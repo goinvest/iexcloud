@@ -15,28 +15,22 @@ const apiURL = "https://cloud.iexapis.com"
 // Client models a client to consume the IEX Cloud API.
 type Client struct {
 	baseURL    string
-	bearer     string
+	token      string
 	httpClient *http.Client
 }
 
 // NewClient creates a client with the given authorization toke.
 func NewClient(token string) *Client {
 	return &Client{
-		baseURL:    apiURL,
-		bearer:     "Bearer " + token,
-		httpClient: &http.Client{},
+		baseURL: apiURL,
+		token:   token,
 	}
 }
 
 // GetJSON gets the JSON data from the given endpoint.
 func (c *Client) GetJSON(endpoint string, v interface{}) error {
-	uri := c.baseURL + endpoint
-	req, err := http.NewRequest("GET", uri, nil)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Authorization", c.bearer)
-	resp, err := c.httpClient.Do(req)
+	address := c.baseURL + endpoint + "?token=" + c.token
+	resp, err := http.Get(address)
 	if err != nil {
 		return err
 	}
