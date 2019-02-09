@@ -42,3 +42,21 @@ type BalanceSheet struct {
 	ShareholderEquity       int  `json:"shareholderEquity"`
 	NetTangibleAssets       int  `json:"netTangibleAssets"`
 }
+
+// AnnualBalanceSheets returns the annual balance sheets from the IEX Cloud
+// endpoint for the given stock symbol.
+func (c Client) AnnualBalanceSheets(stock string) (BalanceSheets, error) {
+	var bs BalanceSheets
+	endpoint := "/stock/" + stock + "/balance-sheet?period=annual"
+	err := c.GetJSON(endpoint, bs)
+	return bs, err
+}
+
+// QuarterlyBalanceSheets returns the quarterly balance sheets from the IEX
+// Cloud endpoint for the given stock symbol.
+func (c Client) QuarterlyBalanceSheets(stock string) (BalanceSheets, error) {
+	var bs BalanceSheets
+	endpoint := "/stock/" + stock + "/balance-sheet"
+	err := c.GetJSON(endpoint, bs)
+	return bs, err
+}

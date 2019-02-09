@@ -15,7 +15,7 @@ import (
 type Date time.Time
 
 // UnmarshalJSON implements the Unmarshaler interface for ReportDate.
-func (d *ReportDate) UnmarshalJSON(data []byte) error {
+func (d *Date) UnmarshalJSON(data []byte) error {
 	var aux string
 	err := json.Unmarshal(data, &aux)
 	if err != nil {
@@ -25,6 +25,6 @@ func (d *ReportDate) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return fmt.Errorf("error converting string to date: %s", err)
 	}
-	*d = ReportDate(t)
+	*d = Date(t)
 	return nil
 }
