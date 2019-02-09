@@ -24,6 +24,9 @@ type Company struct {
 	Tags        []string  `json:"tags"`
 }
 
+// IssueType refers to the common issue type of the stock.
+type IssueType int
+
 const (
 	ad IssueType = iota
 	re
@@ -45,9 +48,6 @@ var issueTypeDescription = map[IssueType]string{
 	et:    "Exchange Taded Fund (ETF)",
 	blank: "Not available",
 }
-
-// IssueType refers to the common issue type of the stock.
-type IssueType int
 
 // IssueTypes maps the string keys from the JSON to the IssueType constant
 // values.
@@ -85,7 +85,7 @@ func (i *IssueType) UnmarshalJSON(data []byte) error {
 
 // Set sets the issue type using a string.
 func (i *IssueType) Set(s string) error {
-	// Ensure the provided string matches on eof the keys in the map.
+	// Ensure the provided string matches on the keys in the map.
 	got, ok := IssueTypes[s]
 	if !ok {
 		return fmt.Errorf("invalid issue type %q", s)

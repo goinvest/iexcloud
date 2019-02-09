@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-// ReportDate models a report date
-type ReportDate time.Time
+// Date models a report date
+type Date time.Time
 
 // UnmarshalJSON implements the Unmarshaler interface for ReportDate.
 func (d *ReportDate) UnmarshalJSON(data []byte) error {
