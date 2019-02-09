@@ -8,12 +8,12 @@ package iex
 // CashFlows pulls cash flow data. Available quarterly (4 quarters) or annually
 // (4 years).
 type CashFlows struct {
-	Symbol             string              `json:"symbol"`
-	CashFlowStatements []CashFlowStatement `json:"cashflow"`
+	Symbol     string     `json:"symbol"`
+	Statements []CashFlow `json:"cashflow"`
 }
 
-// CashFlowStatement models one cash flow statement.
-type CashFlowStatement struct {
+// CashFlow models one cash flow statement.
+type CashFlow struct {
 	ReportDate              Date `json:"reportDate"`
 	NetIncome               int  `json:"netIncome"`
 	Depreciation            int  `json:"depreciation"`

@@ -8,12 +8,12 @@ package iex
 // BalanceSheets pulls balance sheet data. Available quarterly (4 quarters) and
 // annually (4 years).
 type BalanceSheets struct {
-	Symbol                 string                  `json:"symbol"`
-	BalanceSheetStatements []BalanceSheetStatement `json:"balancesheet"`
+	Symbol     string         `json:"symbol"`
+	Statements []BalanceSheet `json:"balancesheet"`
 }
 
-// BalanceSheetStatement models one balance sheet statement.
-type BalanceSheetStatement struct {
+// BalanceSheet models one balance sheet statement.
+type BalanceSheet struct {
 	ReportDate              Date `json:"reportDate"`
 	CurrentCash             int  `json:"currentCash"`
 	ShortTermInvestments    int  `json:"shortTermInvestments"`
