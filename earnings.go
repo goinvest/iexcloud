@@ -63,7 +63,7 @@ var AnnounceTimeJSON = map[AnnounceTime]string{
 }
 
 // UnmarshalJSON implements the Unmarshaler interface for AnnounceTime.
-func (a *AnnounceTime) UnmashalJSON(data []byte) error {
+func (a *AnnounceTime) UnmarshalJSON(data []byte) error {
 	var s string
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("announceTime should be a string, got %s", data)
