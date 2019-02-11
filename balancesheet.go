@@ -46,17 +46,19 @@ type BalanceSheet struct {
 // AnnualBalanceSheets returns the annual balance sheets from the IEX Cloud
 // endpoint for the given stock symbol.
 func (c Client) AnnualBalanceSheets(stock string) (BalanceSheets, error) {
-	var bs BalanceSheets
 	endpoint := "/stock/" + stock + "/balance-sheet?period=annual"
-	err := c.GetJSON(endpoint, bs)
-	return bs, err
+	return c.balanceSheets(endpoint)
 }
 
 // QuarterlyBalanceSheets returns the quarterly balance sheets from the IEX
 // Cloud endpoint for the given stock symbol.
 func (c Client) QuarterlyBalanceSheets(stock string) (BalanceSheets, error) {
-	var bs BalanceSheets
 	endpoint := "/stock/" + stock + "/balance-sheet"
+	return c.balanceSheets(endpoint)
+}
+
+func (c Client) balanceSheets(endpoint string) (BalanceSheets, error) {
+	bs := &BalanceSheets{}
 	err := c.GetJSON(endpoint, bs)
-	return bs, err
+	return *bs, err
 }

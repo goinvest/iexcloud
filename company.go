@@ -8,8 +8,6 @@ package iex
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 )
 
 // Company models the company data from the /company endpoint.
@@ -110,19 +108,8 @@ func (i *IssueType) Set(s string) error {
 // Company returns the copmany data from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) Company(stock string) (Company, error) {
-	var company Company
+	company := &Company{}
 	endpoint := "/stock/" + stock + "/company"
 	err := c.GetJSON(endpoint, company)
-	address := c.baseURL + endpoint + "?token=" + c.token
-	resp, err := http.Get(address)
-	if err != nil {
-		return company, err
-	}
-	defer resp.Body.Close()
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return company, err
-	}
-	err = json.Unmarshal(b, &company)
-	return company, err
+	return *company, err
 }

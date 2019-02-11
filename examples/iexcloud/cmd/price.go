@@ -15,12 +15,12 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(companyCmd)
+	rootCmd.AddCommand(priceCmd)
 }
 
-var companyCmd = &cobra.Command{
-	Use:   "company [stock]",
-	Short: "Retrieve the company data for stock symbol",
+var priceCmd = &cobra.Command{
+	Use:   "price [stock]",
+	Short: "Retrieve the current price for stock symbol",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		stock := args[0]
@@ -29,7 +29,10 @@ var companyCmd = &cobra.Command{
 			log.Fatalf("Error reading config file: %s", err)
 		}
 		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		company, err := client.Company(stock)
-		fmt.Printf("%q\n", company)
+		price, err := client.Price(stock)
+		if err != nil {
+			log.Fatalf("Error getting stock price: %s", err)
+		}
+		fmt.Printf("Current price = $%.2f\n", price)
 	},
 }

@@ -8,8 +8,8 @@ package iex
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"strconv"
 )
 
 const apiURL = "https://cloud.iexapis.com/beta"
@@ -40,12 +40,21 @@ func (c *Client) GetJSON(endpoint string, v interface{}) error {
 		return err
 	}
 	defer resp.Body.Close()
+	return json.NewDecoder(resp.Body).Decode(v)
+}
+
+// GetFloat64 gets the number from the given endpoint.
+func (c *Client) GetFloat64(endpoint string) (float64, error) {
+	address := c.baseURL + endpoint + "?token=" + c.token
+	resp, err := http.Get(address)
+	if err != nil {
+		return 0.0, err
+	}
+	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return 0.0, err
 	}
-	bodyString := string(b)
-	log.Printf("Body as string = %s", bodyString)
-	err = json.NewDecoder(resp.Body).Decode(v)
-	return err
+	return strconv.ParseFloat(string(b), 64)
+
 }
