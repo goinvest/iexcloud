@@ -8,6 +8,8 @@ package iex
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
 // Company models the company data from the /company endpoint.
@@ -74,6 +76,16 @@ var IssueTypeJSON = map[IssueType]string{
 	blank: "",
 }
 
+// String implements the Stringer interface for IssueType.
+func (i IssueType) String() string {
+	return issueTypeDescription[i]
+}
+
+// MarshalJSON implements the Marshaler interface for IssueType.
+func (i *IssueType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(IssueTypeJSON[*i])
+}
+
 // UnmarshalJSON implements the Unmarshaler interface for IssueType.
 func (i *IssueType) UnmarshalJSON(data []byte) error {
 	var s string
@@ -95,21 +107,22 @@ func (i *IssueType) Set(s string) error {
 	return nil
 }
 
-// MarshalJSON implements the Marshaler interface for IssueType.
-func (i *IssueType) MarshalJSON() ([]byte, error) {
-	return json.Marshal(IssueTypeJSON[*i])
-}
-
-// String implements the Stringer interface for IssueType.
-func (i IssueType) String() string {
-	return issueTypeDescription[i]
-}
-
 // Company returns the copmany data from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) Company(stock string) (Company, error) {
 	var company Company
 	endpoint := "/stock/" + stock + "/company"
 	err := c.GetJSON(endpoint, company)
+	address := c.baseURL + endpoint + "?token=" + c.token
+	resp, err := http.Get(address)
+	if err != nil {
+		return company, err
+	}
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return company, err
+	}
+	err = json.Unmarshal(b, &company)
 	return company, err
 }

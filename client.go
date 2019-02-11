@@ -7,6 +7,8 @@ package iex
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -38,5 +40,12 @@ func (c *Client) GetJSON(endpoint string, v interface{}) error {
 		return err
 	}
 	defer resp.Body.Close()
-	return json.NewDecoder(resp.Body).Decode(v)
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	bodyString := string(b)
+	log.Printf("Body as string = %s", bodyString)
+	err = json.NewDecoder(resp.Body).Decode(v)
+	return err
 }
