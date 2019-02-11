@@ -104,3 +104,12 @@ func (i *IssueType) MarshalJSON() ([]byte, error) {
 func (i IssueType) String() string {
 	return issueTypeDescription[i]
 }
+
+// Company returns the copmany data from the IEX Cloud endpoint for the given
+// stock symbol.
+func (c Client) Company(stock string) (Company, error) {
+	var company Company
+	endpoint := "/stock/" + stock + "/company"
+	err := c.GetJSON(endpoint, company)
+	return company, err
+}

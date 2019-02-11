@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-const apiURL = "https://cloud.iexapis.com"
+const apiURL = "https://cloud.iexapis.com/beta"
 
 // Client models a client to consume the IEX Cloud API.
 type Client struct {
@@ -20,9 +20,12 @@ type Client struct {
 }
 
 // NewClient creates a client with the given authorization toke.
-func NewClient(token string) *Client {
+func NewClient(token string, baseURL string) *Client {
+	if baseURL == "" {
+		baseURL = apiURL
+	}
 	return &Client{
-		baseURL: apiURL,
+		baseURL: baseURL,
 		token:   token,
 	}
 }
