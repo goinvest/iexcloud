@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -34,13 +35,27 @@ func NewClient(token string, baseURL string) *Client {
 
 // GetJSON gets the JSON data from the given endpoint.
 func (c *Client) GetJSON(endpoint string, v interface{}) error {
-	address := c.baseURL + endpoint + "?token=" + c.token
+	address, err := c.addToken(endpoint)
+	if err != nil {
+		return err
+	}
 	resp, err := http.Get(address)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 	return json.NewDecoder(resp.Body).Decode(v)
+}
+
+func (c *Client) addToken(endpoint string) (string, error) {
+	u, err := url.Parse(c.baseURL + endpoint)
+	if err != nil {
+		return "", err
+	}
+	v := u.Query()
+	v.Add("token", c.token)
+	u.RawQuery = v.Encode()
+	return u.String(), nil
 }
 
 // GetFloat64 gets the number from the given endpoint.

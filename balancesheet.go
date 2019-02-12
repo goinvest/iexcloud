@@ -5,6 +5,8 @@
 
 package iex
 
+import "fmt"
+
 // BalanceSheets pulls balance sheet data. Available quarterly (4 quarters) and
 // annually (4 years).
 type BalanceSheets struct {
@@ -18,7 +20,7 @@ type BalanceSheet struct {
 	CurrentCash             int  `json:"currentCash"`
 	ShortTermInvestments    int  `json:"shortTermInvestments"`
 	Receivables             int  `json:"receivables"`
-	Inventory               int  `json:"invetnory"`
+	Inventory               int  `json:"inventory"`
 	OtherCurrentAssets      int  `json:"otherCurrentAssets"`
 	CurrentAssets           int  `json:"currentAssets"`
 	LongTermInvestments     int  `json:"longTermInvestments"`
@@ -45,15 +47,17 @@ type BalanceSheet struct {
 
 // AnnualBalanceSheets returns the annual balance sheets from the IEX Cloud
 // endpoint for the given stock symbol.
-func (c Client) AnnualBalanceSheets(stock string) (BalanceSheets, error) {
-	endpoint := "/stock/" + stock + "/balance-sheet?period=annual"
+func (c Client) AnnualBalanceSheets(stock string, last int) (BalanceSheets, error) {
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
+		stock, last)
 	return c.balanceSheets(endpoint)
 }
 
 // QuarterlyBalanceSheets returns the quarterly balance sheets from the IEX
 // Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyBalanceSheets(stock string) (BalanceSheets, error) {
-	endpoint := "/stock/" + stock + "/balance-sheet"
+func (c Client) QuarterlyBalanceSheets(stock string, last int) (BalanceSheets, error) {
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
+		stock, last)
 	return c.balanceSheets(endpoint)
 }
 

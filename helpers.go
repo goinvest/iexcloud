@@ -28,3 +28,9 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 	*d = Date(t)
 	return nil
 }
+
+// MarshalJSON implements the Marshaler interface for ReportDate.
+func (d *Date) MarshalJSON() ([]byte, error) {
+	t := time.Time(*d)
+	return json.Marshal(t.Format("2006-01-02"))
+}
