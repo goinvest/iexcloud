@@ -5,7 +5,10 @@
 
 package iex
 
-import "fmt"
+import (
+	"fmt"
+	"net/url"
+)
 
 // BalanceSheets pulls balance sheet data. Available quarterly (4 quarters) and
 // annually (4 years).
@@ -47,19 +50,19 @@ type BalanceSheet struct {
 	NetTangibleAssets       float64 `json:"netTangibleAssets"`
 }
 
-// AnnualBalanceSheets returns the annual balance sheets from the IEX Cloud
-// endpoint for the given stock symbol.
-func (c Client) AnnualBalanceSheets(stock string, last int) (BalanceSheets, error) {
+// AnnualBalanceSheets returns the specified number of most recent annual
+// balance sheets from the IEX Cloud endpoint for the given stock symbol.
+func (c Client) AnnualBalanceSheets(stock string, num int) (BalanceSheets, error) {
 	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
-		stock, last)
+		url.PathEscape(stock), num)
 	return c.balanceSheets(endpoint)
 }
 
-// QuarterlyBalanceSheets returns the quarterly balance sheets from the IEX
-// Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyBalanceSheets(stock string, last int) (BalanceSheets, error) {
+// QuarterlyBalanceSheets returns the specified number of most recent quarterly
+// balance sheets from the IEX Cloud endpoint for the given stock symbol.
+func (c Client) QuarterlyBalanceSheets(stock string, num int) (BalanceSheets, error) {
 	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
-		stock, last)
+		url.PathEscape(stock), num)
 	return c.balanceSheets(endpoint)
 }
 

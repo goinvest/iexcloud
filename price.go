@@ -5,9 +5,14 @@
 
 package iex
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // Price returns the current stock price from the IEX Cloud endpoint for the
 // given stock symbol.
 func (c Client) Price(stock string) (float64, error) {
-	endpoint := "/stock/" + stock + "/price"
+	endpoint := fmt.Sprintf("/stock/%s/price", url.PathEscape(stock))
 	return c.GetFloat64(endpoint)
 }

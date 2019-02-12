@@ -8,6 +8,7 @@ package iex
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 // Company models the company data from the /company endpoint.
@@ -28,14 +29,14 @@ type Company struct {
 type IssueType int
 
 const (
-	ad IssueType = iota
+	blank IssueType = iota
+	ad
 	re
 	ce
 	si
 	lp
 	cs
 	et
-	blank
 )
 
 var issueTypeDescription = map[IssueType]string{
@@ -109,7 +110,7 @@ func (i *IssueType) Set(s string) error {
 // stock symbol.
 func (c Client) Company(stock string) (Company, error) {
 	company := &Company{}
-	endpoint := "/stock/" + stock + "/company"
+	endpoint := fmt.Sprintf("/stock/%s/company", url.PathEscape(stock))
 	err := c.GetJSON(endpoint, company)
 	return *company, err
 }

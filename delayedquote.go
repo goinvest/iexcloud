@@ -5,6 +5,11 @@
 
 package iex
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // DelayedQuote returns the 15 minute delayed market quote.
 type DelayedQuote struct {
 	Symbol           string  `json:"symbol"`
@@ -15,4 +20,13 @@ type DelayedQuote struct {
 	Low              float64 `json:"Low"`
 	TotalVolume      int     `json:"totalVolume"`
 	ProcessedTime    int     `json:"processedTime"`
+}
+
+// DelayedQuote returns the 15 minute delayed market quote from the IEX Cloud
+// endpoint for the given stock symbol.
+func (c Client) DelayedQuote(stock string) (DelayedQuote, error) {
+	dq := &DelayedQuote{}
+	endpoint := fmt.Sprintf("/stock/%s/delayed-quote", url.PathEscape(stock))
+	err := c.GetJSON(endpoint, dq)
+	return *dq, err
 }

@@ -12,4 +12,5 @@ follows:
 ```bash
 $ ./iexcloud company aapl
 $ ./iexcloud price aapl
+$ ./iexcloud dq aapl
 ```
