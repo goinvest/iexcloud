@@ -53,14 +53,15 @@ var issueTypeDescription = map[IssueType]string{
 // IssueTypes maps the string keys from the JSON to the IssueType constant
 // values.
 var IssueTypes = map[string]IssueType{
-	"ad": ad,
-	"re": re,
-	"ce": ce,
-	"si": si,
-	"lp": lp,
-	"cs": cs,
-	"et": et,
-	"":   blank,
+	"ad":  ad,
+	"re":  re,
+	"ce":  ce,
+	"cef": ce,
+	"si":  si,
+	"lp":  lp,
+	"cs":  cs,
+	"et":  et,
+	"":    blank,
 }
 
 // IssueTypeJSON maps an IssueType to the string used in the JSON.
