@@ -19,6 +19,8 @@ $ go get github.com/goinvest/iexcloud
 
 ## Examples
 
+See the [iexcloud CLI example README][2].
+
 ## Implementation Status
 
 Below is a list of the APIs that have and have not been implemented.
@@ -52,7 +54,7 @@ Below is a list of the APIs that have and have not been implemented.
 - [x] Previous Day Prices
 - [x] Price
 - [ ] Price Target
-- [ ] Quote
+- [x] Quote
 - [ ] Relevant Stocks
 - [ ] Sector Performance
 - [ ] Splits
@@ -136,6 +138,7 @@ $ make cover
 
 
 [1]:https://iexcloud.io
+[2]: https://github.com/goinvest/iexcloud/blob/master/examples/iexcloud/README.md
 [iexcloud]: https://github.com/goinvest/iexcloud
 [godoc badge]: https://godoc.org/github.com/goinvest/iexcloud?status.svg
 [godoc link]: https://godoc.org/github.com/goinvest/iexcloud
