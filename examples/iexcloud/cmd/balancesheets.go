@@ -20,7 +20,7 @@ func init() {
 }
 
 var balanceSheetCmd = &cobra.Command{
-	Use:   "bs [stock]",
+	Use:   "balancesheets [stock]",
 	Short: "Retrieve the balance sheet for stock symbol",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
