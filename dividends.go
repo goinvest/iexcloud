@@ -5,6 +5,11 @@
 
 package iex
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // Dividends models the dividens for a given range.
 type Dividends []Dividend
 
@@ -16,4 +21,14 @@ type Dividend struct {
 	DeclaredDeta Date    `json:"declaredDate"`
 	Amount       float64 `json:"amount"`
 	Flag         string  `json:"flag"`
+}
+
+// Dividends returns the dividends from the IEX Cloud endpoint for the given
+// stock symbol and the given date range.
+func (c Client) Dividends(stock string, r PathRange) (Dividends, error) {
+	dividends := &Dividends{}
+	endpoint := fmt.Sprintf("/stock/%s/dividends/%s",
+		url.PathEscape(stock), PathRangeJSON[r])
+	err := c.GetJSON(endpoint, dividends)
+	return *dividends, err
 }
