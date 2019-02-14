@@ -23,7 +23,8 @@ See the [iexcloud CLI example README][2].
 
 ## Implementation Status
 
-Below is a list of the APIs that have and have not been implemented.
+Below is a list of the APIs that have and have not been implemented. If
+you want a particular API to be developed next, please open an issue.
 
 ### Stocks
 
@@ -36,24 +37,24 @@ Below is a list of the APIs that have and have not been implemented.
 - [x] Delayed Quote
 - [x] Dividends
 - [x] Earnings
-- [ ] Effective Spread
+- [x] Effective Spread
 - [x] Estimates
 - [x] Financials
 - [ ] Historical Prices
 - [x] Income Statement
 - [ ] IPO Calendar
 - [x] Key Stats
-- [ ] Largest Trades
-- [ ] List
+- [x] Largest Trades
+- [x] List
 - [x] Logo
-- [ ] Market Value (U.S.)
+- [ ] Market Volume (U.S.)
 - [ ] News
-- [ ] OHLC
-- [ ] Open / Close Price
+- [x] OHLC
+- [x] Open / Close Price
 - [x] Peers
 - [x] Previous Day Prices
 - [x] Price
-- [ ] Price Target
+- [x] Price Target
 - [x] Quote
 - [ ] Relevant Stocks
 - [ ] Sector Performance
@@ -64,6 +65,7 @@ Below is a list of the APIs that have and have not been implemented.
 
 - [ ] News
 - [ ] Crypto
+- [ ] Social Sentiment
 
 ### Reference Data
 
