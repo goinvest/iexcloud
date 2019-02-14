@@ -38,11 +38,11 @@ Below is a list of the APIs that have and have not been implemented.
 - [ ] Earnings
 - [ ] Effective Spread
 - [x] Estimates
-- [ ] Financials
+- [x] Financials
 - [ ] Historical Prices
 - [x] Income Statement
 - [ ] IPO Calendar
-- [ ] Key Stats
+- [x] Key Stats
 - [ ] Largest Trades
 - [ ] List
 - [x] Logo
