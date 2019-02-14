@@ -47,6 +47,18 @@ func (c *Client) GetJSON(endpoint string, v interface{}) error {
 	return json.NewDecoder(resp.Body).Decode(v)
 }
 
+// GetJSONWithoutToken gets the JSON data from the given endpoint without
+// adding a token to the URL.
+func (c *Client) GetJSONWithoutToken(endpoint string, v interface{}) error {
+	address := c.baseURL + endpoint
+	resp, err := http.Get(address)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	return json.NewDecoder(resp.Body).Decode(v)
+}
+
 func (c *Client) addToken(endpoint string) (string, error) {
 	u, err := url.Parse(c.baseURL + endpoint)
 	if err != nil {

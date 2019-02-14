@@ -38,6 +38,7 @@ func (d *Date) MarshalJSON() ([]byte, error) {
 // PathRange refers to the date range used in the path of an endpoint.
 type PathRange int
 
+// Enum values for PathRange.
 const (
 	Mo1 PathRange = iota
 	Mo3
