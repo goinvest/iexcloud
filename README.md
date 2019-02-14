@@ -70,8 +70,8 @@ you want a particular API to be developed next, please open an issue.
 ### Reference Data
 
 - [x] Symbols
-- [ ] IEX Symbols
-- [ ] U.S. Exchanges
+- [x] IEX Symbols
+- [x] U.S. Exchanges
 - [ ] U.S. Holidays and Trading Days
 - [ ] Stock Tags
 - [ ] Stock Collections
