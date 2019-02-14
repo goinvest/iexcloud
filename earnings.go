@@ -8,6 +8,7 @@ package iex
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 // Earnings provides earnings data for a given company including the actual
@@ -50,16 +51,16 @@ var announceTimeDescription = map[AnnounceTime]string{
 // AnnounceTimes maps the string keys from the JSON to the AnnounceType
 // constant values.
 var AnnounceTimes = map[string]AnnounceTime{
-	"bto": bto,
-	"dmt": dmt,
-	"amc": amc,
+	"BTO": bto,
+	"DMT": dmt,
+	"AMC": amc,
 }
 
 // AnnounceTimeJSON maps an AnnounceTime to the string used in the JSON.
 var AnnounceTimeJSON = map[AnnounceTime]string{
-	bto: "bto",
-	dmt: "dmt",
-	amc: "amc",
+	bto: "BTO",
+	dmt: "DMT",
+	amc: "AMC",
 }
 
 // UnmarshalJSON implements the Unmarshaler interface for AnnounceTime.
@@ -91,4 +92,13 @@ func (a *AnnounceTime) MarshalJSON() ([]byte, error) {
 // String implements the Stringer interface for AnnounceTime.
 func (a AnnounceTime) String() string {
 	return announceTimeDescription[a]
+}
+
+// Earnings returns the specified number of most recent earnings data from the
+// IEX Cloud endpoint for the given stock symbol.
+func (c Client) Earnings(stock string, num int) (Earnings, error) {
+	earnings := &Earnings{}
+	endpoint := fmt.Sprintf("/stock/%s/earnings/%d", url.PathEscape(stock), num)
+	err := c.GetJSON(endpoint, earnings)
+	return *earnings, err
 }

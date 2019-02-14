@@ -34,8 +34,8 @@ Below is a list of the APIs that have and have not been implemented.
 - [ ] Collections
 - [x] Company
 - [x] Delayed Quote
-- [ ] Dividends
-- [ ] Earnings
+- [x] Dividends
+- [x] Earnings
 - [ ] Effective Spread
 - [x] Estimates
 - [x] Financials
