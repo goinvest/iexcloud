@@ -40,8 +40,8 @@ type KeyStats struct {
 // KeyStats returns the key stats from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) KeyStats(stock string) (KeyStats, error) {
-	stats := &KeyStats{}
+	stats := KeyStats{}
 	endpoint := fmt.Sprintf("/stock/%s/stats", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, stats)
-	return *stats, err
+	err := c.GetJSON(endpoint, &stats)
+	return stats, err
 }

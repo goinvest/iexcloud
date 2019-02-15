@@ -23,8 +23,8 @@ type Market struct {
 
 // Markets returns real time traded volume on U.S. markets.
 func (c Client) Markets() (Markets, error) {
-	m := &Markets{}
+	m := Markets{}
 	endpoint := "/market"
-	err := c.GetJSON(endpoint, m)
-	return *m, err
+	err := c.GetJSON(endpoint, &m)
+	return m, err
 }

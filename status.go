@@ -14,8 +14,8 @@ type Status struct {
 
 // Status returns the IEX Cloud system status.
 func (c Client) Status() (Status, error) {
-	status := &Status{}
+	status := Status{}
 	endpoint := "/status"
-	err := c.GetJSONWithoutToken(endpoint, status)
-	return *status, err
+	err := c.GetJSONWithoutToken(endpoint, &status)
+	return status, err
 }

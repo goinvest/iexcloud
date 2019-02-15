@@ -54,8 +54,8 @@ type Quote struct {
 // Quote returns the quote data from the IEX Cloud endpoint for the given stock
 // symbol.
 func (c Client) Quote(stock string) (Quote, error) {
-	quote := &Quote{}
+	quote := Quote{}
 	endpoint := fmt.Sprintf("/stock/%s/quote", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, quote)
-	return *quote, err
+	err := c.GetJSON(endpoint, &quote)
+	return quote, err
 }

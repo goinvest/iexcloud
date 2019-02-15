@@ -19,8 +19,8 @@ type USExchange struct {
 
 // USExchanges returns an array of U.S. Exchanges.
 func (c Client) USExchanges() ([]USExchange, error) {
-	e := &[]USExchange{}
+	e := []USExchange{}
 	endpoint := "/ref-data/market/us/exchanges"
-	err := c.GetJSON(endpoint, e)
-	return *e, err
+	err := c.GetJSON(endpoint, &e)
+	return e, err
 }

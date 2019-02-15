@@ -54,7 +54,7 @@ func (c Client) QuarterlyCashFlows(stock string, num int) (CashFlows, error) {
 }
 
 func (c Client) cashFlows(endpoint string) (CashFlows, error) {
-	cf := &CashFlows{}
-	err := c.GetJSON(endpoint, cf)
-	return *cf, err
+	cf := CashFlows{}
+	err := c.GetJSON(endpoint, &cf)
+	return cf, err
 }

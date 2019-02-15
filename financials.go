@@ -58,7 +58,7 @@ func (c Client) QuarterlyFinancials(stock string, num int) (Financials, error) {
 }
 
 func (c Client) financials(endpoint string) (Financials, error) {
-	financials := &Financials{}
-	err := c.GetJSON(endpoint, financials)
-	return *financials, err
+	financials := Financials{}
+	err := c.GetJSON(endpoint, &financials)
+	return financials, err
 }

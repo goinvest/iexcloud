@@ -54,7 +54,7 @@ func (c Client) QuarterlyIncomeStatements(stock string, num int) (IncomeStatemen
 }
 
 func (c Client) incomeStatements(endpoint string) (IncomeStatements, error) {
-	is := &IncomeStatements{}
-	err := c.GetJSON(endpoint, is)
-	return *is, err
+	is := IncomeStatements{}
+	err := c.GetJSON(endpoint, &is)
+	return is, err
 }

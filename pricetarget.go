@@ -24,8 +24,8 @@ type PriceTarget struct {
 // PriceTarget returns the latest average, high, and low analyst price target
 // for a given stock symbol.
 func (c Client) PriceTarget(stock string) (PriceTarget, error) {
-	pt := &PriceTarget{}
+	pt := PriceTarget{}
 	endpoint := fmt.Sprintf("/stock/%s/price-target", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, pt)
-	return *pt, err
+	err := c.GetJSON(endpoint, &pt)
+	return pt, err
 }

@@ -13,8 +13,8 @@ import (
 // Peers returns a slice of peer stock symbols from the IEX Cloud endpoint for
 // the given stock symbol.
 func (c Client) Peers(stock string) ([]string, error) {
-	peers := &[]string{}
+	peers := []string{}
 	endpoint := fmt.Sprintf("/stock/%s/peers", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, peers)
-	return *peers, err
+	err := c.GetJSON(endpoint, &peers)
+	return peers, err
 }

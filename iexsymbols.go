@@ -14,8 +14,8 @@ type IEXSymbol struct {
 
 // IEXSymbols returns an array of symbols that IEX Cloud supports for API calls.
 func (c Client) IEXSymbols() ([]IEXSymbol, error) {
-	symbols := &[]IEXSymbol{}
+	symbols := []IEXSymbol{}
 	endpoint := "/ref-data/iex/symbols"
-	err := c.GetJSON(endpoint, symbols)
-	return *symbols, err
+	err := c.GetJSON(endpoint, &symbols)
+	return symbols, err
 }

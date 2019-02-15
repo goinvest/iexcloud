@@ -25,17 +25,17 @@ type News struct {
 
 // News retrieves the given number of news articles for the given stock symbol.
 func (c Client) News(stock string, num int) ([]News, error) {
-	n := &[]News{}
+	n := []News{}
 	endpoint := fmt.Sprintf("/stock/%s/news/last/%d",
 		url.PathEscape(stock), num)
-	err := c.GetJSON(endpoint, n)
-	return *n, err
+	err := c.GetJSON(endpoint, &n)
+	return n, err
 }
 
 // MarketNews retrieves the given number of news articles for the market.
 func (c Client) MarketNews(num int) ([]News, error) {
-	n := &[]News{}
+	n := []News{}
 	endpoint := fmt.Sprintf("/stock/market/news/last/%d", num)
-	err := c.GetJSON(endpoint, n)
-	return *n, err
+	err := c.GetJSON(endpoint, &n)
+	return n, err
 }

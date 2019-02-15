@@ -23,8 +23,8 @@ type RelevantStocks struct {
 // represent a definitive or accurate list of peers, and is subject to change
 // at any time.
 func (c Client) RelevantStocks(stock string) (RelevantStocks, error) {
-	rs := &RelevantStocks{}
+	rs := RelevantStocks{}
 	endpoint := fmt.Sprintf("/stock/%s/relevant", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, rs)
-	return *rs, err
+	err := c.GetJSON(endpoint, &rs)
+	return rs, err
 }

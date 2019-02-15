@@ -28,8 +28,8 @@ type OpenClose struct {
 // OHLC returns the OHLC data from the IEX Cloud endpoint for the given stock
 // symbol.
 func (c Client) OHLC(stock string) (OHLC, error) {
-	ohlc := &OHLC{}
+	ohlc := OHLC{}
 	endpoint := fmt.Sprintf("/stock/%s/ohlc", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, ohlc)
-	return *ohlc, err
+	err := c.GetJSON(endpoint, &ohlc)
+	return ohlc, err
 }

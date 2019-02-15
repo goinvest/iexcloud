@@ -67,7 +67,7 @@ func (c Client) QuarterlyBalanceSheets(stock string, num int) (BalanceSheets, er
 }
 
 func (c Client) balanceSheets(endpoint string) (BalanceSheets, error) {
-	bs := &BalanceSheets{}
-	err := c.GetJSON(endpoint, bs)
-	return *bs, err
+	bs := BalanceSheets{}
+	err := c.GetJSON(endpoint, &bs)
+	return bs, err
 }

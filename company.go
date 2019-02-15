@@ -110,8 +110,8 @@ func (i *IssueType) Set(s string) error {
 // Company returns the copmany data from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) Company(stock string) (Company, error) {
-	company := &Company{}
+	company := Company{}
 	endpoint := fmt.Sprintf("/stock/%s/company", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, company)
-	return *company, err
+	err := c.GetJSON(endpoint, &company)
+	return company, err
 }

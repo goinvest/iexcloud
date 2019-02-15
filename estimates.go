@@ -27,8 +27,8 @@ type Estimate struct {
 
 // Estimates returns the latest consensue estimates for the next fiscal period.
 func (c Client) Estimates(stock string, num int) (Estimates, error) {
-	estimates := &Estimates{}
+	estimates := Estimates{}
 	endpoint := fmt.Sprintf("/stock/%s/estimates/%d", url.PathEscape(stock), num)
-	err := c.GetJSON(endpoint, estimates)
-	return *estimates, err
+	err := c.GetJSON(endpoint, &estimates)
+	return estimates, err
 }

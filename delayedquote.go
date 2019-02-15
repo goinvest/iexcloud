@@ -25,8 +25,8 @@ type DelayedQuote struct {
 // DelayedQuote returns the 15 minute delayed market quote from the IEX Cloud
 // endpoint for the given stock symbol.
 func (c Client) DelayedQuote(stock string) (DelayedQuote, error) {
-	dq := &DelayedQuote{}
+	dq := DelayedQuote{}
 	endpoint := fmt.Sprintf("/stock/%s/delayed-quote", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, dq)
-	return *dq, err
+	err := c.GetJSON(endpoint, &dq)
+	return dq, err
 }

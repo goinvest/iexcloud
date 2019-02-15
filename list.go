@@ -42,8 +42,8 @@ func (c Client) InFocus() ([]Quote, error) {
 }
 
 func (c Client) list(list string) ([]Quote, error) {
-	q := &[]Quote{}
+	q := []Quote{}
 	endpoint := "/stock/market/list/" + list
-	err := c.GetJSON(endpoint, q)
-	return *q, err
+	err := c.GetJSON(endpoint, &q)
+	return q, err
 }

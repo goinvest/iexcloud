@@ -97,8 +97,8 @@ func (a AnnounceTime) String() string {
 // Earnings returns the specified number of most recent earnings data from the
 // IEX Cloud endpoint for the given stock symbol.
 func (c Client) Earnings(stock string, num int) (Earnings, error) {
-	earnings := &Earnings{}
+	earnings := Earnings{}
 	endpoint := fmt.Sprintf("/stock/%s/earnings/%d", url.PathEscape(stock), num)
-	err := c.GetJSON(endpoint, earnings)
-	return *earnings, err
+	err := c.GetJSON(endpoint, &earnings)
+	return earnings, err
 }

@@ -26,8 +26,8 @@ type LargestTrade struct {
 // LargestTrades returns the 15 minute delayed, last sale eligible trade from
 // the IEX Cloud endpoint for the given stock symbol.
 func (c Client) LargestTrades(stock string) (LargestTrades, error) {
-	lt := &LargestTrades{}
+	lt := LargestTrades{}
 	endpoint := fmt.Sprintf("/stock/%s/largest-trades", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, lt)
-	return *lt, err
+	err := c.GetJSON(endpoint, &lt)
+	return lt, err
 }

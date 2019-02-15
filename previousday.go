@@ -27,8 +27,8 @@ type PreviousDay struct {
 // PreviousDay returns the previous day adjusted price data from the IEX Cloud
 // endpoint for the given stock symbol.
 func (c Client) PreviousDay(stock string) (PreviousDay, error) {
-	pd := &PreviousDay{}
+	pd := PreviousDay{}
 	endpoint := fmt.Sprintf("/stock/%s/previous", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, pd)
-	return *pd, err
+	err := c.GetJSON(endpoint, &pd)
+	return pd, err
 }

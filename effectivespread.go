@@ -27,8 +27,8 @@ type EffectiveSpread struct {
 // EffectiveSpreads returns the effective spreads from the IEX Cloud endpoint
 // for the given stock symbol.
 func (c Client) EffectiveSpreads(stock string) (EffectiveSpreads, error) {
-	es := &EffectiveSpreads{}
+	es := EffectiveSpreads{}
 	endpoint := fmt.Sprintf("/stock/%s/effective-spread", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, es)
-	return *es, err
+	err := c.GetJSON(endpoint, &es)
+	return es, err
 }

@@ -26,9 +26,9 @@ type Dividend struct {
 // Dividends returns the dividends from the IEX Cloud endpoint for the given
 // stock symbol and the given date range.
 func (c Client) Dividends(stock string, r PathRange) (Dividends, error) {
-	dividends := &Dividends{}
+	dividends := Dividends{}
 	endpoint := fmt.Sprintf("/stock/%s/dividends/%s",
 		url.PathEscape(stock), PathRangeJSON[r])
-	err := c.GetJSON(endpoint, dividends)
-	return *dividends, err
+	err := c.GetJSON(endpoint, &dividends)
+	return dividends, err
 }

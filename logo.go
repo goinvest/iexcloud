@@ -18,8 +18,8 @@ type Logo struct {
 // Logo returns the logo data from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) Logo(stock string) (Logo, error) {
-	logo := &Logo{}
+	logo := Logo{}
 	endpoint := fmt.Sprintf("/stock/%s/logo", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, logo)
-	return *logo, err
+	err := c.GetJSON(endpoint, &logo)
+	return logo, err
 }
