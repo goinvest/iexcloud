@@ -143,3 +143,146 @@ func (e *EpochTime) UnmarshalJSON(data []byte) (err error) {
 
 // String implements the Stringer interface for EpochTime.
 func (e EpochTime) String() string { return time.Time(e).String() }
+
+// IssueType refers to the common issue type of the stock.
+type IssueType int
+
+const (
+	blank IssueType = iota
+	ad
+	re
+	ce
+	si
+	lp
+	cs
+	et
+)
+
+var issueTypeDescription = map[IssueType]string{
+	ad:    "American Depository Receipt (ADR)",
+	re:    "Real Estate Investment Trust (REIT)",
+	ce:    "Closed end fund (Stock and Bond Fund)",
+	si:    "Secondary Issue",
+	lp:    "Limited Partnership",
+	cs:    "Common Stock",
+	et:    "Exchange Taded Fund (ETF)",
+	blank: "Not available",
+}
+
+// IssueTypes maps the string keys from the JSON to the IssueType constant
+// values.
+var IssueTypes = map[string]IssueType{
+	"ad":  ad,
+	"re":  re,
+	"ce":  ce,
+	"cef": ce,
+	"si":  si,
+	"lp":  lp,
+	"cs":  cs,
+	"et":  et,
+	"":    blank,
+}
+
+// IssueTypeJSON maps an IssueType to the string used in the JSON.
+var IssueTypeJSON = map[IssueType]string{
+	ad:    "ad",
+	re:    "re",
+	ce:    "ce",
+	si:    "si",
+	lp:    "lp",
+	cs:    "cs",
+	et:    "et",
+	blank: "",
+}
+
+// String implements the Stringer interface for IssueType.
+func (i IssueType) String() string {
+	return issueTypeDescription[i]
+}
+
+// MarshalJSON implements the Marshaler interface for IssueType.
+func (i *IssueType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(IssueTypeJSON[*i])
+}
+
+// UnmarshalJSON implements the Unmarshaler interface for IssueType.
+func (i *IssueType) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("issueType should be a string, got %s", data)
+	}
+	return i.Set(s)
+}
+
+// Set sets the issue type using a string.
+func (i *IssueType) Set(s string) error {
+	// Ensure the provided string matches on the keys in the map.
+	got, ok := IssueTypes[s]
+	if !ok {
+		return fmt.Errorf("invalid issue type %q", s)
+	}
+	// Set the issue type to the value found in the map per the key.
+	*i = got
+	return nil
+}
+
+// AnnounceTime refers to the time of earnings announcement.
+type AnnounceTime int
+
+const (
+	bto AnnounceTime = iota
+	dmt
+	amc
+)
+
+var announceTimeDescription = map[AnnounceTime]string{
+	bto: "Before open",
+	dmt: "During trading",
+	amc: "After close",
+}
+
+// AnnounceTimes maps the string keys from the JSON to the AnnounceType
+// constant values.
+var AnnounceTimes = map[string]AnnounceTime{
+	"BTO": bto,
+	"DMT": dmt,
+	"AMC": amc,
+}
+
+// AnnounceTimeJSON maps an AnnounceTime to the string used in the JSON.
+var AnnounceTimeJSON = map[AnnounceTime]string{
+	bto: "BTO",
+	dmt: "DMT",
+	amc: "AMC",
+}
+
+// UnmarshalJSON implements the Unmarshaler interface for AnnounceTime.
+func (a *AnnounceTime) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("announceTime should be a string, got %s", data)
+	}
+	return a.Set(s)
+}
+
+// Set sets the issue type using a string.
+func (a *AnnounceTime) Set(s string) error {
+	// Ensure the provided string matches on the keys in the map.
+	got, ok := AnnounceTimes[s]
+	if !ok {
+		return fmt.Errorf("invalid issue type %q", s)
+	}
+	// Set the issue type to the value found in the map per the key.
+	*a = got
+	return nil
+}
+
+// MarshalJSON implements the Marshaler interface for AnnounceTime.
+func (a *AnnounceTime) MarshalJSON() ([]byte, error) {
+	return json.Marshal(AnnounceTimeJSON[*a])
+}
+
+// String implements the Stringer interface for AnnounceTime.
+func (a AnnounceTime) String() string {
+	return announceTimeDescription[a]
+}

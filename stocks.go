@@ -1,0 +1,379 @@
+// Copyright (c) 2019 The iexcloud developers. All rights reserved.
+// Project site: https://github.com/goinvest/iexcloud
+// Use of this source code is governed by a MIT-style license that
+// can be found in the LICENSE file for the project.
+
+package iex
+
+// BalanceSheets pulls balance sheet data. Available quarterly (4 quarters) and
+// annually (4 years).
+type BalanceSheets struct {
+	Symbol     string         `json:"symbol"`
+	Statements []BalanceSheet `json:"balancesheet"`
+}
+
+// BalanceSheet models one balance sheet statement. Normally the amounts
+// returned are integers, although the currentCash for UBNT returned is a
+// float; therefore, these are all floats.
+type BalanceSheet struct {
+	ReportDate              Date    `json:"reportDate"`
+	CurrentCash             float64 `json:"currentCash"`
+	ShortTermInvestments    float64 `json:"shortTermInvestments"`
+	Receivables             float64 `json:"receivables"`
+	Inventory               float64 `json:"inventory"`
+	OtherCurrentAssets      float64 `json:"otherCurrentAssets"`
+	CurrentAssets           float64 `json:"currentAssets"`
+	LongTermInvestments     float64 `json:"longTermInvestments"`
+	PropertyPlanetEquipment float64 `json:"propertyPlantEquipment"`
+	Goodwill                float64 `json:"goodwill"`
+	IntangibleAssets        float64 `json:"intangibleAssets"`
+	OtherAssets             float64 `json:"otherAssets"`
+	TotalAssets             float64 `json:"totalAssets"`
+	AccountsPayable         float64 `json:"accountsPayable"`
+	CurrentLongTermDebt     float64 `json:"currentLongTermDebt"`
+	OtherCurrentLiabilities float64 `json:"otherCurrentLiabilities"`
+	TotalCurrentLiabilities float64 `json:"totalCurrentLiabilities"`
+	LongTermDebt            float64 `json:"longTermDebt"`
+	OtherLiablities         float64 `json:"otherLiabilities"`
+	MinorityInterest        float64 `json:"minorityInterest"`
+	TotalLiabilities        float64 `json:"totalLiabilities"`
+	CommonStock             float64 `json:"commonStock"`
+	RetainedEarnings        float64 `json:"retainedEarnings"`
+	TreasuryStock           float64 `json:"treasuryStock"`
+	CapitalSurplus          float64 `json:"capitalSurplus"`
+	ShareholderEquity       float64 `json:"shareholderEquity"`
+	NetTangibleAssets       float64 `json:"netTangibleAssets"`
+}
+
+// Book models the data returned from the /book endpoint.
+type Book struct {
+	Quote       int
+	Bids        []float64
+	Asks        []float64
+	Trades      []float64
+	SystemEvent int
+}
+
+// CashFlows pulls cash flow data. Available quarterly (4 quarters) or annually
+// (4 years).
+type CashFlows struct {
+	Symbol     string     `json:"symbol"`
+	Statements []CashFlow `json:"cashflow"`
+}
+
+// CashFlow models one cash flow statement.
+type CashFlow struct {
+	ReportDate              Date    `json:"reportDate"`
+	NetIncome               float64 `json:"netIncome"`
+	Depreciation            float64 `json:"depreciation"`
+	ChangesInReceivables    float64 `json:"changesInReceivables"`
+	ChangesInInventories    float64 `json:"changesInInventories"`
+	CashChange              float64 `json:"cashChange"`
+	CashFlow                float64 `json:"cashFlow"`
+	CapitalExpenditures     float64 `json:"capitalExpenditures"`
+	Investment              float64 `json:"investments"`
+	InvestingActivityOther  float64 `json:"investingActivityOther"`
+	TotalInvestingCashFloes float64 `json:"totalInvestingCashFlows"`
+	DividensPaid            float64 `json:"dividendsPaid"`
+	NetBorrowings           float64 `json:"netBorrowings"`
+	OtherFinancingCashFlows float64 `json:"otherFinancingCashFlows"`
+	CashFlowFinancing       float64 `json:"cashFlowFinancing"`
+	ExchangeRateEffect      float64 `json:"exchangeRateEffect"`
+}
+
+// Company models the company data from the /company endpoint.
+type Company struct {
+	Symbol      string    `json:"symbol"`
+	Name        string    `json:"companyName"`
+	Exchange    string    `json:"exchange"`
+	Industry    string    `json:"industry"`
+	Website     string    `json:"website"`
+	Description string    `json:"description"`
+	CEO         string    `json:"CEO"`
+	IssueType   IssueType `json:"issueType"`
+	Sector      string    `json:"sector"`
+	Tags        []string  `json:"tags"`
+}
+
+// Dividends models the dividens for a given range.
+type Dividends []Dividend
+
+// Dividend models one dividend.
+type Dividend struct {
+	ExDate       Date    `json:"exDate"`
+	PaymentDate  Date    `json:"paymentDate"`
+	RecordDate   Date    `json:"recordDate"`
+	DeclaredDate Date    `json:"declaredDate"`
+	Amount       float64 `json:"amount"`
+	Flag         string  `json:"flag"`
+}
+
+// Earnings provides earnings data for a given company including the actual
+// EPS, consensus, and fiscal period. Earnings are available quarterly (last 4
+// quarters) and annually (last 4 years).
+type Earnings struct {
+	Symbol   string    `json:"symbol"`
+	Earnings []Earning `json:"earnings"`
+}
+
+// Earning models the earnings for one date.
+type Earning struct {
+	ActualEPS            float64      `json:"actualEPS"`
+	ConsensusEPS         float64      `json:"consensusEPS"`
+	AnnounceTime         AnnounceTime `json:"announcetime"`
+	NumberOfEstimates    int          `json:"numberOfEstimates"`
+	EPSSurpriseDollar    float64      `json:"EPSSurpriseDollar"`
+	EPSReportDate        Date         `json:"EPSReportDate"`
+	FiscalPeriod         string       `json:"fiscalPeriod"`
+	FiscalEndDate        Date         `json:"fiscalEndDate"`
+	YearAgo              float64      `json:"yearAgo"`
+	YearAgoChangePercent float64      `json:"yearAgoChangePercent"`
+}
+
+// DelayedQuote returns the 15 minute delayed market quote.
+type DelayedQuote struct {
+	Symbol           string  `json:"symbol"`
+	DelayedPrice     float64 `json:"delayedPrice"`
+	DelayedSize      int     `json:"delayedSize"`
+	DelayedPriceTime int     `json:"delayedPriceTime"`
+	High             float64 `json:"High"`
+	Low              float64 `json:"Low"`
+	TotalVolume      int     `json:"totalVolume"`
+	ProcessedTime    int     `json:"processedTime"`
+}
+
+// EffectiveSpreads models the effective spreads.
+type EffectiveSpreads []EffectiveSpread
+
+// EffectiveSpread models the effective spread, eligible volume, and price
+// improvement of a stock by market.
+type EffectiveSpread struct {
+	Volume           int     `json:"volume"`
+	Venue            string  `json:"venue"`
+	VenueName        string  `json:"venueName"`
+	EffectiveSpread  float64 `json:"effectiveSpread"`
+	EffectiveQuoted  float64 `json:"effectiveQuoted"`
+	PriceImprovement float64 `json:"priceImprovement"`
+}
+
+// Estimates models the latest consensus esimtate for the next fiscal period.
+type Estimates struct {
+	Symbol    string     `json:"symbol"`
+	Estimates []Estimate `json:"estimates"`
+}
+
+// Estimate models one estimate.
+type Estimate struct {
+	ConsensusEPS      float64 `json:"consensusEPS"`
+	NumberOfEstimates int     `json:"numberOfEstimates"`
+	FiscalPeriod      string  `json:"fiscalPeriod"`
+	FiscalEndDate     Date    `json:"fiscalEndDate"`
+	ReportDate        Date    `json:"reportDate"`
+}
+
+// Financials models income statement, balance sheet, and cash flow data from
+// the most recent reported quarter.
+type Financials struct {
+	Symbol     string      `json:"symbol"`
+	Financials []Financial `json:"financials"`
+}
+
+// Financial pulls income statement, balance sheet, and cash flow data from
+// the most recent reported quarter.
+type Financial struct {
+	ReportDate             Date    `json:"reportDate"`
+	GrossProfit            float64 `json:"grossProfit"`
+	CostOfRevenue          float64 `json:"costOfRevenue"`
+	OperatingRevenue       float64 `json:"operatingRevenue"`
+	TotalRevenue           float64 `json:"totalRevenue"`
+	OperatingIncome        float64 `json:"operatingIncome"`
+	NetIncome              float64 `json:"netIncome"`
+	ResearchAndDevelopment float64 `json:"researchAndDevelopment"`
+	OperatingExpense       float64 `json:"operatingExpense"`
+	CurrentAssets          float64 `json:"currentAssets"`
+	TotalAssets            float64 `json:"totalAssets"`
+	TotalLiabilities       float64 `json:"totalLiabilities"`
+	CurrentCash            float64 `json:"currentCash"`
+	TotalCash              float64 `json:"totalCash"`
+	TotalDebt              float64 `json:"totalDebt"`
+	ShareholderEquity      float64 `json:"shareholderEquity"`
+	CashChange             float64 `json:"cashChange"`
+	CashFlow               float64 `json:"cashFlow"`
+	OperatingGainsLosses   string  `json:"operatingGainsLosses"`
+}
+
+// IncomeStatements pulls income statement data. Available quarterly (4 quarters) and
+// annually (4 years).
+type IncomeStatements struct {
+	Symbol     string            `json:"symbol"`
+	Statements []IncomeStatement `json:"income"`
+}
+
+// IncomeStatement models one income statement.
+type IncomeStatement struct {
+	ReportDate             Date    `json:"reportDate"`
+	TotalRevenue           float64 `json:"totalRevenue"`
+	CostOfRevenue          float64 `json:"costOfRevenue"`
+	GrossProfit            float64 `json:"grossProfit"`
+	ResearchAndDevelopment float64 `json:"researchAndDevelopment"`
+	SellingGeneralAndAdmin float64 `json:"sellingGeneralAndAdmin"`
+	OperatingExpense       float64 `json:"operatingExpense"`
+	OperatingIncome        float64 `json:"operatingIncome"`
+	OtherIncomeExpenseNet  float64 `json:"otherIncomeExpenseNet"`
+	EBIT                   float64 `json:"ebit"`
+	InterestIncome         float64 `json:"interestIncome"`
+	PretaxIncome           float64 `json:"pretaxIncome"`
+	IncomeTax              float64 `json:"incomeTax"`
+	MinorityInterest       float64 `json:"minorityInterest"`
+	NetIncome              float64 `json:"netIncome"`
+	NetIncomeBasic         float64 `json:"netIncomeBasic"`
+}
+
+// KeyStats models the data returned from IEX Cloud's /stats endpoint.
+type KeyStats struct {
+	Name                string  `json:"companyName"`
+	MarketCap           int     `json:"marketCap"`
+	Week52High          float64 `json:"week52High"`
+	Week52Low           float64 `json:"week52Low"`
+	Week52Change        float64 `json:"week52Change"`
+	SharesOutstanding   int     `json:"sharesOutstanding"`
+	Float               int     `json:"float"`
+	Symbol              string  `json:"symbol"`
+	Avg10Volume         int     `json:"avg10Volume"`
+	Avg30Volume         int     `json:"avg30Volume"`
+	Day200MovingAvg     float64 `json:"day200MovingAvg"`
+	Day50MovingAvg      float64 `json:"day50MovingAvg"`
+	Employees           int     `json:"employees"`
+	MaxChangePercent    float64 `json:"maxChangePercent"`
+	Year5ChangePercent  float64 `json:"year5ChangePercent"`
+	Year2ChangePercent  float64 `json:"year2ChangePercent"`
+	Year1ChangePercent  float64 `json:"year1ChangePercent"`
+	YTDChangePercent    float64 `json:"ytdChangePercent"`
+	Month6ChangePercent float64 `json:"month6ChangePercent"`
+	Month3ChangePercent float64 `json:"month3ChangePercent"`
+	Month1ChangePercent float64 `json:"month1ChangePercent"`
+	Day30ChangePercent  float64 `json:"day30ChangePercent"`
+	Day5ChangePercent   float64 `json:"day5ChangePercent"`
+}
+
+// LargestTrades models multiple last sale eligible trades.
+type LargestTrades []LargestTrade
+
+// LargestTrade models the 15 minute delayed, last sale eligible trades.
+type LargestTrade struct {
+	Price     float64 `json:"price"`
+	Size      int     `json:"size"`
+	Time      int     `json:"time"`
+	TimeLabel string  `json:"timeLabel"`
+	Venue     string  `json:"venue"`
+	VenueName string  `json:"venueName"`
+}
+
+// Logo models the /logo endpoint.
+type Logo struct {
+	URL string `json:"url"`
+}
+
+// Markets models a slice of markets.
+type Markets []Market
+
+// Market models the traded volume on U.S. markets.
+type Market struct {
+	MIC         string    `json:"mic"`
+	TapeID      string    `json:"tapeId"`
+	Venue       string    `json:"venueName"`
+	Volume      int       `json:"volume"`
+	TapeA       int       `json:"tapeA"`
+	TapeB       int       `json:"tapeB"`
+	TapeC       int       `json:"tapeC"`
+	Percent     float64   `json:"marketPercent"`
+	LastUpdated EpochTime `json:"lastUpdated"`
+}
+
+// OHLC models the open, high, low, close for a stock.
+type OHLC struct {
+	Open  OpenClose `json:"open"`
+	Close OpenClose `json:"close"`
+	High  float64   `json:"high"`
+	Low   float64   `json:"low"`
+}
+
+// OpenClose provides the price and time for either the open or close price of
+// a stock.
+type OpenClose struct {
+	Price float64 `json:"price"`
+	Time  int     `json:"Time"`
+}
+
+// PreviousDay models the previous day adjusted price data.
+type PreviousDay struct {
+	Symbol           string  `json:"symbol"`
+	Date             Date    `json:"date"`
+	Open             float64 `json:"open"`
+	High             float64 `json:"high"`
+	Low              float64 `json:"Low"`
+	Close            float64 `json:"close"`
+	Volume           int     `json:"volume"`
+	UnadjustedVolume int     `json:"unadjustedVolume"`
+	Change           float64 `json:"change"`
+	ChangePercent    float64 `json:"changePercent"`
+}
+
+// PriceTarget models the latest average, high, and low analyst price target for
+// a symbol.
+type PriceTarget struct {
+	Symbol      string  `json:"symbol"`
+	UpdatedDate Date    `json:"updatedDate"`
+	Average     float64 `json:"priceTargetAverage"`
+	High        float64 `json:"priceTargetHigh"`
+	Low         float64 `json:"priceTargetLow"`
+	NumAnalysts int     `json:"numberOfAnalysts"`
+}
+
+// Quote models the data returned from the IEX Cloud /quote endpoint.
+type Quote struct {
+	Symbol                string     `json:"symbol"`
+	CompanyName           string     `json:"companyName"`
+	CalculationPrice      string     `json:"calculationPrice"`
+	Open                  float64    `json:"open"`
+	OpenTime              EpochTime  `json:"openTime"`
+	Close                 float64    `json:"close"`
+	CloseTime             EpochTime  `json:"closeTime"`
+	High                  float64    `json:"high"`
+	Low                   float64    `json:"low"`
+	LatestPrice           float64    `json:"latestPrice"`
+	LatestSource          string     `json:"latestSource"`
+	LatestTime            string     `json:"latestTime"`
+	LatestUpdate          EpochTime  `json:"latestUpdate"`
+	LatestVolume          int        `json:"latestVolume"`
+	IEXRealtimePrice      float64    `json:"iexRealtimePrice"`
+	IEXRealtimeSize       int        `json:"iexRealtimeSize"`
+	IEXLastUpdated        *EpochTime `json:"iexLastUpdated"`
+	DelayedPrice          float64    `json:"delayedPrice"`
+	DelayedTime           string     `json:"delayedTime"`
+	ExtendedPrice         float64    `json:"extendedPrice"`
+	ExtendedChange        float64    `json:"extendedChange"`
+	ExtendedChangePercent float64    `json:"extendedChangePercent"`
+	ExtendedPriceTime     int        `json:"extendedPriceTime"`
+	PreviousClose         float64    `json:"previousClose"`
+	Change                float64    `json:"change"`
+	ChangePercent         float64    `json:"changePercent"`
+	IEXMarketPercent      float64    `json:"iexMarketPercent"`
+	IEXVolume             int        `json:"iexVolume"`
+	AvgTotalVolume        int        `json:"avgTotalVolume"`
+	IEXBidPrice           float64    `json:"iexBidPrice"`
+	IEXBidSize            int        `json:"iexBidSize"`
+	IEXAskPrice           float64    `json:"iexAskPrice"`
+	IEXAskSize            int        `json:"iexAskSize"`
+	MarketCap             int        `json:"marketCap"`
+	Week52High            float64    `json:"week52High"`
+	Week52Low             float64    `json:"week52Low"`
+	YTDChange             float64    `json:"ytdChange"`
+}
+
+// RelevantStocks models a list of relevant stocks that may or may not be
+// peers.
+type RelevantStocks struct {
+	Peers   bool     `json:"peers"`
+	Symbols []string `json:"symbols"`
+}
