@@ -63,7 +63,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Alternative Data
 
-- [ ] News
+- [x] News
 - [ ] Crypto
 - [ ] Social Sentiment
 

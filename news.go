@@ -31,3 +31,11 @@ func (c Client) News(stock string, num int) ([]News, error) {
 	err := c.GetJSON(endpoint, n)
 	return *n, err
 }
+
+// MarketNews retrieves the given number of news articles for the market.
+func (c Client) MarketNews(num int) ([]News, error) {
+	n := &[]News{}
+	endpoint := fmt.Sprintf("/stock/market/news/last/%d", num)
+	err := c.GetJSON(endpoint, n)
+	return *n, err
+}
