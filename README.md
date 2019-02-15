@@ -9,7 +9,7 @@ Go library for accessing the IEX Cloud API.
 ## Overview
 
 [iexcloud][] provides a Go interface to the [IEX Cloud API][1]. To
-access the [IEX Cloud API][1] an account and token is required.
+access the [IEX Cloud API][1] an account and token are required.
 
 ## Installation
 
@@ -47,7 +47,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Largest Trades
 - [x] List
 - [x] Logo
-- [ ] Market Volume (U.S.)
+- [x] Market Volume (U.S.)
 - [ ] News
 - [x] OHLC
 - [x] Open / Close Price
