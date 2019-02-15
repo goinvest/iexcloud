@@ -8,13 +8,14 @@ package iex
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 )
 
 // Date models a report date
 type Date time.Time
 
-// UnmarshalJSON implements the Unmarshaler interface for ReportDate.
+// UnmarshalJSON implements the Unmarshaler interface for Date.
 func (d *Date) UnmarshalJSON(data []byte) error {
 	var aux string
 	err := json.Unmarshal(data, &aux)
@@ -29,7 +30,7 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON implements the Marshaler interface for ReportDate.
+// MarshalJSON implements the Marshaler interface for Date.
 func (d *Date) MarshalJSON() ([]byte, error) {
 	t := time.Time(*d)
 	return json.Marshal(t.Format("2006-01-02"))
@@ -86,12 +87,12 @@ var PathRangeJSON = map[PathRange]string{
 	Next: "next",
 }
 
-// MarshalJSON implements the Marshaler interface for AnnounceTime.
+// MarshalJSON implements the Marshaler interface for PathRange.
 func (p *PathRange) MarshalJSON() ([]byte, error) {
 	return json.Marshal(PathRangeJSON[*p])
 }
 
-// UnmarshalJSON implements the Unmarshaler interface for AnnounceTime.
+// UnmarshalJSON implements the Unmarshaler interface for PathRange.
 func (p *PathRange) UnmarshalJSON(data []byte) error {
 	var s string
 	if err := json.Unmarshal(data, &s); err != nil {
@@ -116,3 +117,29 @@ func (p *PathRange) Set(s string) error {
 func (p PathRange) String() string {
 	return pathRangeDescription[p]
 }
+
+// EpochTime refers to unix timestamps used for some fields in the API
+type EpochTime time.Time
+
+// MarshalJSON implements the Marshaler interface for EpochTime.
+func (e *EpochTime) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprint(time.Time(*e).Unix())), nil
+}
+
+// UnmarshalJSON implements the Unmarshaler interface for EpochTime.
+func (e *EpochTime) UnmarshalJSON(data []byte) (err error) {
+	ts, err := strconv.Atoi(string(data))
+	if err != nil {
+		return err
+	}
+	// Per docs: If the value is -1, IEX has not quoted the symbol in the trading day.
+	if ts == -1 {
+		return
+	}
+
+	*e = EpochTime(time.Unix(int64(ts)/1000, 0))
+	return nil
+}
+
+// String implements the Stringer interface for EpochTime.
+func (e EpochTime) String() string { return time.Time(e).String() }
