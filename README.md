@@ -56,7 +56,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Price
 - [x] Price Target
 - [x] Quote
-- [ ] Relevant Stocks
+- [x] Relevant Stocks
 - [ ] Sector Performance
 - [ ] Splits
 - [ ] Volume by Venue
