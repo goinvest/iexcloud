@@ -48,7 +48,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] List
 - [x] Logo
 - [x] Market Volume (U.S.)
-- [ ] News
+- [x] News
 - [x] OHLC
 - [x] Open / Close Price
 - [x] Peers
