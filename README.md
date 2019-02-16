@@ -86,7 +86,7 @@ you want a particular API to be developed next, please open an issue.
 ### Investors Exchange Data
 
 - [ ] TOPS
-- [ ] Last
+- [x] Last
 - [ ] DEEP
 - [ ] DEEP Auction
 - [ ] DEEP Book

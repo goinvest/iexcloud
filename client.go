@@ -413,3 +413,14 @@ func (c Client) IEXSymbols() ([]TradedSymbol, error) {
 	err := c.GetJSON(endpoint, &symbols)
 	return symbols, err
 }
+
+// Last provides trade data for executions on IEX. It is a near real time,
+// intraday API that provides IEX last sale price, size and time. Last is ideal
+// for developers that need a lightweight stock quote.
+func (c Client) Last(stock string) ([]Last, error) {
+	// FIXME: Change so that multiple stock symbols can be handled.
+	x := []Last{}
+	endpoint := "/tops/last?symbols=" + url.PathEscape(stock)
+	err := c.GetJSON(endpoint, &x)
+	return x, err
+}
