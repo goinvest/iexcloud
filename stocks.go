@@ -95,9 +95,6 @@ type Company struct {
 	Tags        []string  `json:"tags"`
 }
 
-// Dividends models the dividens for a given range.
-type Dividends []Dividend
-
 // Dividend models one dividend.
 type Dividend struct {
 	ExDate       Date    `json:"exDate"`
@@ -141,9 +138,6 @@ type DelayedQuote struct {
 	TotalVolume      int     `json:"totalVolume"`
 	ProcessedTime    int     `json:"processedTime"`
 }
-
-// EffectiveSpreads models the effective spreads.
-type EffectiveSpreads []EffectiveSpread
 
 // EffectiveSpread models the effective spread, eligible volume, and price
 // improvement of a stock by market.
@@ -256,9 +250,6 @@ type KeyStats struct {
 	Day5ChangePercent   float64 `json:"day5ChangePercent"`
 }
 
-// LargestTrades models multiple last sale eligible trades.
-type LargestTrades []LargestTrade
-
 // LargestTrade models the 15 minute delayed, last sale eligible trades.
 type LargestTrade struct {
 	Price     float64 `json:"price"`
@@ -273,9 +264,6 @@ type LargestTrade struct {
 type Logo struct {
 	URL string `json:"url"`
 }
-
-// Markets models a slice of markets.
-type Markets []Market
 
 // Market models the traded volume on U.S. markets.
 type Market struct {

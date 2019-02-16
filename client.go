@@ -142,8 +142,8 @@ func (c Client) Company(stock string) (Company, error) {
 
 // Dividends returns the dividends from the IEX Cloud endpoint for the given
 // stock symbol and the given date range.
-func (c Client) Dividends(stock string, r PathRange) (Dividends, error) {
-	dividends := Dividends{}
+func (c Client) Dividends(stock string, r PathRange) ([]Dividend, error) {
+	dividends := []Dividend{}
 	endpoint := fmt.Sprintf("/stock/%s/dividends/%s",
 		url.PathEscape(stock), PathRangeJSON[r])
 	err := c.GetJSON(endpoint, &dividends)
@@ -170,8 +170,8 @@ func (c Client) DelayedQuote(stock string) (DelayedQuote, error) {
 
 // EffectiveSpreads returns the effective spreads from the IEX Cloud endpoint
 // for the given stock symbol.
-func (c Client) EffectiveSpreads(stock string) (EffectiveSpreads, error) {
-	es := EffectiveSpreads{}
+func (c Client) EffectiveSpreads(stock string) ([]EffectiveSpread, error) {
+	es := []EffectiveSpread{}
 	endpoint := fmt.Sprintf("/stock/%s/effective-spread", url.PathEscape(stock))
 	err := c.GetJSON(endpoint, &es)
 	return es, err
@@ -240,8 +240,8 @@ func (c Client) KeyStats(stock string) (KeyStats, error) {
 
 // LargestTrades returns the 15 minute delayed, last sale eligible trade from
 // the IEX Cloud endpoint for the given stock symbol.
-func (c Client) LargestTrades(stock string) (LargestTrades, error) {
-	lt := LargestTrades{}
+func (c Client) LargestTrades(stock string) ([]LargestTrade, error) {
+	lt := []LargestTrade{}
 	endpoint := fmt.Sprintf("/stock/%s/largest-trades", url.PathEscape(stock))
 	err := c.GetJSON(endpoint, &lt)
 	return lt, err
@@ -300,8 +300,8 @@ func (c Client) Logo(stock string) (Logo, error) {
 }
 
 // Markets returns real time traded volume on U.S. markets.
-func (c Client) Markets() (Markets, error) {
-	m := Markets{}
+func (c Client) Markets() ([]Market, error) {
+	m := []Market{}
 	endpoint := "/market"
 	err := c.GetJSON(endpoint, &m)
 	return m, err
