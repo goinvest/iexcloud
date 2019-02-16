@@ -196,6 +196,11 @@ type Financial struct {
 	OperatingGainsLosses   string  `json:"operatingGainsLosses"`
 }
 
+// HistoricalPrice models the data for a historical stock price.
+type HistoricalPrice struct {
+	Date string `json:"date"`
+}
+
 // IncomeStatements pulls income statement data. Available quarterly (4 quarters) and
 // annually (4 years).
 type IncomeStatements struct {
@@ -364,4 +369,32 @@ type Quote struct {
 type RelevantStocks struct {
 	Peers   bool     `json:"peers"`
 	Symbols []string `json:"symbols"`
+}
+
+// Sector models the performance based on each sector ETF.
+type Sector struct {
+	Type        string    `json:"sector"`
+	Name        string    `json:"name"`
+	Performance float64   `json:"performance"`
+	LastUpdated EpochTime `json:"lastUpdated"`
+}
+
+// Split models the a stock split.
+type Split struct {
+	ExDate       Date    `json:"exDate"`
+	DeclaredDate Date    `json:"declaredDate"`
+	Ratio        float64 `json:"ratio"`
+	FromFactor   float64 `json:"fromFactor"`
+	Description  string  `json:"description"`
+}
+
+// Volume models the 15 minute delayed and 30 day average consolidated volume
+// percentage of a stock by market.
+type Volume struct {
+	Volume               int     `json:"volume"`
+	Venue                string  `json:"venue"`
+	VenueName            string  `json:"venueName"`
+	Date                 Date    `json:"date"`
+	MarketPercent        float64 `json:"marketPercent"`
+	AverageMarketPercent float64 `json:"avgMarketPercent"`
 }
