@@ -329,25 +329,25 @@ type Quote struct {
 	CompanyName           string     `json:"companyName"`
 	CalculationPrice      string     `json:"calculationPrice"`
 	Open                  float64    `json:"open"`
-	OpenTime              EpochTime  `json:"openTime"`
+	OpenTime              *EpochTime `json:"openTime"`
 	Close                 float64    `json:"close"`
-	CloseTime             EpochTime  `json:"closeTime"`
+	CloseTime             *EpochTime `json:"closeTime"`
 	High                  float64    `json:"high"`
 	Low                   float64    `json:"low"`
 	LatestPrice           float64    `json:"latestPrice"`
 	LatestSource          string     `json:"latestSource"`
 	LatestTime            string     `json:"latestTime"`
-	LatestUpdate          EpochTime  `json:"latestUpdate"`
+	LatestUpdate          *EpochTime `json:"latestUpdate"`
 	LatestVolume          int        `json:"latestVolume"`
 	IEXRealtimePrice      float64    `json:"iexRealtimePrice"`
 	IEXRealtimeSize       int        `json:"iexRealtimeSize"`
 	IEXLastUpdated        *EpochTime `json:"iexLastUpdated"`
 	DelayedPrice          float64    `json:"delayedPrice"`
-	DelayedTime           string     `json:"delayedTime"`
+	DelayedPriceTime      *EpochTime `json:"delayedPriceTime"`
 	ExtendedPrice         float64    `json:"extendedPrice"`
 	ExtendedChange        float64    `json:"extendedChange"`
 	ExtendedChangePercent float64    `json:"extendedChangePercent"`
-	ExtendedPriceTime     int        `json:"extendedPriceTime"`
+	ExtendedPriceTime     *EpochTime `json:"extendedPriceTime"`
 	PreviousClose         float64    `json:"previousClose"`
 	Change                float64    `json:"change"`
 	ChangePercent         float64    `json:"changePercent"`
