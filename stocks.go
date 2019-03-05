@@ -369,6 +369,7 @@ type Quote struct {
 	Week52High            float64   `json:"week52High"`
 	Week52Low             float64   `json:"week52Low"`
 	YTDChange             float64   `json:"ytdChange"`
+	PERatio               float64   `json:"peRatio"`
 }
 
 // RelevantStocks models a list of relevant stocks that may or may not be
