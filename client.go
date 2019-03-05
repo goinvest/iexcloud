@@ -62,6 +62,11 @@ func (c *Client) GetJSONWithoutToken(endpoint string, v interface{}) error {
 		return err
 	}
 	defer resp.Body.Close()
+	// Even if GET didn't return an error, check the status code to make sure
+	// everything was ok.
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+	}
 	return json.NewDecoder(resp.Body).Decode(v)
 }
 
@@ -84,6 +89,11 @@ func (c *Client) GetFloat64(endpoint string) (float64, error) {
 		return 0.0, err
 	}
 	defer resp.Body.Close()
+	// Even if GET didn't return an error, check the status code to make sure
+	// everything was ok.
+	if resp.StatusCode != http.StatusOK {
+		return 0.0, fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+	}
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return 0.0, err
