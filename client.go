@@ -112,6 +112,14 @@ func (c Client) balanceSheets(endpoint string) (BalanceSheets, error) {
 	return bs, err
 }
 
+// Book returns the quote, bids, asks, and trades for a given stock symbol.
+func (c Client) Book(stock string) (Book, error) {
+	book := Book{}
+	endpoint := fmt.Sprintf("/stock/%s/book", url.PathEscape(stock))
+	err := c.GetJSON(endpoint, &book)
+	return book, err
+}
+
 // AnnualCashFlows returns the specified number of most recent annual cash flow
 // statements from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualCashFlows(stock string, num int) (CashFlows, error) {

@@ -47,11 +47,37 @@ type BalanceSheet struct {
 
 // Book models the data returned from the /book endpoint.
 type Book struct {
-	Quote       int
-	Bids        []float64
-	Asks        []float64
-	Trades      []float64
-	SystemEvent int
+	Quote       Quote       `json:"quote"`
+	Bids        []BidAsk    `json:"bids"`
+	Asks        []BidAsk    `json:"asks"`
+	Trades      []Trade     `json:"trades"`
+	SystemEvent SystemEvent `json:"systemEvent"`
+}
+
+// BidAsk models a bid or an ask for a quote.
+type BidAsk struct {
+	Price     float64   `json:"price"`
+	Size      int       `json:"size"`
+	Timestamp EpochTime `json:"timestamp"`
+}
+
+// Trade models a trade for a quote.
+type Trade struct {
+	Price                 float64   `json:"price"`
+	Size                  int       `json:"size"`
+	TradeID               int       `json:"tradeId"`
+	IsISO                 bool      `json:"isISO"`
+	IsOddLot              bool      `json:"isOddLot"`
+	IsOutsideRegularHours bool      `json:"isOutsideRegularHours"`
+	IsSinglePriceCross    bool      `json:"isSinglePriceCross"`
+	IsTradeThroughExempt  bool      `json:"isTradeThroughExempt"`
+	Timestamp             EpochTime `json:"timestamp"`
+}
+
+// SystemEvent models a system event for a quote.
+type SystemEvent struct {
+	Type      string    `json:"systemEvent"`
+	Timestamp EpochTime `json:"timestamp"`
 }
 
 // CashFlows pulls cash flow data. Available quarterly (4 quarters) or annually
