@@ -254,6 +254,12 @@ type KeyStats struct {
 	Month1ChangePercent float64 `json:"month1ChangePercent"`
 	Day30ChangePercent  float64 `json:"day30ChangePercent"`
 	Day5ChangePercent   float64 `json:"day5ChangePercent"`
+	PERatio             float64 `json:"peRatio"`
+	NextDividendDate    Date    `json:"nextDividendDate"`
+	NextEarningsDate    Date    `json:"nextEarningsDate"`
+	TTMEPS              float64 `json:"ttmEPS"`
+	TTMDividendRate     float64 `json:"ttmDividendRate"`
+	DividendYield       float64 `json:"dividendYield"`
 }
 
 // LargestTrade models the 15 minute delayed, last sale eligible trades.
