@@ -427,3 +427,11 @@ func (c Client) Last(stock string) ([]Last, error) {
 	err := c.GetJSON(endpoint, &x)
 	return x, err
 }
+
+// Status returns the IEX Cloud system status.
+func (c Client) Status() (Status, error) {
+	status := Status{}
+	endpoint := "/status"
+	err := c.GetJSONWithoutToken(endpoint, &status)
+	return status, err
+}

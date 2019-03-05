@@ -7,9 +7,9 @@ package iex
 
 // Status models the IEX Cloud API system status
 type Status struct {
-	Status  string `json:"status"`
-	Version string `json:"version"`
-	Time    int    `json:"time"`
+	Status  string    `json:"status"`
+	Version string    `json:"version"`
+	Time    EpochTime `json:"time"`
 }
 
 // Status returns the IEX Cloud system status.
