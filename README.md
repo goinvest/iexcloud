@@ -37,11 +37,17 @@ you want a particular API to be developed next, please open an issue.
 - [x] Delayed Quote
 - [x] Dividends
 - [x] Earnings
+- [ ] Earnings Today
 - [x] Effective Spread
 - [x] Estimates
 - [x] Financials
+- [ ] Fund Ownership
 - [ ] Historical Prices
 - [x] Income Statement
+- [ ] Insider Roster
+- [ ] Insider Summary
+- [ ] Insider Transactions
+- [ ] Institutional Ownership
 - [ ] IPO Calendar
 - [x] Key Stats
 - [x] Largest Trades
@@ -56,6 +62,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Price
 - [x] Price Target
 - [x] Quote
+- [ ] Recommendation Trends
 - [x] Relevant Stocks
 - [ ] Sector Performance
 - [ ] Splits
@@ -63,9 +70,9 @@ you want a particular API to be developed next, please open an issue.
 
 ### Alternative Data
 
-- [x] News
 - [ ] Crypto
 - [ ] Social Sentiment
+- [ ] CEO Compensation
 
 ### Reference Data
 

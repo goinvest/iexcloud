@@ -11,11 +11,3 @@ type Status struct {
 	Version string    `json:"version"`
 	Time    EpochTime `json:"time"`
 }
-
-// Status returns the IEX Cloud system status.
-func (c Client) Status() (Status, error) {
-	status := Status{}
-	endpoint := "/status"
-	err := c.GetJSONWithoutToken(endpoint, &status)
-	return status, err
-}
