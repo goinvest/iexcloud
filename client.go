@@ -41,13 +41,15 @@ func (c *Client) GetJSON(endpoint string, v interface{}) error {
 		return err
 	}
 	resp, err := http.Get(address)
-	if resp.StatusCode == 403 {
-		return fmt.Errorf("invalid api access token")
-	}
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
+	// Even if GET didn't return an error, check the status code to make sure
+	// everything was ok.
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+	}
 	return json.NewDecoder(resp.Body).Decode(v)
 }
 

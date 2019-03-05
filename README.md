@@ -30,7 +30,7 @@ you want a particular API to be developed next, please open an issue.
 
 - [x] Balance Sheet
 - [ ] Batch Requests
-- [ ] Book
+- [x] Book
 - [x] Cash Flow
 - [ ] Collections
 - [x] Company
