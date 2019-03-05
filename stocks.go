@@ -92,6 +92,7 @@ type Company struct {
 	CEO         string    `json:"CEO"`
 	IssueType   IssueType `json:"issueType"`
 	Sector      string    `json:"sector"`
+	Employees   int       `json:"employees"`
 	Tags        []string  `json:"tags"`
 }
 
