@@ -37,7 +37,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Delayed Quote
 - [x] Dividends
 - [x] Earnings
-- [ ] Earnings Today
+- [x] Earnings Today
 - [x] Effective Spread
 - [x] Estimates
 - [x] Financials

@@ -182,6 +182,15 @@ func (c Client) Earnings(stock string, num int) (Earnings, error) {
 	return earnings, err
 }
 
+// EarningsToday returns the earnings that will be reported today before the
+// open and after the market closes.
+func (c Client) EarningsToday() (EarningsToday, error) {
+	e := EarningsToday{}
+	endpoint := "/stock/market/today-earnings"
+	err := c.GetJSON(endpoint, &e)
+	return e, err
+}
+
 // DelayedQuote returns the 15 minute delayed market quote from the IEX Cloud
 // endpoint for the given stock symbol.
 func (c Client) DelayedQuote(stock string) (DelayedQuote, error) {
