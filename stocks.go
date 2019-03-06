@@ -361,6 +361,19 @@ type Market struct {
 	LastUpdated EpochTime `json:"lastUpdated"`
 }
 
+// News models a news item either for the market or for an individual stock.
+type News struct {
+	Time       EpochTime `json:"datetime"`
+	Headline   string    `json:"headline"`
+	Source     string    `json:"source"`
+	URL        string    `json:"url"`
+	Summary    string    `json:"summary"`
+	Related    string    `json:"related"`
+	Image      string    `json:"image"`
+	Language   string    `json:"lang"`
+	HasPaywall bool      `json:"hasPaywall"`
+}
+
 // OHLC models the open, high, low, close for a stock.
 type OHLC struct {
 	Open  OpenClose `json:"open"`
