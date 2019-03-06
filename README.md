@@ -88,7 +88,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] U.S. Holidays and Trading Days
 - [ ] Stock Tags
 - [ ] Stock Collections
-- [ ] Mutual Fund Symbols
+- [x] Mutual Fund Symbols
 - [x] OTC Symbols
 - [x] FX Symbols
 - [ ] Options Symbols

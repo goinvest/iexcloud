@@ -34,6 +34,14 @@ type USExchange struct {
 	Type     string `json:"type"`
 }
 
+// MutualFundSymbol models mutual fund support by IEX Cloud for API calls.
+type MutualFundSymbol struct {
+	Symbol    string `json:"symbol"`
+	Name      string `json:"name"`
+	Date      Date   `json:"date"`
+	IsEnabled bool   `json:"isEnabled"`
+}
+
 // OTCSymbol models an Over-the-Counter (OTC) symbol that IEX Cloud supports
 // for API calls.
 type OTCSymbol struct {

@@ -503,6 +503,15 @@ func (c Client) USExchanges() ([]USExchange, error) {
 	return e, err
 }
 
+// MutualFundSymbols returns an array of mutual funds that IEX Cloud supports
+// for API calls.
+func (c Client) MutualFundSymbols() ([]MutualFundSymbol, error) {
+	r := []MutualFundSymbol{}
+	endpoint := "/ref-data/mutual-funds/symbols"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // OTCSymbols returns an array of Over-the-Counter (OTC) stocks that IEX Cloud
 // supports for API calls.
 func (c Client) OTCSymbols() ([]OTCSymbol, error) {
