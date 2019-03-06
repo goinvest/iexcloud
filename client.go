@@ -464,6 +464,16 @@ func (c Client) IEXSymbols() ([]TradedSymbol, error) {
 	return symbols, err
 }
 
+// ExchangeRate returns an end of day exchange rate of a given currency pair.
+func (c Client) ExchangeRate(from, to string) (ExchangeRate, error) {
+	r := ExchangeRate{}
+	endpoint := fmt.Sprintf("/fx/rate/%s/%s",
+		url.PathEscape(from),
+		url.PathEscape(to))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // Last provides trade data for executions on IEX. It is a near real time,
 // intraday API that provides IEX last sale price, size and time. Last is ideal
 // for developers that need a lightweight stock quote.

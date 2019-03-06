@@ -90,6 +90,10 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Bonds Symbols
 - [ ] Crypto Symbols
 
+### Forex / Currencies
+
+- [ ] Exchange Rates
+
 ### Investors Exchange Data
 
 - [ ] TOPS
