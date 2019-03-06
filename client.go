@@ -239,6 +239,14 @@ func (c Client) financials(endpoint string) (Financials, error) {
 	return financials, err
 }
 
+// FundOwnership returns the ten top holders of the given stock.
+func (c Client) FundOwnership(stock string) ([]FundOwner, error) {
+	r := []FundOwner{}
+	endpoint := fmt.Sprintf("/stock/%s/fund-ownership", url.PathEscape(stock))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // AnnualIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualIncomeStatements(stock string, num int) (IncomeStatements, error) {

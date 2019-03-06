@@ -242,6 +242,16 @@ type Financial struct {
 	OperatingGainsLosses   string  `json:"operatingGainsLosses"`
 }
 
+// FundOwner models a fund owning a stock.
+type FundOwner struct {
+	AdjustedHolding     float64   `json:"adjHolding"`
+	AdjustedMarketValue float64   `json:"adjMv"`
+	Name                string    `json:"entityProperName"`
+	ReportDate          EpochTime `json:"reportDate"`
+	ReportedHolding     float64   `json:"reportedHolding"`
+	ReportedMarketValue float64   `json:"reportedMv"`
+}
+
 // HistoricalPrice models the data for a historical stock price.
 type HistoricalPrice struct {
 	Date string `json:"date"`

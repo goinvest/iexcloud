@@ -41,7 +41,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Effective Spread
 - [x] Estimates
 - [x] Financials
-- [ ] Fund Ownership
+- [x] Fund Ownership
 - [ ] Historical Prices
 - [x] Income Statement
 - [x] Insider Roster
