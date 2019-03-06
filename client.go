@@ -261,6 +261,15 @@ func (c Client) incomeStatements(endpoint string) (IncomeStatements, error) {
 	return is, err
 }
 
+// InsiderRoster returns the top 10 insiders with the most recent information
+// for the given stock symbol.
+func (c Client) InsiderRoster(stock string) ([]InsiderRoster, error) {
+	r := []InsiderRoster{}
+	endpoint := fmt.Sprintf("/stock/%s/insider-roster", url.PathEscape(stock))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // KeyStats returns the key stats from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) KeyStats(stock string) (KeyStats, error) {

@@ -274,6 +274,13 @@ type IncomeStatement struct {
 	NetIncomeBasic         float64 `json:"netIncomeBasic"`
 }
 
+// InsiderRoster models the top 10 insiders with the most recent information.
+type InsiderRoster struct {
+	EntityName string `json:"entityName"`
+	Position   int    `json:"position"`
+	ReportDate Date   `json:"reportDate"`
+}
+
 // KeyStats models the data returned from IEX Cloud's /stats endpoint.
 type KeyStats struct {
 	Name                string  `json:"companyName"`

@@ -44,7 +44,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Fund Ownership
 - [ ] Historical Prices
 - [x] Income Statement
-- [ ] Insider Roster
+- [x] Insider Roster
 - [ ] Insider Summary
 - [ ] Insider Transactions
 - [ ] Institutional Ownership
