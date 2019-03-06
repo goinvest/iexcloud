@@ -34,9 +34,19 @@ type USExchange struct {
 	Type     string `json:"type"`
 }
 
-// ForexSymbols provides a list of the currencies and currency pairs available
+// OTCSymbol models an Over-the-Counter (OTC) symbol that IEX Cloud supports
+// for API calls.
+type OTCSymbol struct {
+	Symbol string `json:"symbol"`
+	Name   string `json:"name"`
+	Date   Date   `json:"date"`
+	Type   string `json:"type"`
+	IEXID  string `json:"iexId"`
+}
+
+// FXSymbols provides a list of the currencies and currency pairs available
 // from IEX Cloud.
-type ForexSymbols struct {
+type FXSymbols struct {
 	Currencies []Currency     `json:"currencies"`
 	Pairs      []CurrencyPair `json:"pairs"`
 }

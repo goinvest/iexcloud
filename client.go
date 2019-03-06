@@ -486,10 +486,19 @@ func (c Client) USExchanges() ([]USExchange, error) {
 	return e, err
 }
 
-// ForexSymbols returns a list of currencies and a list of foreign exchange
+// OTCSymbols returns an array of Over-the-Counter (OTC) stocks that IEX Cloud
+// supports for API calls.
+func (c Client) OTCSymbols() ([]OTCSymbol, error) {
+	r := []OTCSymbol{}
+	endpoint := "/ref-data/otc/symbols"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// FXSymbols returns a list of currencies and a list of foreign exchange
 // currency pairs that are available supported by IEX Cloud.
-func (c Client) ForexSymbols() (ForexSymbols, error) {
-	r := ForexSymbols{}
+func (c Client) FXSymbols() (FXSymbols, error) {
+	r := FXSymbols{}
 	endpoint := "/ref-data/fx/symbols"
 	err := c.GetJSON(endpoint, &r)
 	return r, err

@@ -83,7 +83,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Stock Tags
 - [ ] Stock Collections
 - [ ] Mutual Fund Symbols
-- [ ] OTC Symbols
+- [x] OTC Symbols
 - [x] FX Symbols
 - [ ] Options Symbols
 - [ ] Commodities Symbols
