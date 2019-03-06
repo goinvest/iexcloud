@@ -45,7 +45,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Historical Prices
 - [x] Income Statement
 - [x] Insider Roster
-- [ ] Insider Summary
+- [x] Insider Summary
 - [ ] Insider Transactions
 - [ ] Institutional Ownership
 - [ ] IPO Calendar

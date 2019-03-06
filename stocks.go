@@ -281,6 +281,15 @@ type InsiderRoster struct {
 	ReportDate Date   `json:"reportDate"`
 }
 
+// InsiderSummary models a summary of insider information.
+type InsiderSummary struct {
+	FullName       string `json:"fullName"`
+	NetTransaction int    `json:"netTransaction"`
+	ReportedTitle  string `json:"reportedTitle"`
+	TotalBought    int    `json:"totalBought"`
+	TotalSold      int    `json:"totalSold"`
+}
+
 // KeyStats models the data returned from IEX Cloud's /stats endpoint.
 type KeyStats struct {
 	Name                string  `json:"companyName"`

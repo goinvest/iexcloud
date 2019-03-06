@@ -270,6 +270,15 @@ func (c Client) InsiderRoster(stock string) ([]InsiderRoster, error) {
 	return r, err
 }
 
+// InsiderSummary returns the insiders summary with the most recent information
+// for the given stock symbol.
+func (c Client) InsiderSummary(stock string) ([]InsiderSummary, error) {
+	r := []InsiderSummary{}
+	endpoint := fmt.Sprintf("/stock/%s/insider-summary", url.PathEscape(stock))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // KeyStats returns the key stats from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) KeyStats(stock string) (KeyStats, error) {
