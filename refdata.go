@@ -33,3 +33,23 @@ type USExchange struct {
 	OATSID   string `json:"oatsId"`
 	Type     string `json:"type"`
 }
+
+// ForexSymbols provides a list of the currencies and currency pairs available
+// from IEX Cloud.
+type ForexSymbols struct {
+	Currencies []Currency     `json:"currencies"`
+	Pairs      []CurrencyPair `json:"pairs"`
+}
+
+// Currency models the code and name for a currency.
+type Currency struct {
+	Code string `json:"code"`
+	Name string `json:"name"`
+}
+
+// CurrencyPair models an available currency pair listing both the from
+// currency and the to currency codes.
+type CurrencyPair struct {
+	From string `json:"fromCurrency"`
+	To   string `json:"toCurrency"`
+}

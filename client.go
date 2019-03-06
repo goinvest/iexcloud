@@ -464,6 +464,15 @@ func (c Client) IEXSymbols() ([]TradedSymbol, error) {
 	return symbols, err
 }
 
+// ForexSymbols returns a list of currencies and a list of foreign exchange
+// currency pairs that are available supported by IEX Cloud.
+func (c Client) ForexSymbols() (ForexSymbols, error) {
+	r := ForexSymbols{}
+	endpoint := "/ref-data/fx/symbols"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // ExchangeRate returns an end of day exchange rate of a given currency pair.
 func (c Client) ExchangeRate(from, to string) (ExchangeRate, error) {
 	r := ExchangeRate{}

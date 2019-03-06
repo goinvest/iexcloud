@@ -84,7 +84,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Stock Collections
 - [ ] Mutual Fund Symbols
 - [ ] OTC Symbols
-- [ ] Forex / Currency Symbols
+- [x] Forex / Currency Symbols
 - [ ] Options Symbols
 - [ ] Commodities Symbols
 - [ ] Bonds Symbols
@@ -92,7 +92,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Forex / Currencies
 
-- [ ] Exchange Rates
+- [x] Exchange Rates
 
 ### Investors Exchange Data
 
