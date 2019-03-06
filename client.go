@@ -429,11 +429,11 @@ func (c Client) PriceTarget(stock string) (PriceTarget, error) {
 
 // Quote returns the quote data from the IEX Cloud endpoint for the given stock
 // symbol.
-func (c Client) Quote(stock string) (Quote, error) {
-	quote := Quote{}
-	endpoint := fmt.Sprintf("/stock/%s/quote", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, &quote)
-	return quote, err
+func (c Client) Quote(symbol string) (Quote, error) {
+	r := Quote{}
+	endpoint := fmt.Sprintf("/stock/%s/quote", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
 }
 
 // RelevantStocks is similar to the peers endpoint, except this will return
@@ -441,19 +441,27 @@ func (c Client) Quote(stock string) (Quote, error) {
 // returned are not peers, the peers key will be false. This is not intended to
 // represent a definitive or accurate list of peers, and is subject to change
 // at any time.
-func (c Client) RelevantStocks(stock string) (RelevantStocks, error) {
-	rs := RelevantStocks{}
-	endpoint := fmt.Sprintf("/stock/%s/relevant", url.PathEscape(stock))
-	err := c.GetJSON(endpoint, &rs)
-	return rs, err
+func (c Client) RelevantStocks(symbol string) (RelevantStocks, error) {
+	r := RelevantStocks{}
+	endpoint := fmt.Sprintf("/stock/%s/relevant", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
 }
 
 // # Alternative Data related endpoints. #
 
-// CEOCompensation provides CEO compensation for a company.
-func (c Client) CEOCompensation(stock string) (CEOCompensation, error) {
+// Crypto provides a quote for a given cryptocurrency symbol.
+func (c Client) Crypto(symbol string) (Quote, error) {
+	r := Quote{}
+	endpoint := fmt.Sprintf("/crypto/%s/quote", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// CEOCompensation provides CEO compensation for the given stock symbol.
+func (c Client) CEOCompensation(symbol string) (CEOCompensation, error) {
 	r := CEOCompensation{}
-	endpoint := fmt.Sprintf("/stock/%s/ceo-compensation", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/ceo-compensation", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }

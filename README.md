@@ -70,7 +70,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Alternative Data
 
-- [ ] Crypto
+- [x] Crypto
 - [ ] Social Sentiment
 - [x] CEO Compensation
 
