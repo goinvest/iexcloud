@@ -436,6 +436,15 @@ func (c Client) Quote(symbol string) (Quote, error) {
 	return r, err
 }
 
+// RecommendationTrends provides a list of recommendations with the start and
+// end date for each rating.
+func (c Client) RecommendationTrends(symbol string) ([]Recommendation, error) {
+	r := []Recommendation{}
+	endpoint := fmt.Sprintf("/stock/%s/recommendation-trends", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // RelevantStocks is similar to the peers endpoint, except this will return
 // most active market symbols when peers are not available. If the symbols
 // returned are not peers, the peers key will be false. This is not intended to

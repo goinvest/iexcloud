@@ -26,6 +26,12 @@ See the [iexcloud CLI example README][2].
 Below is a list of the APIs that have and have not been implemented. If
 you want a particular API to be developed next, please open an issue.
 
+### Account
+
+- [ ] Metadata
+- [ ] Usage
+- [ ] Pay as you go
+
 ### Stocks
 
 - [x] Balance Sheet
@@ -62,7 +68,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Price
 - [x] Price Target
 - [x] Quote
-- [ ] Recommendation Trends
+- [x] Recommendation Trends
 - [x] Relevant Stocks
 - [ ] Sector Performance
 - [ ] Splits

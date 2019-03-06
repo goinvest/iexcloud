@@ -456,6 +456,19 @@ type Quote struct {
 	PERatio               float64   `json:"peRatio"`
 }
 
+// Recommendation models the buy, hold, sell recommendations for a stock.
+type Recommendation struct {
+	ConsensusEndDate   EpochTime `json:"consensusEndDate"`
+	ConsensusStartDate EpochTime `json:"consensusStartDate"`
+	BuyRatings         int       `json:"ratingBuy"`
+	HoldRatings        int       `json:"ratingHold"`
+	NoRatings          int       `json:"ratingNone"`
+	OverweightRatings  int       `json:"ratingOverweight"`
+	SellRatings        int       `json:"ratingSell"`
+	UnderweightRatings int       `json:"ratingUnderweight"`
+	ConsensusRating    float64   `json:"ratingScaleMark"`
+}
+
 // RelevantStocks models a list of relevant stocks that may or may not be
 // peers.
 type RelevantStocks struct {
