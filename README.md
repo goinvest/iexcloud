@@ -72,7 +72,7 @@ you want a particular API to be developed next, please open an issue.
 
 - [ ] Crypto
 - [ ] Social Sentiment
-- [ ] CEO Compensation
+- [x] CEO Compensation
 
 ### Reference Data
 

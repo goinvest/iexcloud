@@ -102,6 +102,8 @@ func (c *Client) GetFloat64(endpoint string) (float64, error) {
 
 }
 
+// # Stocks related endpoints. #
+
 // AnnualBalanceSheets returns the specified number of most recent annual
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualBalanceSheets(stock string, num int) (BalanceSheets, error) {
@@ -446,13 +448,17 @@ func (c Client) RelevantStocks(stock string) (RelevantStocks, error) {
 	return rs, err
 }
 
-// USExchanges returns an array of U.S. Exchanges.
-func (c Client) USExchanges() ([]USExchange, error) {
-	e := []USExchange{}
-	endpoint := "/ref-data/market/us/exchanges"
-	err := c.GetJSON(endpoint, &e)
-	return e, err
+// # Alternative Data related endpoints. #
+
+// CEOCompensation provides CEO compensation for a company.
+func (c Client) CEOCompensation(stock string) (CEOCompensation, error) {
+	r := CEOCompensation{}
+	endpoint := fmt.Sprintf("/stock/%s/ceo-compensation", url.PathEscape(stock))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
 }
+
+// # Reference Data related endpoints. #
 
 // Symbols returns an array of symbols that IEX Cloud supports for API calls.
 func (c Client) Symbols() ([]Symbol, error) {
@@ -472,6 +478,14 @@ func (c Client) IEXSymbols() ([]TradedSymbol, error) {
 	return symbols, err
 }
 
+// USExchanges returns an array of U.S. Exchanges.
+func (c Client) USExchanges() ([]USExchange, error) {
+	e := []USExchange{}
+	endpoint := "/ref-data/market/us/exchanges"
+	err := c.GetJSON(endpoint, &e)
+	return e, err
+}
+
 // ForexSymbols returns a list of currencies and a list of foreign exchange
 // currency pairs that are available supported by IEX Cloud.
 func (c Client) ForexSymbols() (ForexSymbols, error) {
@@ -480,6 +494,8 @@ func (c Client) ForexSymbols() (ForexSymbols, error) {
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }
+
+// # Forex / Currencies related endpoints. #
 
 // ExchangeRate returns an end of day exchange rate of a given currency pair.
 func (c Client) ExchangeRate(from, to string) (ExchangeRate, error) {
@@ -491,6 +507,8 @@ func (c Client) ExchangeRate(from, to string) (ExchangeRate, error) {
 	return r, err
 }
 
+// # Investors Exchange Data related endpoints. #
+
 // Last provides trade data for executions on IEX. It is a near real time,
 // intraday API that provides IEX last sale price, size and time. Last is ideal
 // for developers that need a lightweight stock quote.
@@ -501,6 +519,8 @@ func (c Client) Last(stock string) ([]Last, error) {
 	err := c.GetJSON(endpoint, &x)
 	return x, err
 }
+
+// # API System Metadata related endpoints. #
 
 // Status returns the IEX Cloud system status.
 func (c Client) Status() (Status, error) {
