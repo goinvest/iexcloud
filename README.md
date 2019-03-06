@@ -88,7 +88,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Options Symbols
 - [ ] Commodities Symbols
 - [ ] Bonds Symbols
-- [ ] Crypto Symbols
+- [x] Crypto Symbols
 
 ### Forex / Currencies
 

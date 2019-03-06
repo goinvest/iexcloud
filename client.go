@@ -451,8 +451,8 @@ func (c Client) RelevantStocks(symbol string) (RelevantStocks, error) {
 // # Alternative Data related endpoints. #
 
 // Crypto provides a quote for a given cryptocurrency symbol.
-func (c Client) Crypto(symbol string) (Quote, error) {
-	r := Quote{}
+func (c Client) Crypto(symbol string) (CryptoQuote, error) {
+	r := CryptoQuote{}
 	endpoint := fmt.Sprintf("/crypto/%s/quote", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &r)
 	return r, err
@@ -508,6 +508,15 @@ func (c Client) OTCSymbols() ([]OTCSymbol, error) {
 func (c Client) FXSymbols() (FXSymbols, error) {
 	r := FXSymbols{}
 	endpoint := "/ref-data/fx/symbols"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// CryptoSymbols returns a list of cryptocurrencies that are supported by IEX
+// Cloud.
+func (c Client) CryptoSymbols() ([]CryptoSymbol, error) {
+	r := []CryptoSymbol{}
+	endpoint := "/ref-data/crypto/symbols"
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }

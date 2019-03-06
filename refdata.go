@@ -51,6 +51,17 @@ type FXSymbols struct {
 	Pairs      []CurrencyPair `json:"pairs"`
 }
 
+// CryptoSymbol models cryptocurrency symbol that IEX Cloud supports for API
+// calls.
+type CryptoSymbol struct {
+	Symbol    string `json:"symbol"`
+	Name      string `json:"name"`
+	Date      Date   `json:"date"`
+	IsEnabled bool   `json:"isEnabled"`
+	Type      string `json:"type"`
+	IEXID     string `json:"iexId"`
+}
+
 // Currency models the code and name for a currency.
 type Currency struct {
 	Code string `json:"code"`
