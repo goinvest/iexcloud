@@ -70,7 +70,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Quote
 - [x] Recommendation Trends
 - [x] Relevant Stocks
-- [ ] Sector Performance
+- [x] Sector Performance
 - [ ] Splits
 - [ ] Volume by Venue
 
