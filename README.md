@@ -53,7 +53,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Insider Roster
 - [x] Insider Summary
 - [x] Insider Transactions
-- [ ] Institutional Ownership
+- [x] Institutional Ownership
 - [ ] IPO Calendar
 - [x] Key Stats
 - [x] Largest Trades

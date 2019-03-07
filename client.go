@@ -297,6 +297,15 @@ func (c Client) InsiderTransactions(symbol string) ([]InsiderTransaction, error)
 	return r, err
 }
 
+// InstitutionalOwnership returns the top 10 holders with the most recent
+// information.
+func (c Client) InstitutionalOwnership(symbol string) ([]InstitutionalOwner, error) {
+	r := []InstitutionalOwner{}
+	endpoint := fmt.Sprintf("/stock/%s/institutional-owernship", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // KeyStats returns the key stats from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) KeyStats(symbol string) (KeyStats, error) {

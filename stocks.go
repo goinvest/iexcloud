@@ -311,6 +311,15 @@ type InsiderTransaction struct {
 	Value         float64   `json:"tranValue"`
 }
 
+// InstitutionalOwner models an institutional owner of a stock.
+type InstitutionalOwner struct {
+	EntityName          string    `json:"entityProperName"`
+	AdjustedHolding     float64   `json:"adjHolding"`
+	AdjustedMarketValue float64   `json:"adjMv"`
+	ReportDate          EpochTime `json:"reportDate"`
+	ReportedHolding     float64   `json:"reportedHolding"`
+}
+
 // KeyStats models the data returned from IEX Cloud's /stats endpoint.
 type KeyStats struct {
 	Name                string  `json:"companyName"`
