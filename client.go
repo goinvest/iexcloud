@@ -106,17 +106,17 @@ func (c *Client) GetFloat64(endpoint string) (float64, error) {
 
 // AnnualBalanceSheets returns the specified number of most recent annual
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualBalanceSheets(stock string, num int) (BalanceSheets, error) {
+func (c Client) AnnualBalanceSheets(symbol string, num int) (BalanceSheets, error) {
 	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.balanceSheets(endpoint)
 }
 
 // QuarterlyBalanceSheets returns the specified number of most recent quarterly
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyBalanceSheets(stock string, num int) (BalanceSheets, error) {
+func (c Client) QuarterlyBalanceSheets(symbol string, num int) (BalanceSheets, error) {
 	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.balanceSheets(endpoint)
 }
 
@@ -127,26 +127,26 @@ func (c Client) balanceSheets(endpoint string) (BalanceSheets, error) {
 }
 
 // Book returns the quote, bids, asks, and trades for a given stock symbol.
-func (c Client) Book(stock string) (Book, error) {
+func (c Client) Book(symbol string) (Book, error) {
 	book := Book{}
-	endpoint := fmt.Sprintf("/stock/%s/book", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/book", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &book)
 	return book, err
 }
 
 // AnnualCashFlows returns the specified number of most recent annual cash flow
 // statements from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualCashFlows(stock string, num int) (CashFlows, error) {
+func (c Client) AnnualCashFlows(symbol string, num int) (CashFlows, error) {
 	endpoint := fmt.Sprintf("/stock/%s/cash-flow/%d?period=annual",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.cashFlows(endpoint)
 }
 
 // QuarterlyCashFlows returns the specified number of most recent annual
 // cash flow statements from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyCashFlows(stock string, num int) (CashFlows, error) {
+func (c Client) QuarterlyCashFlows(symbol string, num int) (CashFlows, error) {
 	endpoint := fmt.Sprintf("/stock/%s/cash-flow/%d?period=quarter",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.cashFlows(endpoint)
 }
 
@@ -158,19 +158,19 @@ func (c Client) cashFlows(endpoint string) (CashFlows, error) {
 
 // Company returns the copmany data from the IEX Cloud endpoint for the given
 // stock symbol.
-func (c Client) Company(stock string) (Company, error) {
+func (c Client) Company(symbol string) (Company, error) {
 	company := Company{}
-	endpoint := fmt.Sprintf("/stock/%s/company", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/company", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &company)
 	return company, err
 }
 
 // Dividends returns the dividends from the IEX Cloud endpoint for the given
 // stock symbol and the given date range.
-func (c Client) Dividends(stock string, r PathRange) ([]Dividend, error) {
+func (c Client) Dividends(symbol string, r PathRange) ([]Dividend, error) {
 	dividends := []Dividend{}
 	endpoint := fmt.Sprintf("/stock/%s/dividends/%s",
-		url.PathEscape(stock), PathRangeJSON[r])
+		url.PathEscape(symbol), PathRangeJSON[r])
 	err := c.GetJSON(endpoint, &dividends)
 	return dividends, err
 }
@@ -282,27 +282,35 @@ func (c Client) InsiderRoster(stock string) ([]InsiderRoster, error) {
 
 // InsiderSummary returns the insiders summary with the most recent information
 // for the given stock symbol.
-func (c Client) InsiderSummary(stock string) ([]InsiderSummary, error) {
+func (c Client) InsiderSummary(symbol string) ([]InsiderSummary, error) {
 	r := []InsiderSummary{}
-	endpoint := fmt.Sprintf("/stock/%s/insider-summary", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/insider-summary", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// InsiderTransactions returns a list of insider transactions for the given stock symbol.
+func (c Client) InsiderTransactions(symbol string) ([]InsiderTransaction, error) {
+	r := []InsiderTransaction{}
+	endpoint := fmt.Sprintf("/stock/%s/insider-summary", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }
 
 // KeyStats returns the key stats from the IEX Cloud endpoint for the given
 // stock symbol.
-func (c Client) KeyStats(stock string) (KeyStats, error) {
+func (c Client) KeyStats(symbol string) (KeyStats, error) {
 	stats := KeyStats{}
-	endpoint := fmt.Sprintf("/stock/%s/stats", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/stats", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &stats)
 	return stats, err
 }
 
 // LargestTrades returns the 15 minute delayed, last sale eligible trade from
 // the IEX Cloud endpoint for the given stock symbol.
-func (c Client) LargestTrades(stock string) ([]LargestTrade, error) {
+func (c Client) LargestTrades(symbol string) ([]LargestTrade, error) {
 	lt := []LargestTrade{}
-	endpoint := fmt.Sprintf("/stock/%s/largest-trades", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/largest-trades", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &lt)
 	return lt, err
 }

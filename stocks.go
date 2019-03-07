@@ -293,11 +293,22 @@ type InsiderRoster struct {
 
 // InsiderSummary models a summary of insider information.
 type InsiderSummary struct {
-	FullName       string `json:"fullName"`
+	Name           string `json:"fullName"`
 	NetTransaction int    `json:"netTransaction"`
 	ReportedTitle  string `json:"reportedTitle"`
 	TotalBought    int    `json:"totalBought"`
 	TotalSold      int    `json:"totalSold"`
+}
+
+// InsiderTransaction models a buy or sell transaction made by an insider of a
+// company.
+type InsiderTransaction struct {
+	EffectiveDate EpochTime `json:"effectiveDate"`
+	Name          string    `json:"fullName"`
+	ReportedTitle string    `json:"reportedTitle"`
+	Price         float64   `json:"tranPrice"`
+	Shares        int       `json:"tranShares"`
+	Value         float64   `json:"tranValue"`
 }
 
 // KeyStats models the data returned from IEX Cloud's /stats endpoint.

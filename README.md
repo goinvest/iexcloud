@@ -52,7 +52,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Income Statement
 - [x] Insider Roster
 - [x] Insider Summary
-- [ ] Insider Transactions
+- [x] Insider Transactions
 - [ ] Institutional Ownership
 - [ ] IPO Calendar
 - [x] Key Stats
