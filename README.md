@@ -85,7 +85,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Symbols
 - [x] IEX Symbols
 - [x] U.S. Exchanges
-- [ ] U.S. Holidays and Trading Days
+- [x] U.S. Holidays and Trading Days
 - [ ] Stock Tags
 - [ ] Stock Collections
 - [x] Mutual Fund Symbols

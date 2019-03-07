@@ -34,6 +34,12 @@ type USExchange struct {
 	Type     string `json:"type"`
 }
 
+// TradeHolidayDate models either a trade date or a holiday.
+type TradeHolidayDate struct {
+	Date           Date `json:"date"`
+	SettlementDate Date `json:"settlementDate"`
+}
+
 // MutualFundSymbol models mutual fund support by IEX Cloud for API calls.
 type MutualFundSymbol struct {
 	Symbol    string `json:"symbol"`

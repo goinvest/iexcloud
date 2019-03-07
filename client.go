@@ -177,9 +177,9 @@ func (c Client) Dividends(symbol string, r PathRange) ([]Dividend, error) {
 
 // Earnings returns the specified number of most recent earnings data from the
 // IEX Cloud endpoint for the given stock symbol.
-func (c Client) Earnings(stock string, num int) (Earnings, error) {
+func (c Client) Earnings(symbol string, num int) (Earnings, error) {
 	earnings := Earnings{}
-	endpoint := fmt.Sprintf("/stock/%s/earnings/%d", url.PathEscape(stock), num)
+	endpoint := fmt.Sprintf("/stock/%s/earnings/%d", url.PathEscape(symbol), num)
 	err := c.GetJSON(endpoint, &earnings)
 	return earnings, err
 }
@@ -195,43 +195,43 @@ func (c Client) EarningsToday() (EarningsToday, error) {
 
 // DelayedQuote returns the 15 minute delayed market quote from the IEX Cloud
 // endpoint for the given stock symbol.
-func (c Client) DelayedQuote(stock string) (DelayedQuote, error) {
+func (c Client) DelayedQuote(symbol string) (DelayedQuote, error) {
 	dq := DelayedQuote{}
-	endpoint := fmt.Sprintf("/stock/%s/delayed-quote", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/delayed-quote", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &dq)
 	return dq, err
 }
 
 // EffectiveSpreads returns the effective spreads from the IEX Cloud endpoint
 // for the given stock symbol.
-func (c Client) EffectiveSpreads(stock string) ([]EffectiveSpread, error) {
+func (c Client) EffectiveSpreads(symbol string) ([]EffectiveSpread, error) {
 	es := []EffectiveSpread{}
-	endpoint := fmt.Sprintf("/stock/%s/effective-spread", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/effective-spread", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &es)
 	return es, err
 }
 
 // Estimates returns the latest consensue estimates for the next fiscal period.
-func (c Client) Estimates(stock string, num int) (Estimates, error) {
+func (c Client) Estimates(symbol string, num int) (Estimates, error) {
 	estimates := Estimates{}
-	endpoint := fmt.Sprintf("/stock/%s/estimates/%d", url.PathEscape(stock), num)
+	endpoint := fmt.Sprintf("/stock/%s/estimates/%d", url.PathEscape(symbol), num)
 	err := c.GetJSON(endpoint, &estimates)
 	return estimates, err
 }
 
 // AnnualFinancials returns the specified number of most recent annual
 // financials from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualFinancials(stock string, num int) (Financials, error) {
+func (c Client) AnnualFinancials(symbol string, num int) (Financials, error) {
 	endpoint := fmt.Sprintf("/stock/%s/financials/%d?period=annual",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.financials(endpoint)
 }
 
 // QuarterlyFinancials returns the specified number of most recent quarterly
 // financials from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyFinancials(stock string, num int) (Financials, error) {
+func (c Client) QuarterlyFinancials(symbol string, num int) (Financials, error) {
 	endpoint := fmt.Sprintf("/stock/%s/financials/%d?period=quarter",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.financials(endpoint)
 }
 
@@ -242,26 +242,26 @@ func (c Client) financials(endpoint string) (Financials, error) {
 }
 
 // FundOwnership returns the ten top holders of the given stock.
-func (c Client) FundOwnership(stock string) ([]FundOwner, error) {
+func (c Client) FundOwnership(symbol string) ([]FundOwner, error) {
 	r := []FundOwner{}
-	endpoint := fmt.Sprintf("/stock/%s/fund-ownership", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/fund-ownership", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }
 
 // AnnualIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualIncomeStatements(stock string, num int) (IncomeStatements, error) {
+func (c Client) AnnualIncomeStatements(symbol string, num int) (IncomeStatements, error) {
 	endpoint := fmt.Sprintf("/stock/%s/income/%d?period=annual",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.incomeStatements(endpoint)
 }
 
 // QuarterlyIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyIncomeStatements(stock string, num int) (IncomeStatements, error) {
+func (c Client) QuarterlyIncomeStatements(symbol string, num int) (IncomeStatements, error) {
 	endpoint := fmt.Sprintf("/stock/%s/income/%d?period=quarter",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	return c.incomeStatements(endpoint)
 }
 
@@ -273,9 +273,9 @@ func (c Client) incomeStatements(endpoint string) (IncomeStatements, error) {
 
 // InsiderRoster returns the top 10 insiders with the most recent information
 // for the given stock symbol.
-func (c Client) InsiderRoster(stock string) ([]InsiderRoster, error) {
+func (c Client) InsiderRoster(symbol string) ([]InsiderRoster, error) {
 	r := []InsiderRoster{}
-	endpoint := fmt.Sprintf("/stock/%s/insider-roster", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/insider-roster", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }
@@ -369,9 +369,9 @@ func (c Client) list(list string) ([]Quote, error) {
 
 // Logo returns the logo data from the IEX Cloud endpoint for the given
 // stock symbol.
-func (c Client) Logo(stock string) (Logo, error) {
+func (c Client) Logo(symbol string) (Logo, error) {
 	logo := Logo{}
-	endpoint := fmt.Sprintf("/stock/%s/logo", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/logo", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &logo)
 	return logo, err
 }
@@ -385,10 +385,10 @@ func (c Client) Markets() ([]Market, error) {
 }
 
 // News retrieves the given number of news articles for the given stock symbol.
-func (c Client) News(stock string, num int) ([]News, error) {
+func (c Client) News(symbol string, num int) ([]News, error) {
 	n := []News{}
 	endpoint := fmt.Sprintf("/stock/%s/news/last/%d",
-		url.PathEscape(stock), num)
+		url.PathEscape(symbol), num)
 	err := c.GetJSON(endpoint, &n)
 	return n, err
 }
@@ -403,43 +403,43 @@ func (c Client) MarketNews(num int) ([]News, error) {
 
 // OHLC returns the OHLC data from the IEX Cloud endpoint for the given stock
 // symbol.
-func (c Client) OHLC(stock string) (OHLC, error) {
+func (c Client) OHLC(symbol string) (OHLC, error) {
 	ohlc := OHLC{}
-	endpoint := fmt.Sprintf("/stock/%s/ohlc", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/ohlc", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &ohlc)
 	return ohlc, err
 }
 
 // Peers returns a slice of peer stock symbols from the IEX Cloud endpoint for
 // the given stock symbol.
-func (c Client) Peers(stock string) ([]string, error) {
+func (c Client) Peers(symbol string) ([]string, error) {
 	peers := []string{}
-	endpoint := fmt.Sprintf("/stock/%s/peers", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/peers", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &peers)
 	return peers, err
 }
 
 // PreviousDay returns the previous day adjusted price data from the IEX Cloud
 // endpoint for the given stock symbol.
-func (c Client) PreviousDay(stock string) (PreviousDay, error) {
+func (c Client) PreviousDay(symbol string) (PreviousDay, error) {
 	pd := PreviousDay{}
-	endpoint := fmt.Sprintf("/stock/%s/previous", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/previous", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &pd)
 	return pd, err
 }
 
 // Price returns the current stock price from the IEX Cloud endpoint for the
 // given stock symbol.
-func (c Client) Price(stock string) (float64, error) {
-	endpoint := fmt.Sprintf("/stock/%s/price", url.PathEscape(stock))
+func (c Client) Price(symbol string) (float64, error) {
+	endpoint := fmt.Sprintf("/stock/%s/price", url.PathEscape(symbol))
 	return c.GetFloat64(endpoint)
 }
 
 // PriceTarget returns the latest average, high, and low analyst price target
 // for a given stock symbol.
-func (c Client) PriceTarget(stock string) (PriceTarget, error) {
+func (c Client) PriceTarget(symbol string) (PriceTarget, error) {
 	pt := PriceTarget{}
-	endpoint := fmt.Sprintf("/stock/%s/price-target", url.PathEscape(stock))
+	endpoint := fmt.Sprintf("/stock/%s/price-target", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &pt)
 	return pt, err
 }
@@ -520,6 +520,56 @@ func (c Client) USExchanges() ([]USExchange, error) {
 	return e, err
 }
 
+// NextTradingDay returns the date of the next trading day.
+func (c Client) NextTradingDay() (TradeHolidayDate, error) {
+	r := TradeHolidayDate{}
+	endpoint := "/ref-data/us/dates/trade/next/1"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// NextTradingDays returns the dates of the next trading days for the given
+// number of days.
+func (c Client) NextTradingDays(numDays int) (TradeHolidayDate, error) {
+	r := TradeHolidayDate{}
+	endpoint := fmt.Sprintf("/ref-data/us/dates/trade/next/%d", numDays)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// NextHoliday returns the date of the next holiday.
+func (c Client) NextHoliday() (TradeHolidayDate, error) {
+	r := TradeHolidayDate{}
+	endpoint := "/ref-data/us/dates/holiday/next/1"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// NextHolidays returns the dates of the next holidays for the given
+// number of days.
+func (c Client) NextHolidays(numDays int) (TradeHolidayDate, error) {
+	r := TradeHolidayDate{}
+	endpoint := fmt.Sprintf("/ref-data/us/dates/holiday/next/%d", numDays)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// PreviousTradingDay returns the date of the previous trading day.
+func (c Client) PreviousTradingDay() (TradeHolidayDate, error) {
+	r := TradeHolidayDate{}
+	endpoint := "/ref-data/us/dates/trade/last/1"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// PreviousHoliday returns the date of the previous holiday.
+func (c Client) PreviousHoliday() (TradeHolidayDate, error) {
+	r := TradeHolidayDate{}
+	endpoint := "/ref-data/us/dates/holiday/last/1"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // MutualFundSymbols returns an array of mutual funds that IEX Cloud supports
 // for API calls.
 func (c Client) MutualFundSymbols() ([]MutualFundSymbol, error) {
@@ -573,10 +623,10 @@ func (c Client) ExchangeRate(from, to string) (ExchangeRate, error) {
 // Last provides trade data for executions on IEX. It is a near real time,
 // intraday API that provides IEX last sale price, size and time. Last is ideal
 // for developers that need a lightweight stock quote.
-func (c Client) Last(stock string) ([]Last, error) {
+func (c Client) Last(symbol string) ([]Last, error) {
 	// FIXME: Change so that multiple stock symbols can be handled.
 	x := []Last{}
-	endpoint := "/tops/last?symbols=" + url.PathEscape(stock)
+	endpoint := "/tops/last?symbols=" + url.PathEscape(symbol)
 	err := c.GetJSON(endpoint, &x)
 	return x, err
 }
