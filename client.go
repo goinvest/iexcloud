@@ -672,19 +672,27 @@ func (c Client) OneTOPS(symbol string) ([]TOPS, error) {
 // intraday API that provides IEX last sale price, size and time. Last is ideal
 // for developers that need a lightweight stock quote.
 func (c Client) Last(symbols []string) ([]Last, error) {
-	x := []Last{}
+	r := []Last{}
 	s := strings.Join(symbols, ",")
 	endpoint := "/tops/last?symbols=" + url.PathEscape(s)
-	err := c.GetJSON(endpoint, &x)
-	return x, err
+	err := c.GetJSON(endpoint, &r)
+	return r, err
 }
 
 // OneLast provides the last trade data executions for one stock symbol.
 func (c Client) OneLast(symbol string) ([]Last, error) {
-	x := []Last{}
+	r := []Last{}
 	endpoint := "/tops/last?symbols=" + url.PathEscape(symbol)
-	err := c.GetJSON(endpoint, &x)
-	return x, err
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// IntradayStats retrieves the intraday stats on IEX.
+func (c Client) IntradayStats(symbol string) (IntradayStats, error) {
+	r := IntradayStats{}
+	endpoint := "/stats/intraday"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
 }
 
 // # API System Metadata related endpoints. #

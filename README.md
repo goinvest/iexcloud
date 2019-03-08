@@ -119,7 +119,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Listed Short Interest List
 - [ ] Stats Historical Daily
 - [ ] Stats Historical Summary
-- [ ] Stats Intraday
+- [x] Stats Intraday
 - [ ] Stats Recent
 - [ ] Stats Records
 

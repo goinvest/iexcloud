@@ -44,3 +44,18 @@ type VolumeRecord struct {
 	PreviousDayValue float64 `json:"previousDayValue"`
 	Avg30Value       float64 `json:"avg30Value"`
 }
+
+// IntradayStats models the intraday stats on IEX.
+type IntradayStats struct {
+	Volume        Stat `json:"volume"`
+	SymbolsTraded Stat `json:"symbolsTraded"`
+	RoutedVolume  Stat `json:"routedVolume"`
+	Notional      Stat `json:"notional"`
+	MarketShare   Stat `json:"marketShare"`
+}
+
+// Stat models a single stat.
+type Stat struct {
+	Value       float64   `json:"value"`
+	LastUpdated EpochTime `json:"lastUpdated"`
+}
