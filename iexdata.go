@@ -20,11 +20,12 @@ type Records struct {
 	Volume VolumeRecord `json:"volume"`
 }
 
-// TOPS contain IEX's aggregated best quoted bid and offer position in near
+// TOPS contains IEX's aggregated best quoted bid and offer position in near
 // real time for all securities on IEX's displayed limit order book.
 type TOPS struct {
 	Symbol        string    `json:"symbol"`
 	MarketPercent float64   `json:"marketPercent"`
+	BidSize       int       `json:"bidSize"`
 	BidPrice      float64   `json:"bidPrice"`
 	AskSize       int       `json:"AskSize"`
 	AskPrice      float64   `json:"AskPrice"`

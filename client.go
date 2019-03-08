@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 const apiURL = "https://cloud.iexapis.com/beta"
@@ -100,6 +101,21 @@ func (c *Client) GetFloat64(endpoint string) (float64, error) {
 	}
 	return strconv.ParseFloat(string(b), 64)
 
+}
+
+// # Account related endpoints. #
+
+// AccountMetadata returns information about an IEX Cloud account, such as
+// current tier, payment status, message quote usage, etc. An SK token is
+// required to access.
+func (c Client) AccountMetadata() (AccountMetadata, error) {
+	// FIXME(mdr): Since this requires an SK token, should Client be modified to
+	// have an SK token? Should we change the token get the JSON and then change
+	// it back? Need to think about this.
+	r := AccountMetadata{}
+	endpoint := "/account/metadata"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
 }
 
 // # Stocks related endpoints. #
@@ -629,11 +645,42 @@ func (c Client) ExchangeRate(from, to string) (ExchangeRate, error) {
 
 // # Investors Exchange Data related endpoints. #
 
+// TOPS is used to receive real-time top of book quotations direct from IEX.
+// The quotations received via TOPS provide an aggregated size and do not
+// indicate the size or number of individual orders at the best bid or ask.
+// Non-displayed orders and non-displayed portions of reserve orders are not
+// represented in TOPS. TOPS also provides last trade price and size
+// information. Trades resulting from either displayed or non-displayed orders
+// matching on IEX will be reported.  Routed executions will not be reported.
+func (c Client) TOPS(symbols []string) ([]TOPS, error) {
+	r := []TOPS{}
+	s := strings.Join(symbols, ",")
+	endpoint := "/tops?symbols=" + url.PathEscape(s)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// OneTOPS returns TOPS for one stock symbol.
+func (c Client) OneTOPS(symbol string) ([]TOPS, error) {
+	r := []TOPS{}
+	endpoint := "/tops?symbols=" + url.PathEscape(symbol)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // Last provides trade data for executions on IEX. It is a near real time,
 // intraday API that provides IEX last sale price, size and time. Last is ideal
 // for developers that need a lightweight stock quote.
-func (c Client) Last(symbol string) ([]Last, error) {
-	// FIXME: Change so that multiple stock symbols can be handled.
+func (c Client) Last(symbols []string) ([]Last, error) {
+	x := []Last{}
+	s := strings.Join(symbols, ",")
+	endpoint := "/tops/last?symbols=" + url.PathEscape(s)
+	err := c.GetJSON(endpoint, &x)
+	return x, err
+}
+
+// OneLast provides the last trade data executions for one stock symbol.
+func (c Client) OneLast(symbol string) ([]Last, error) {
 	x := []Last{}
 	endpoint := "/tops/last?symbols=" + url.PathEscape(symbol)
 	err := c.GetJSON(endpoint, &x)

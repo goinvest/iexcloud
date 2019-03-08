@@ -28,7 +28,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Account
 
-- [ ] Metadata
+- [x] Metadata
 - [ ] Usage
 - [ ] Pay as you go
 
@@ -102,7 +102,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Investors Exchange Data
 
-- [ ] TOPS
+- [x] TOPS
 - [x] Last
 - [ ] DEEP
 - [ ] DEEP Auction
