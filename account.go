@@ -7,11 +7,11 @@ package iex
 
 // AccountMetadata provides details about an IEX Cloud account.
 type AccountMetadata struct {
-	PayAsYouGo       bool      `json:"overagesEnabled"`
-	EffectiveDate    EpochTime `json:"effectiveDate"`
-	EndDateEffective EpochTime `json:"endDateEffective"`
-	SubscriptionTerm string    `json:"subscriptionTermType"`
-	TierName         string    `json:"tierName"`
-	MessageLimit     int       `json:"messageLimit"`
-	MessagesUsed     int       `json:"messagesUsed"`
+	PayAsYouGo       bool       `json:"overagesEnabled"`
+	EffectiveDate    EpochTime  `json:"effectiveDate"`
+	EndDateEffective *EpochTime `json:"endDateEffective"`
+	SubscriptionTerm string     `json:"subscriptionTermType"`
+	TierName         string     `json:"tierName"`
+	MessageLimit     int        `json:"messageLimit"`
+	MessagesUsed     int        `json:"messagesUsed"`
 }
