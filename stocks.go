@@ -328,13 +328,20 @@ type KeyStats struct {
 	Week52Low           float64 `json:"week52Low"`
 	Week52Change        float64 `json:"week52Change"`
 	SharesOutstanding   int     `json:"sharesOutstanding"`
+	Avg30Volume         int     `json:"avg30Volume"`
+	Avg10Volume         int     `json:"avg10Volume"`
 	Float               int     `json:"float"`
 	Symbol              string  `json:"symbol"`
-	Avg10Volume         int     `json:"avg10Volume"`
-	Avg30Volume         int     `json:"avg30Volume"`
+	Employees           int     `json:"employees"`
+	TTMEPS              float64 `json:"ttmEPS"`
+	TTMDividendRate     float64 `json:"ttmDividendRate"`
+	DividendYield       float64 `json:"dividendYield"`
+	NextDividendDate    Date    `json:"nextDividendDate"`
+	ExDividendDate      Date    `json:"exDividendDate"`
+	NextEarningsDate    Date    `json:"nextEarningsDate"`
+	PERatio             float64 `json:"peRatio"`
 	Day200MovingAvg     float64 `json:"day200MovingAvg"`
 	Day50MovingAvg      float64 `json:"day50MovingAvg"`
-	Employees           int     `json:"employees"`
 	MaxChangePercent    float64 `json:"maxChangePercent"`
 	Year5ChangePercent  float64 `json:"year5ChangePercent"`
 	Year2ChangePercent  float64 `json:"year2ChangePercent"`
@@ -345,12 +352,6 @@ type KeyStats struct {
 	Month1ChangePercent float64 `json:"month1ChangePercent"`
 	Day30ChangePercent  float64 `json:"day30ChangePercent"`
 	Day5ChangePercent   float64 `json:"day5ChangePercent"`
-	PERatio             float64 `json:"peRatio"`
-	NextDividendDate    Date    `json:"nextDividendDate"`
-	NextEarningsDate    Date    `json:"nextEarningsDate"`
-	TTMEPS              float64 `json:"ttmEPS"`
-	TTMDividendRate     float64 `json:"ttmDividendRate"`
-	DividendYield       float64 `json:"dividendYield"`
 }
 
 // LargestTrade models the 15 minute delayed, last sale eligible trades.
