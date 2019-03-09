@@ -138,7 +138,7 @@ func (e *EpochTime) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	*e = EpochTime(time.Unix(int64(ts)/1000, 0))
-	return nil
+	return
 }
 
 // String implements the Stringer interface for EpochTime.
