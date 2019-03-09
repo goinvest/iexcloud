@@ -597,8 +597,8 @@ func (c Client) PreviousHoliday() (TradeHolidayDate, error) {
 
 // MutualFundSymbols returns an array of mutual funds that IEX Cloud supports
 // for API calls.
-func (c Client) MutualFundSymbols() ([]MutualFundSymbol, error) {
-	r := []MutualFundSymbol{}
+func (c Client) MutualFundSymbols() ([]Symbol, error) {
+	r := []Symbol{}
 	endpoint := "/ref-data/mutual-funds/symbols"
 	err := c.GetJSON(endpoint, &r)
 	return r, err
@@ -606,8 +606,8 @@ func (c Client) MutualFundSymbols() ([]MutualFundSymbol, error) {
 
 // OTCSymbols returns an array of Over-the-Counter (OTC) stocks that IEX Cloud
 // supports for API calls.
-func (c Client) OTCSymbols() ([]OTCSymbol, error) {
-	r := []OTCSymbol{}
+func (c Client) OTCSymbols() ([]Symbol, error) {
+	r := []Symbol{}
 	endpoint := "/ref-data/otc/symbols"
 	err := c.GetJSON(endpoint, &r)
 	return r, err

@@ -13,13 +13,18 @@ type TradedSymbol struct {
 	IsEnabled bool   `json:"isEnabled"`
 }
 
-// Symbol models the data for one stock symbol that IEX Cloud supports for API
-// calls.
+// Symbol models the data for one stock, mutual fund, or OTC symbol that IEX
+// Cloud supports for API calls.
 type Symbol struct {
-	TradedSymbol
-	Name  string `json:"name"`
-	Type  string `json:"type"`
-	IEXID string `json:"iexId"`
+	Symbol    string `json:"symbol"`
+	Exchange  string `json:"exchange"`
+	Name      string `json:"name"`
+	Date      Date   `json:"date"`
+	Type      string `json:"type"`
+	IEXID     string `json:"iexId"`
+	Region    string `json:"region"`
+	Currency  string `json:"currency"`
+	IsEnabled bool   `json:"isEnabled"`
 }
 
 // USExchange provides information about one U.S. exchange including the name,
@@ -38,24 +43,6 @@ type USExchange struct {
 type TradeHolidayDate struct {
 	Date           Date `json:"date"`
 	SettlementDate Date `json:"settlementDate"`
-}
-
-// MutualFundSymbol models mutual fund support by IEX Cloud for API calls.
-type MutualFundSymbol struct {
-	Symbol    string `json:"symbol"`
-	Name      string `json:"name"`
-	Date      Date   `json:"date"`
-	IsEnabled bool   `json:"isEnabled"`
-}
-
-// OTCSymbol models an Over-the-Counter (OTC) symbol that IEX Cloud supports
-// for API calls.
-type OTCSymbol struct {
-	Symbol string `json:"symbol"`
-	Name   string `json:"name"`
-	Date   Date   `json:"date"`
-	Type   string `json:"type"`
-	IEXID  string `json:"iexId"`
 }
 
 // FXSymbols provides a list of the currencies and currency pairs available
