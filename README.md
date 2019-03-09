@@ -48,7 +48,8 @@ you want a particular API to be developed next, please open an issue.
 - [x] Estimates
 - [x] Financials
 - [x] Fund Ownership
-- [ ] Historical Prices
+- [x] Nondynamic Historical Prices
+- [ ] Dynamic Historical Prices
 - [x] Income Statement
 - [x] Insider Roster
 - [x] Insider Summary
@@ -155,8 +156,7 @@ $ make cover
 [iexcloud][] is released under the MIT license. Please see the
 [LICENSE][] file for more information.
 
-
-[1]:https://iexcloud.io
+[1]: https://iexcloud.io
 [2]: https://github.com/goinvest/iexcloud/blob/master/examples/iexcloud/README.md
 [iexcloud]: https://github.com/goinvest/iexcloud
 [godoc badge]: https://godoc.org/github.com/goinvest/iexcloud?status.svg

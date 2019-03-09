@@ -7,12 +7,16 @@ package iex
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 const apiURL = "https://cloud.iexapis.com/beta"
@@ -693,6 +697,100 @@ func (c Client) IntradayStats(symbol string) (IntradayStats, error) {
 	endpoint := "/stats/intraday"
 	err := c.GetJSON(endpoint, &r)
 	return r, err
+}
+
+// # Historical Data related endpoints. #
+
+// HistoricalPrices retrieves historically adjusted market-wide data
+func (c Client) HistoricalPrices(symbol string, timeframe HistoricalTimeFrame, options *HistoricalOptions) ([]HistoricalDataPoint, error) {
+	h := make([]HistoricalDataPoint, 0)
+	if !timeframe.Valid() {
+		return h, errors.New("invalid timeframe passed to method")
+	}
+	endpoint := fmt.Sprintf("/stock/%s/chart/%s",
+		url.PathEscape(symbol), timeframe)
+
+	endpoint, err := c.historicalEndpointWithOpts(endpoint, options)
+	if err != nil {
+		return h, err
+	}
+	err = c.GetJSON(endpoint, &h)
+	return h, err
+}
+
+// HistoricalPricesByDay retrieves historically adjusted market-wide data for a given day
+func (c Client) HistoricalPricesByDay(symbol string, day time.Time, options *HistoricalOptions) ([]HistoricalDataPoint, error) {
+	h := make([]HistoricalDataPoint, 0)
+	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s",
+		url.PathEscape(symbol), day.Format("20060102"))
+	endpoint, err := c.historicalEndpointWithOpts(endpoint, options)
+	if err != nil {
+		return h, err
+	}
+
+	err = c.GetJSON(endpoint, &h)
+	return h, err
+}
+
+func (c Client) historicalEndpointWithOpts(endpoint string, opts *HistoricalOptions) (string, error) {
+	if opts == nil {
+		return endpoint, nil
+	}
+	v, err := query.Values(opts)
+	if err != nil {
+		return "", err
+	}
+	optParams := v.Encode()
+	if optParams != "" {
+		endpoint = fmt.Sprintf("%s?%s", endpoint, optParams)
+	}
+	return endpoint, nil
+}
+
+// IntradayHistoricalPrices retrieves intraday historical market-wide data
+func (c Client) IntradayHistoricalPrices(symbol string, options *IntradayHistoricalOptions) ([]IntradayHistoricalDataPoint, error) {
+	h := make([]IntradayHistoricalDataPoint, 0)
+	endpoint := fmt.Sprintf("/stock/%s/chart/1d",
+		url.PathEscape(symbol))
+	endpoint, err := c.intradayHistoricalEndpointWithOpts(endpoint, options, false)
+	if err != nil {
+		return h, err
+	}
+
+	err = c.GetJSON(endpoint, &h)
+	return h, err
+}
+
+// IntradayHistoricalPricesByDay retrieves intraday historical market-wide data for a given day
+func (c Client) IntradayHistoricalPricesByDay(symbol string, day time.Time, options *IntradayHistoricalOptions) ([]IntradayHistoricalDataPoint, error) {
+	h := make([]IntradayHistoricalDataPoint, 0)
+	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s?chartByDay=true",
+		url.PathEscape(symbol), day.Format("20060102"))
+	endpoint, err := c.intradayHistoricalEndpointWithOpts(endpoint, options, true)
+	if err != nil {
+		return h, err
+	}
+	err = c.GetJSON(endpoint, &h)
+	return h, err
+}
+
+func (c Client) intradayHistoricalEndpointWithOpts(endpoint string, opts *IntradayHistoricalOptions, existingParams bool) (string, error) {
+	if opts == nil {
+		return endpoint, nil
+	}
+	v, err := query.Values(opts)
+	if err != nil {
+		return "", err
+	}
+	sep := "?"
+	if existingParams {
+		sep = "&"
+	}
+	optParams := v.Encode()
+	if optParams != "" {
+		endpoint = fmt.Sprintf("%s%s%s", endpoint, sep, optParams)
+	}
+	return endpoint, nil
 }
 
 // # API System Metadata related endpoints. #
