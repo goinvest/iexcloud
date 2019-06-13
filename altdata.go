@@ -22,7 +22,7 @@ type CryptoQuote struct {
 	LatestSource          string    `json:"latestSource"`
 	LatestTime            string    `json:"latestTime"`
 	LatestUpdate          EpochTime `json:"latestUpdate"`
-	LatestVolume          int       `json:"latestVolume"`
+	LatestVolume          float64   `json:"latestVolume"`
 	IEXRealtimePrice      float64   `json:"iexRealtimePrice"`
 	IEXRealtimeSize       int       `json:"iexRealtimeSize"`
 	IEXLastUpdated        EpochTime `json:"iexLastUpdated"`
