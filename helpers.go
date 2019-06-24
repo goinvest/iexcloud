@@ -165,7 +165,7 @@ var issueTypeDescription = map[IssueType]string{
 	si:    "Secondary Issue",
 	lp:    "Limited Partnership",
 	cs:    "Common Stock",
-	et:    "Exchange Taded Fund (ETF)",
+	et:    "Exchange Traded Fund (ETF)",
 	blank: "Not available",
 }
 

@@ -312,7 +312,7 @@ func (c Client) InsiderSummary(symbol string) ([]InsiderSummary, error) {
 // InsiderTransactions returns a list of insider transactions for the given stock symbol.
 func (c Client) InsiderTransactions(symbol string) ([]InsiderTransaction, error) {
 	r := []InsiderTransaction{}
-	endpoint := fmt.Sprintf("/stock/%s/insider-summary", url.PathEscape(symbol))
+	endpoint := fmt.Sprintf("/stock/%s/insider-transactions", url.PathEscape(symbol))
 	err := c.GetJSON(endpoint, &r)
 	return r, err
 }
