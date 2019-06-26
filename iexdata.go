@@ -55,10 +55,10 @@ type DEEP struct {
 	TradingStatus TradingStatus `json:"tradingStatus"`
 	OpHaltStatus  OpHaltStatus  `json:"opHaltStatus"`
 	SSRStatus     SSRStatus     `json:"ssrStatus"`
-    SecurityEvent SecurityEvent `json:"securityEvent"`
+	SecurityEvent SecurityEvent `json:"securityEvent"`
 	Trades        []Trade       `json:"trades"`
 	TradeBreaks   []Trade       `json:"tradeBreaks"`
-    Auction       Auction       `json:"auction"`
+	Auction       Auction       `json:"auction"`
 }
 
 // DEEPBook contains just the bids and asks for a specified symbol
