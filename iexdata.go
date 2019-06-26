@@ -61,6 +61,12 @@ type DEEP struct {
     Auction       Auction       `json:"auction"`
 }
 
+// DEEPBook contains just the bids and asks for a specified symbol
+type DEEPBook struct {
+	Bids          []BidAsk      `json:"bids"`
+	Asks          []BidAsk      `json:"asks"`
+}
+
 // VolumeRecord models the record volume.
 type VolumeRecord struct {
 	Value            float64 `json:"recordValue"`
