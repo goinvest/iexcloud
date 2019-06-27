@@ -691,6 +691,32 @@ func (c Client) OneLast(symbol string) ([]Last, error) {
 	return r, err
 }
 
+// DEEP provides all DEEP data for one stock symbol.
+func (c Client) DEEP(symbol string) (DEEP, error) {
+	r := DEEP{}
+	endpoint := "/deep?symbols=" + url.PathEscape(symbol)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// DEEPBook provides DEEP book data for multiple symbols
+func (c Client) DEEPBook(symbols []string) (map[string]DEEPBook, error) {
+	r := make(map[string]DEEPBook)
+	s := strings.Join(symbols, ",")
+	endpoint := "/deep/book?symbols=" + url.PathEscape(s)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// DEEPTrades provides DEEP trades data for multiple symbols.
+func (c Client) DEEPTrades(symbols []string) (map[string][]Trade, error) {
+	r := make(map[string][]Trade)
+	s := strings.Join(symbols, ",")
+	endpoint := "/deep/trades?symbols=" + url.PathEscape(s)
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // IntradayStats retrieves the intraday stats on IEX.
 func (c Client) IntradayStats(symbol string) (IntradayStats, error) {
 	r := IntradayStats{}

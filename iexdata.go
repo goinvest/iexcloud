@@ -37,6 +37,36 @@ type TOPS struct {
 	SecurityType  string    `json:"securityType"`
 }
 
+// DEEP is used to receive real-time depth of book quotations direct from IEX.
+// The depth of book quotations received via DEEP provide an aggregated size of
+// resting displayed orders at a price and side, and do not indicate the size or
+// number of individual orders at any price level.
+type DEEP struct {
+	Symbol        string        `json:"symbol"`
+	MarketPercent float64       `json:"marketPercent"`
+	Volume        int           `json:"volume"`
+	LastSalePrice float64       `json:"lastSalePrice"`
+	LastSaleSize  int           `json:"lastSaleSize"`
+	LastSaleTime  EpochTime     `json:"lastSaleTime"`
+	LastUpdated   EpochTime     `json:"lastUpdated"`
+	Bids          []BidAsk      `json:"bids"`
+	Asks          []BidAsk      `json:"asks"`
+	SystemEvent   SystemEvent   `json:"systemEvent"`
+	TradingStatus TradingStatus `json:"tradingStatus"`
+	OpHaltStatus  OpHaltStatus  `json:"opHaltStatus"`
+	SSRStatus     SSRStatus     `json:"ssrStatus"`
+	SecurityEvent SecurityEvent `json:"securityEvent"`
+	Trades        []Trade       `json:"trades"`
+	TradeBreaks   []Trade       `json:"tradeBreaks"`
+	Auction       Auction       `json:"auction"`
+}
+
+// DEEPBook contains just the bids and asks for a specified symbol
+type DEEPBook struct {
+	Bids          []BidAsk      `json:"bids"`
+	Asks          []BidAsk      `json:"asks"`
+}
+
 // VolumeRecord models the record volume.
 type VolumeRecord struct {
 	Value            float64 `json:"recordValue"`

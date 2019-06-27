@@ -105,15 +105,15 @@ you want a particular API to be developed next, please open an issue.
 
 - [x] TOPS
 - [x] Last
-- [ ] DEEP
+- [x] DEEP
 - [ ] DEEP Auction
-- [ ] DEEP Book
+- [x] DEEP Book
 - [ ] DEEP Operational Halt Status
 - [ ] DEEP Official Price
 - [ ] DEEP Security Event
 - [ ] DEEP Short Sale Price Tst Status
 - [ ] DEEP System Event
-- [ ] DEEP Trades
+- [x] DEEP Trades
 - [ ] DEEP Trade Break
 - [ ] DEEP Trading Status
 - [ ] Listed Regulation SHO Threshold Securities List
