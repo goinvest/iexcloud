@@ -599,6 +599,23 @@ func (c Client) PreviousHoliday() (TradeHolidayDate, error) {
 	return r, err
 }
 
+// Sectors returns an array of all sectors
+func (c Client) Sectors() ([]Sector, error) {
+	r := []Sector{}
+	endpoint := "/ref-data/sectors"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
+// Tags returns an array of tags.  Tags can
+// be found for each on each company.
+func (c Client) Tags() ([]Tag, error) {
+	r := []Tag{}
+	endpoint := "/ref-data/tags"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // MutualFundSymbols returns an array of mutual funds that IEX Cloud supports
 // for API calls.
 func (c Client) MutualFundSymbols() ([]Symbol, error) {
