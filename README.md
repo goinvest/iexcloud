@@ -38,7 +38,7 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Batch Requests
 - [x] Book
 - [x] Cash Flow
-- [ ] Collections
+- [x] Collections
 - [x] Company
 - [x] Delayed Quote
 - [x] Dividends
@@ -87,8 +87,8 @@ you want a particular API to be developed next, please open an issue.
 - [x] IEX Symbols
 - [x] U.S. Exchanges
 - [x] U.S. Holidays and Trading Days
-- [ ] Stock Tags
-- [ ] Stock Collections
+- [x] Stock Tags
+- [x] Stock Collections
 - [x] Mutual Fund Symbols
 - [x] OTC Symbols
 - [x] FX Symbols

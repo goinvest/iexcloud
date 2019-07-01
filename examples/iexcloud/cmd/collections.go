@@ -15,23 +15,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// QuoteByMktCap is a wrapper type used for sorting arrays of Quotes
 type QuoteByMktCap []iex.Quote
-func (q QuoteByMktCap) Len() int{ return len(q) }
-func (q QuoteByMktCap) Swap(i, j int) {q[i], q[j] = q[j], q[i]}
-func (q QuoteByMktCap) Less(i, j int) bool {return q[i].MarketCap < q[j].MarketCap}
 
+func (q QuoteByMktCap) Len() int           { return len(q) }
+func (q QuoteByMktCap) Swap(i, j int)      { q[i], q[j] = q[j], q[i] }
+func (q QuoteByMktCap) Less(i, j int) bool { return q[i].MarketCap < q[j].MarketCap }
 
 func init() {
 	rootCmd.AddCommand(collectionSectorCmd)
 	rootCmd.AddCommand(collectionTagCmd)
 }
 
-func printNumber(n int) (string) {
+func printNumber(n int) string {
 	s := "N/A"
 	if n > 1000000000 {
-		s = fmt.Sprintf("%.2fB", float32(n) / 1000000000)
+		s = fmt.Sprintf("%.2fB", float32(n)/1000000000)
 	} else if n > 1000000 {
-		s = fmt.Sprintf("%.2fM", float32(n) / 1000000)
+		s = fmt.Sprintf("%.2fM", float32(n)/1000000)
 	} else if n > 0 {
 		s = fmt.Sprintf("%d", n)
 	}
@@ -40,7 +41,7 @@ func printNumber(n int) (string) {
 
 func printQuote(q iex.Quote) {
 	fmt.Printf("%s : %s <Mkt Cap %s - %.2f %d>\n",
-			   q.Symbol, q.CompanyName, printNumber(q.MarketCap), q.LatestPrice, q.LatestVolume)
+		q.Symbol, q.CompanyName, printNumber(q.MarketCap), q.LatestPrice, q.LatestVolume)
 }
 
 var collectionSectorCmd = &cobra.Command{

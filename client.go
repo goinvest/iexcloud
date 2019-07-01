@@ -181,7 +181,7 @@ func (c Client) cashFlows(endpoint string) (CashFlows, error) {
 func (c Client) CollectionBySector(sector Sector) ([]Quote, error) {
 	quotes := []Quote{}
 	endpoint := fmt.Sprintf("/stock/market/collection/sector?collectionName=%s",
-							url.QueryEscape(sector.Name))
+		url.QueryEscape(sector.Name))
 	err := c.GetJSON(endpoint, &quotes)
 	return quotes, err
 }
@@ -191,7 +191,7 @@ func (c Client) CollectionBySector(sector Sector) ([]Quote, error) {
 func (c Client) CollectionByTag(tag Tag) ([]Quote, error) {
 	quotes := []Quote{}
 	endpoint := fmt.Sprintf("/stock/market/collection/tag?collectionName=%s",
-							url.QueryEscape(tag.Name))
+		url.QueryEscape(tag.Name))
 	err := c.GetJSON(endpoint, &quotes)
 	return quotes, err
 }

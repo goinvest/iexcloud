@@ -12,10 +12,12 @@ import (
 	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
 )
 
+// GetClient uses the supplied token and base URL from
+// the config file and returns a created client.
 func GetClient() *iex.Client {
-    cfg, err := domain.ReadConfig(configFileFlag)
-    if err != nil {
-        log.Fatalf("Error reading config file: %s", err)
-    }
-    return iex.NewClient(cfg.Token, cfg.BaseURL)
+	cfg, err := domain.ReadConfig(configFileFlag)
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	return iex.NewClient(cfg.Token, cfg.BaseURL)
 }

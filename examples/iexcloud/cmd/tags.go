@@ -28,8 +28,8 @@ var tagsCmd = &cobra.Command{
 		}
 		count := len(tags)
 		fmt.Printf("IEX Cloud supports %d tags\n", count)
-        for _, t := range tags {
-            fmt.Println(t.Name)
-        }
+		for _, t := range tags {
+			fmt.Println(t.Name)
+		}
 	},
 }
