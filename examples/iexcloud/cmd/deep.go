@@ -56,7 +56,7 @@ var deepBookCmd = &cobra.Command{
 			log.Fatalf("Error reading config file: %s", err)
 		}
 		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-        s := []string{stock}
+		s := []string{stock}
 		deep, err := client.DEEPBook(s)
 		if err != nil {
 			log.Fatalf("Error getting deep book: %s", err)
@@ -81,7 +81,7 @@ var deepTradesCmd = &cobra.Command{
 			log.Fatalf("Error reading config file: %s", err)
 		}
 		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-        s := []string{stock}
+		s := []string{stock}
 		deep, err := client.DEEPTrades(s)
 		if err != nil {
 			log.Fatalf("Error getting deep trades: %s", err)

@@ -75,3 +75,15 @@ type CurrencyPair struct {
 	From string `json:"fromCurrency"`
 	To   string `json:"toCurrency"`
 }
+
+// Sector models an industry sector, as defined by IEX.
+// i.e. "Technology", "Consumer Cyclical"
+type Sector struct {
+	Name string `json:"name"`
+}
+
+// Tag models the tag field specified for each symbol
+// i.e. "Financial Services", "Industrials"
+type Tag struct {
+	Name string `json:"name"`
+}

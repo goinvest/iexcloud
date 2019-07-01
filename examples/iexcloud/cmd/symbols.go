@@ -34,5 +34,12 @@ var symbolsCmd = &cobra.Command{
 		}
 		count := len(symbols)
 		fmt.Printf("IEX Cloud supports %d symbols\n", count)
+		for _, s := range symbols {
+			disabled := ""
+			if !s.IsEnabled {
+				disabled = "(disabled) "
+			}
+			fmt.Printf("%s%s\t%s\t%s\n", disabled, s.Symbol, s.Type, s.Name)
+		}
 	},
 }

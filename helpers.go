@@ -128,6 +128,10 @@ func (e EpochTime) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the Unmarshaler interface for EpochTime.
 func (e *EpochTime) UnmarshalJSON(data []byte) (err error) {
+	s := string(data)
+	if s == "null" {
+		return
+	}
 	ts, err := strconv.Atoi(string(data))
 	if err != nil {
 		return err

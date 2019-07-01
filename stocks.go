@@ -539,8 +539,8 @@ type RelevantStocks struct {
 	Symbols []string `json:"symbols"`
 }
 
-// Sector models the performance based on each sector ETF.
-type Sector struct {
+// SectorPerformance models the performance based on each sector ETF.
+type SectorPerformance struct {
 	Type        string    `json:"sector"`
 	Name        string    `json:"name"`
 	Performance float64   `json:"performance"`
