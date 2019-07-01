@@ -176,6 +176,26 @@ func (c Client) cashFlows(endpoint string) (CashFlows, error) {
 	return cf, err
 }
 
+// CollectionBySector returns an array of quote objects for all
+// symbols within the specified sector.
+func (c Client) CollectionBySector(sector Sector) ([]Quote, error) {
+	quotes := []Quote{}
+	endpoint := fmt.Sprintf("/stock/market/collection/sector?collectionName=%s",
+							url.QueryEscape(sector.Name))
+	err := c.GetJSON(endpoint, &quotes)
+	return quotes, err
+}
+
+// CollectionByTag returns an array of quote objects for all
+// symbols within the specified tag collection.
+func (c Client) CollectionByTag(tag Tag) ([]Quote, error) {
+	quotes := []Quote{}
+	endpoint := fmt.Sprintf("/stock/market/collection/tag?collectionName=%s",
+							url.QueryEscape(tag.Name))
+	err := c.GetJSON(endpoint, &quotes)
+	return quotes, err
+}
+
 // Company returns the copmany data from the IEX Cloud endpoint for the given
 // stock symbol.
 func (c Client) Company(symbol string) (Company, error) {
