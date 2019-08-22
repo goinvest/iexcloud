@@ -368,14 +368,14 @@ type InstitutionalOwner struct {
 // KeyStats models the data returned from IEX Cloud's /stats endpoint.
 type KeyStats struct {
 	Name                string  `json:"companyName"`
-	MarketCap           int     `json:"marketCap"`
+	MarketCap           float64 `json:"marketCap"`
 	Week52High          float64 `json:"week52High"`
 	Week52Low           float64 `json:"week52Low"`
 	Week52Change        float64 `json:"week52Change"`
-	SharesOutstanding   int     `json:"sharesOutstanding"`
-	Avg30Volume         int     `json:"avg30Volume"`
-	Avg10Volume         int     `json:"avg10Volume"`
-	Float               int     `json:"float"`
+	SharesOutstanding   float64 `json:"sharesOutstanding"`
+	Avg30Volume         float64 `json:"avg30Volume"`
+	Avg10Volume         float64 `json:"avg10Volume"`
+	Float               float64 `json:"float"`
 	Symbol              string  `json:"symbol"`
 	Employees           int     `json:"employees"`
 	TTMEPS              float64 `json:"ttmEPS"`
