@@ -276,6 +276,9 @@ type Financial struct {
 	TotalAssets            float64 `json:"totalAssets"`
 	TotalLiabilities       float64 `json:"totalLiabilities"`
 	CurrentCash            float64 `json:"currentCash"`
+	CurrentDebt            float64 `json:"currentDebt"`
+	ShortTermDebt          float64 `json:"shortTermDebt"`
+	LongTermDebt           float64 `json:"LongTermDebt"`
 	TotalCash              float64 `json:"totalCash"`
 	TotalDebt              float64 `json:"totalDebt"`
 	ShareholderEquity      float64 `json:"shareholderEquity"`
