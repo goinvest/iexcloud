@@ -22,9 +22,12 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return fmt.Errorf("error unmarshaling date to string: %s", err)
 	}
+	if aux == "" {
+		aux = "1929-10-24"
+	}
 	t, err := time.Parse("2006-01-02", aux)
 	if err != nil {
-		return fmt.Errorf("error converting string to date: %s", err)
+		return fmt.Errorf("error converting %s string to date: %s", aux, err)
 	}
 	*d = Date(t)
 	return nil
