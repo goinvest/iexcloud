@@ -124,6 +124,15 @@ func (c Client) AccountMetadata() (AccountMetadata, error) {
 
 // # Stocks related endpoints. #
 
+// AdvancedStats returns the everything in key stats plus additional advanced
+// stats such as EBITDA, ratios, key financial data, and more.
+func (c Client) AdvancedStats(symbol string) (AdvancedStats, error) {
+	stats := AdvancedStats{}
+	endpoint := fmt.Sprintf("/stock/%s/advanced-stats", url.PathEscape(symbol))
+	err := c.GetJSON(endpoint, &stats)
+	return stats, err
+}
+
 // AnnualBalanceSheets returns the specified number of most recent annual
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualBalanceSheets(symbol string, num int) (BalanceSheets, error) {

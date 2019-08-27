@@ -34,6 +34,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Stocks
 
+- [x] Advanced Stats
 - [x] Balance Sheet
 - [ ] Batch Requests
 - [x] Book
@@ -44,9 +45,10 @@ you want a particular API to be developed next, please open an issue.
 - [x] Dividends
 - [x] Earnings
 - [x] Earnings Today
-- [x] Effective Spread
+- [x] Effective Spread (@FIXME: Has been removed from API.)
 - [x] Estimates
 - [x] Financials
+- [ ] Financials As Reported
 - [x] Fund Ownership
 - [x] Nondynamic Historical Prices
 - [ ] Dynamic Historical Prices
