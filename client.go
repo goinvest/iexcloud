@@ -122,6 +122,14 @@ func (c Client) AccountMetadata() (AccountMetadata, error) {
 	return r, err
 }
 
+// Usage retrieves the current month usage for your account.
+func (c Client) Usage() (Usage, error) {
+	r := Usage{}
+	endpoint := "/account/usage"
+	err := c.GetJSON(endpoint, &r)
+	return r, err
+}
+
 // # Stocks related endpoints. #
 
 // AdvancedStats returns the everything in key stats plus additional advanced

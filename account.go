@@ -15,3 +15,12 @@ type AccountMetadata struct {
 	MessageLimit     int        `json:"messageLimit"`
 	MessagesUsed     int        `json:"messagesUsed"`
 }
+
+// Usage provides current month usage for your account.
+type Usage struct {
+	MonthlyUsage      int            `json:"monthlyUsage"`
+	MonthlyPayAsYouGo int            `json:"monthlyPayAsYouGo"`
+	DailyUsage        map[string]int `json:"dailyUsage"`
+	TokenUsage        map[string]int `json:"tokenUsage"`
+	KeyUsage          map[string]int `json:"keyUsage"`
+}
