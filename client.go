@@ -29,13 +29,32 @@ type Client struct {
 }
 
 // NewClient creates a client with the given authorization toke.
-func NewClient(token string, baseURL string) *Client {
-	if baseURL == "" {
-		baseURL = apiURL
-	}
-	return &Client{
+func NewClient(token string, baseURL string, options ...func(*Client)) *Client {
+	client := &Client{
 		baseURL: baseURL,
 		token:   token,
+	}
+
+	// apply options
+	for _, option := range options {
+		option(client)
+	}
+
+	// set default values
+	if client.httpClient == nil {
+		client.httpClient = &http.Client{}
+	}
+	if client.baseURL == "" {
+		client.baseURL = apiURL
+	}
+
+	return client
+}
+
+// WithHTTPClient sets the http.Client for a new IEX Client
+func WithHTTPClient(httpClient *http.Client) func(*Client) {
+	return func(client *Client) {
+		client.httpClient = httpClient
 	}
 }
 
@@ -45,7 +64,7 @@ func (c *Client) GetJSON(endpoint string, v interface{}) error {
 	if err != nil {
 		return err
 	}
-	resp, err := http.Get(address)
+	resp, err := c.httpClient.Get(address)
 	if err != nil {
 		return err
 	}
@@ -62,7 +81,7 @@ func (c *Client) GetJSON(endpoint string, v interface{}) error {
 // adding a token to the URL.
 func (c *Client) GetJSONWithoutToken(endpoint string, v interface{}) error {
 	address := c.baseURL + endpoint
-	resp, err := http.Get(address)
+	resp, err := c.httpClient.Get(address)
 	if err != nil {
 		return err
 	}
@@ -89,7 +108,7 @@ func (c *Client) addToken(endpoint string) (string, error) {
 // GetFloat64 gets the number from the given endpoint.
 func (c *Client) GetFloat64(endpoint string) (float64, error) {
 	address := c.baseURL + endpoint + "?token=" + c.token
-	resp, err := http.Get(address)
+	resp, err := c.httpClient.Get(address)
 	if err != nil {
 		return 0.0, err
 	}
