@@ -6,12 +6,13 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"sort"
 	"strings"
 
-	iex "github.com/goinvest/iexcloud"
+	iex "github.com/goinvest/iexcloud/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -51,7 +52,7 @@ var collectionSectorCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		sector := strings.ToLower(args[0])
 		client := GetClient()
-		sectors, err := client.Sectors()
+		sectors, err := client.Sectors(context.Background())
 		if err != nil {
 			log.Fatalf("Error getting sectors: %s", err)
 		}
@@ -72,7 +73,7 @@ var collectionSectorCmd = &cobra.Command{
 			log.Fatalf("Could not find specified sector")
 		case 1:
 			sector := foundSectors[0]
-			quotes, err := client.CollectionBySector(sector)
+			quotes, err := client.CollectionBySector(context.Background(), sector)
 			if err != nil {
 				log.Fatalf("Error getting quotes for sector %s: %s", sector.Name, err)
 			}
@@ -97,7 +98,7 @@ var collectionTagCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		tag := strings.ToLower(args[0])
 		client := GetClient()
-		tags, err := client.Tags()
+		tags, err := client.Tags(context.Background())
 		if err != nil {
 			log.Fatalf("Error getting tags: %s", err)
 		}
@@ -118,7 +119,7 @@ var collectionTagCmd = &cobra.Command{
 			log.Fatalf("Could not find specified tag")
 		case 1:
 			tag := foundTags[0]
-			quotes, err := client.CollectionByTag(tag)
+			quotes, err := client.CollectionByTag(context.Background(), tag)
 			if err != nil {
 				log.Fatalf("Error getting quotes for tag <%s>: %s", tag.Name, err)
 			}

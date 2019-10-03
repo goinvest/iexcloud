@@ -6,12 +6,13 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -37,7 +38,7 @@ var dividendsCmd = &cobra.Command{
 			log.Fatalf("Bad date range: %s", r)
 		}
 		log.Printf("Using date range = %s", got)
-		dividends, err := client.Dividends(stock, got)
+		dividends, err := client.Dividends(context.Background(), stock, got)
 		if err != nil {
 			log.Fatalf("Error getting dividends: %s", err)
 		}

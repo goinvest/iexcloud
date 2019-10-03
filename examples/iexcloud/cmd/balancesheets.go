@@ -6,12 +6,13 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,7 @@ var balanceSheetCmd = &cobra.Command{
 			log.Fatalf("Error reading config file: %s", err)
 		}
 		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-		bs, err := client.QuarterlyBalanceSheets(stock, 4)
+		bs, err := client.QuarterlyBalanceSheets(context.Background(), stock, 4)
 		if err != nil {
 			log.Fatalf("Error getting quarterly balance sheets: %s", err)
 		}

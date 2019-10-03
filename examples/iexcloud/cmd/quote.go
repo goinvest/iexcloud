@@ -6,12 +6,13 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,7 @@ var quoteCmd = &cobra.Command{
 			log.Fatalf("Error reading config file: %s", err)
 		}
 		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-		quote, err := client.Quote(stock)
+		quote, err := client.Quote(context.Background(), stock)
 		if err != nil {
 			log.Fatalf("Error getting quote: %s", err)
 		}

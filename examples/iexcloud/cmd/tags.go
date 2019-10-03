@@ -6,6 +6,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -22,7 +23,7 @@ var tagsCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		client := GetClient()
-		tags, err := client.Tags()
+		tags, err := client.Tags(context.Background())
 		if err != nil {
 			log.Fatalf("Error getting tags: %s", err)
 		}
