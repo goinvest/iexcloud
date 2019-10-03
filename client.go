@@ -31,8 +31,9 @@ type Client struct {
 // NewClient creates a client with the given authorization toke.
 func NewClient(token string, baseURL string, options ...func(*Client)) *Client {
 	client := &Client{
-		baseURL: baseURL,
-		token:   token,
+		baseURL:    baseURL,
+		token:      token,
+		httpClient: &http.Client{},
 	}
 
 	// apply options
@@ -41,9 +42,6 @@ func NewClient(token string, baseURL string, options ...func(*Client)) *Client {
 	}
 
 	// set default values
-	if client.httpClient == nil {
-		client.httpClient = &http.Client{}
-	}
 	if client.baseURL == "" {
 		client.baseURL = apiURL
 	}
