@@ -29,7 +29,7 @@ var estimatesCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		estimates, err := client.Estimates(stock, 4)
 		b, err := json.MarshalIndent(estimates, "", "  ")
 		if err != nil {

@@ -29,7 +29,7 @@ var delayedQuoteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		dq, err := client.DelayedQuote(stock)
 		b, err := json.MarshalIndent(dq, "", "  ")
 		if err != nil {

@@ -29,7 +29,7 @@ var quoteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		quote, err := client.Quote(stock)
 		if err != nil {
 			log.Fatalf("Error getting quote: %s", err)

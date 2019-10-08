@@ -29,7 +29,7 @@ var financialsCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		financials, err := client.QuarterlyFinancials(stock, 4)
 		if err != nil {
 			log.Fatalf("Error getting quarterly financials: %s", err)

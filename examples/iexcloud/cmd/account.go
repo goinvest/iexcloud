@@ -28,7 +28,7 @@ var accountMetadataCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		bs, err := client.AccountMetadata()
 		if err != nil {
 			log.Fatalf("Error getting account metadata: %s", err)

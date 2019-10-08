@@ -29,9 +29,8 @@ type Client struct {
 }
 
 // NewClient creates a client with the given authorization toke.
-func NewClient(token string, baseURL string, options ...func(*Client)) *Client {
+func NewClient(token string, options ...func(*Client)) *Client {
 	client := &Client{
-		baseURL:    baseURL,
 		token:      token,
 		httpClient: &http.Client{},
 	}
@@ -53,6 +52,13 @@ func NewClient(token string, baseURL string, options ...func(*Client)) *Client {
 func WithHTTPClient(httpClient *http.Client) func(*Client) {
 	return func(client *Client) {
 		client.httpClient = httpClient
+	}
+}
+
+// WithBaseURL sets the baseURL for a new IEX Client
+func WithBaseURL(baseURL string) func(*Client) {
+	return func(client *Client) {
+		client.baseURL = baseURL
 	}
 }
 

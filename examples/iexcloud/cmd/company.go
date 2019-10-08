@@ -28,7 +28,7 @@ var companyCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		company, err := client.Company(stock)
 		fmt.Printf("%q\n", company)
 	},

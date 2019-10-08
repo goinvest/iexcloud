@@ -28,7 +28,7 @@ var mostactiveCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 		q, err := client.MostActive()
 		if err != nil {
 			log.Fatalf("Error getting quotes: %s", err)
