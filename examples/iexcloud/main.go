@@ -5,7 +5,7 @@
 
 package main
 
-import "github.com/goinvest/iexcloud/examples/iexcloud/cmd"
+import "github.com/goinvest/iexcloud/v2/examples/iexcloud/cmd"
 
 func main() {
 	cmd.Execute()

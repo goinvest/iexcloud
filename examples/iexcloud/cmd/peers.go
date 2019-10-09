@@ -6,11 +6,12 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -28,8 +29,8 @@ var peersCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		peers, err := client.Peers(stock)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+		peers, err := client.Peers(context.Background(), stock)
 		if err != nil {
 			log.Fatalf("Error retrieving peers: %s", err)
 		}

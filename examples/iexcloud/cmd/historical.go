@@ -6,13 +6,14 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"time"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -34,8 +35,8 @@ var historicalCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		histPrices, err := client.HistoricalPrices(stock, timeframe, nil)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+		histPrices, err := client.HistoricalPrices(context.Background(), stock, timeframe, nil)
 		if err != nil {
 			log.Fatalf("Error getting historical prices: %s", err)
 		}
@@ -63,8 +64,8 @@ var historicalByDayCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		histPrices, err := client.HistoricalPricesByDay(stock, day, nil)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+		histPrices, err := client.HistoricalPricesByDay(context.Background(), stock, day, nil)
 		if err != nil {
 			log.Fatalf("Error getting intraday historical prices: %s", err)
 		}
@@ -87,8 +88,8 @@ var intradayHistoricalCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		histPrices, err := client.IntradayHistoricalPrices(stock, nil)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+		histPrices, err := client.IntradayHistoricalPrices(context.Background(), stock, nil)
 		if err != nil {
 			log.Fatalf("Error getting intraday historical prices: %s", err)
 		}
@@ -116,8 +117,8 @@ var intradayHistoricalByDayCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		histPrices, err := client.IntradayHistoricalPricesByDay(stock, day, nil)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+		histPrices, err := client.IntradayHistoricalPricesByDay(context.Background(), stock, day, nil)
 		if err != nil {
 			log.Fatalf("Error getting intraday historical prices: %s", err)
 		}

@@ -6,6 +6,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -22,7 +23,7 @@ var sectorsCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		client := GetClient()
-		sectors, err := client.Sectors()
+		sectors, err := client.Sectors(context.Background())
 		if err != nil {
 			log.Fatalf("Error getting sectors: %s", err)
 		}
