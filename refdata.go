@@ -33,9 +33,11 @@ type Symbol struct {
 // securities traded by the exchange.
 type USExchange struct {
 	Name     string `json:"name"`
+	LongName string `json:"longName"`
 	MarketID int    `json:"mic"`
 	TapeID   string `json:"tapeId"`
 	OATSID   string `json:"oatsId"`
+	RefID    int    `json:"refId"`
 	Type     string `json:"type"`
 }
 
