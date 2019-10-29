@@ -34,10 +34,10 @@ type Symbol struct {
 type USExchange struct {
 	Name     string `json:"name"`
 	LongName string `json:"longName"`
-	MarketID int    `json:"mic"`
+	MarketID string `json:"mic"`
 	TapeID   string `json:"tapeId"`
 	OATSID   string `json:"oatsId"`
-	RefID    int    `json:"refId"`
+	RefID    string `json:"refId"`
 	Type     string `json:"type"`
 }
 
