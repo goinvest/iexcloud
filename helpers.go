@@ -39,6 +39,23 @@ func (d *Date) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.Format("2006-01-02"))
 }
 
+// GobEncode implements the gob.GobEncoder interface.
+func (d *Date) GobEncode() ([]byte, error) {
+	t := time.Time(*d)
+	return t.GobEncode()
+}
+
+// GobDecode implements the gob.GobDecoder interface.
+func (d *Date) GobDecode(data []byte) error {
+	t := time.Time{}
+	if err := t.GobDecode(data); err != nil {
+		return err
+	}
+
+	*d = Date(t)
+	return nil
+}
+
 // PathRange refers to the date range used in the path of an endpoint.
 type PathRange int
 
