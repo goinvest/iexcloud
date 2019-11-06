@@ -161,10 +161,10 @@ type CashFlow struct {
 	CashChange              float64 `json:"cashChange"`
 	CashFlow                float64 `json:"cashFlow"`
 	CapitalExpenditures     float64 `json:"capitalExpenditures"`
-	Investment              float64 `json:"investments"`
+	Investments             float64 `json:"investments"`
 	InvestingActivityOther  float64 `json:"investingActivityOther"`
-	TotalInvestingCashFloes float64 `json:"totalInvestingCashFlows"`
-	DividensPaid            float64 `json:"dividendsPaid"`
+	TotalInvestingCashFlows float64 `json:"totalInvestingCashFlows"`
+	DividendsPaid           float64 `json:"dividendsPaid"`
 	NetBorrowings           float64 `json:"netBorrowings"`
 	OtherFinancingCashFlows float64 `json:"otherFinancingCashFlows"`
 	CashFlowFinancing       float64 `json:"cashFlowFinancing"`
