@@ -185,7 +185,7 @@ type Company struct {
 	Employees      int      `json:"employees"`
 	Tags           []string `json:"tags"`
 	SecurityName   string   `json:"securityName"`
-	PrimarySICCode string   `json:"primarySicCode"`
+	PrimarySICCode int      `json:"primarySicCode"`
 	Address        string   `json:"address"`
 	Address2       string   `json:"address2"`
 	State          string   `json:"state"`
