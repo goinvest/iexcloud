@@ -20,7 +20,7 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-const apiURL = "https://cloud.iexapis.com/beta"
+const apiURL = "https://cloud.iexapis.com/v1"
 
 // Client models a client to consume the IEX Cloud API.
 type Client struct {
