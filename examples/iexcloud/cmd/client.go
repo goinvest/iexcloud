@@ -8,8 +8,8 @@ package cmd
 import (
 	"log"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 )
 
 // GetClient uses the supplied token and base URL from
@@ -19,5 +19,5 @@ func GetClient() *iex.Client {
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	return iex.NewClient(cfg.Token, cfg.BaseURL)
+	return iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 }

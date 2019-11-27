@@ -6,13 +6,14 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
 
-	iex "github.com/goinvest/iexcloud"
-	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/goinvest/iexcloud/v2/examples/iexcloud/domain"
 	"github.com/spf13/cobra"
 )
 
@@ -34,8 +35,8 @@ var earningsCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error reading config file: %s", err)
 		}
-		client := iex.NewClient(cfg.Token, cfg.BaseURL)
-		earnings, err := client.Earnings(stock, num)
+		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+		earnings, err := client.Earnings(context.Background(), stock, num)
 		if err != nil {
 			log.Fatalf("Error getting earnings: %s", err)
 		}

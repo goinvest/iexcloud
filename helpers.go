@@ -39,6 +39,23 @@ func (d *Date) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.Format("2006-01-02"))
 }
 
+// GobEncode implements the gob.GobEncoder interface.
+func (d *Date) GobEncode() ([]byte, error) {
+	t := time.Time(*d)
+	return t.GobEncode()
+}
+
+// GobDecode implements the gob.GobDecoder interface.
+func (d *Date) GobDecode(data []byte) error {
+	t := time.Time{}
+	if err := t.GobDecode(data); err != nil {
+		return err
+	}
+
+	*d = Date(t)
+	return nil
+}
+
 // PathRange refers to the date range used in the path of an endpoint.
 type PathRange int
 
@@ -163,6 +180,10 @@ const (
 	lp
 	cs
 	et
+	wt
+	rt
+	ut
+	temp
 )
 
 var issueTypeDescription = map[IssueType]string{
@@ -173,21 +194,29 @@ var issueTypeDescription = map[IssueType]string{
 	lp:    "Limited Partnership",
 	cs:    "Common Stock",
 	et:    "Exchange Traded Fund (ETF)",
+	wt:    "Warrant",
+	rt:    "Right",
+	ut:    "Unit",
+	temp:  "Temporary",
 	blank: "Not available",
 }
 
 // IssueTypes maps the string keys from the JSON to the IssueType constant
 // values.
 var IssueTypes = map[string]IssueType{
-	"ad":  ad,
-	"re":  re,
-	"ce":  ce,
-	"cef": ce,
-	"si":  si,
-	"lp":  lp,
-	"cs":  cs,
-	"et":  et,
-	"":    blank,
+	"ad":   ad,
+	"re":   re,
+	"ce":   ce,
+	"cef":  ce,
+	"si":   si,
+	"lp":   lp,
+	"cs":   cs,
+	"et":   et,
+	"wt":   wt,
+	"rt":   rt,
+	"ut":   ut,
+	"temp": temp,
+	"":     blank,
 }
 
 // IssueTypeJSON maps an IssueType to the string used in the JSON.
@@ -199,6 +228,10 @@ var IssueTypeJSON = map[IssueType]string{
 	lp:    "lp",
 	cs:    "cs",
 	et:    "et",
+	wt:    "wt",
+	rt:    "rt",
+	ut:    "ut",
+	temp:  "temp",
 	blank: "",
 }
 
