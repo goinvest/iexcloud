@@ -24,7 +24,7 @@ type BalanceSheet struct {
 	OtherCurrentAssets      float64 `json:"otherCurrentAssets"`
 	CurrentAssets           float64 `json:"currentAssets"`
 	LongTermInvestments     float64 `json:"longTermInvestments"`
-	PropertyPlanetEquipment float64 `json:"propertyPlantEquipment"`
+	PropertyPlantEquipment  float64 `json:"propertyPlantEquipment"`
 	Goodwill                float64 `json:"goodwill"`
 	IntangibleAssets        float64 `json:"intangibleAssets"`
 	OtherAssets             float64 `json:"otherAssets"`
