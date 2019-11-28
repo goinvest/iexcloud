@@ -143,7 +143,11 @@ func (c *Client) GetFloat64(ctx context.Context, endpoint string) (float64, erro
 
 }
 
-// # Account related endpoints. #
+//////////////////////////////////////////////////////////////////////////////
+//
+// Account related endpoints.
+//
+//////////////////////////////////////////////////////////////////////////////
 
 // AccountMetadata returns information about an IEX Cloud account, such as
 // current tier, payment status, message quote usage, etc. An SK token is
@@ -166,7 +170,33 @@ func (c Client) Usage(ctx context.Context) (Usage, error) {
 	return r, err
 }
 
-// # Stocks related endpoints. #
+//////////////////////////////////////////////////////////////////////////////
+//
+// Data Points related endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// AvailableDataPoints returns a list of the available data points for a given
+// symbol and the weight of each data point.
+func (c Client) AvailableDataPoints(ctx context.Context, symbol string) ([]DataPoint, error) {
+	var dataPoints []DataPoint
+	endpoint := fmt.Sprintf("/data-points/%s", url.PathEscape(symbol))
+	err := c.GetJSON(ctx, endpoint, &dataPoints)
+	return dataPoints, err
+}
+
+// DataPoint returns the plain text value for the requested data point key for
+// the given symbol.
+func (c Client) DataPoint(ctx context.Context, symbol, key string) (float64, error) {
+	endpoint := fmt.Sprintf("/data-points/%s/%s", url.PathEscape(symbol), url.PathEscape(key))
+	return c.GetFloat64(ctx, endpoint)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Stock related endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
 
 // AdvancedStats returns the everything in key stats plus additional advanced
 // stats such as EBITDA, ratios, key financial data, and more.

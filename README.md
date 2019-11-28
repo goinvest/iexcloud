@@ -55,7 +55,7 @@ you want a particular API to be developed next, please open an issue.
 
 ### Data Points
 
-- [ ] Data Points
+- [x] Data Points
 
 ### Stock Prices
 
