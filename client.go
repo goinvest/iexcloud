@@ -140,22 +140,7 @@ func (c *Client) GetBytes(ctx context.Context, endpoint string) ([]byte, error) 
 
 // GetFloat64 gets the number from the given endpoint.
 func (c *Client) GetFloat64(ctx context.Context, endpoint string) (float64, error) {
-	address := c.baseURL + endpoint + "?token=" + c.token
-	req, err := http.NewRequest("GET", address, nil)
-	if err != nil {
-		return 0.0, err
-	}
-	resp, err := c.httpClient.Do(req.WithContext(ctx))
-	if err != nil {
-		return 0.0, err
-	}
-	defer resp.Body.Close()
-	// Even if GET didn't return an error, check the status code to make sure
-	// everything was ok.
-	if resp.StatusCode != http.StatusOK {
-		return 0.0, fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
-	}
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := c.GetBytes(ctx, endpoint)
 	if err != nil {
 		return 0.0, err
 	}
