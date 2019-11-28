@@ -61,10 +61,71 @@ type DEEP struct {
 	Auction       Auction       `json:"auction"`
 }
 
+// Auction models auction data for a security
+type Auction struct {
+	AuctionType          string    `json:"auctionType"`
+	PairedShares         int       `json:"pairedShares"`
+	ImbalanceShares      int       `json:"imbalanceShares"`
+	ReferencePrice       float64   `json:"referencePrice"`
+	IndicativePrice      float64   `json:"indicativePrice"`
+	AuctionBookPrice     float64   `json:"auctionBookPrice"`
+	CollarReferencePrice float64   `json:"collarReferencePrice"`
+	LowerCollarPrice     float64   `json:"lowerCollarPrice"`
+	UpperCollarPrice     float64   `json:"upperCollarPrice"`
+	ExtensionNumber      int       `json:"extensionNumber"`
+	StartTime            EpochTime `json:"startTime"`
+	LastUpdate           EpochTime `json:"lastUpdate"`
+}
+
 // DEEPBook contains just the bids and asks for a specified symbol
 type DEEPBook struct {
 	Bids []BidAsk `json:"bids"`
 	Asks []BidAsk `json:"asks"`
+}
+
+// OpHaltStatus models the operational halt status of a security
+type OpHaltStatus struct {
+	IsHalted  bool      `json:"isHalted"`
+	Timestamp EpochTime `json:"timestamp"`
+}
+
+// SecurityEvent models events which apply to a specific security
+type SecurityEvent struct {
+	SecurityEvent string    `json:"securityEvent"`
+	Timestamp     EpochTime `json:"timestamp"`
+}
+
+// SSRStatus models the short sale price test status for a security
+type SSRStatus struct {
+	IsSSR     bool      `json:"isSSR"`
+	Detail    string    `json:"detail"`
+	Timestamp EpochTime `json:"timestamp"`
+}
+
+// SystemEvent models a system event for a quote.
+type SystemEvent struct {
+	SystemEvent string    `json:"systemEvent"`
+	Timestamp   EpochTime `json:"timestamp"`
+}
+
+// Trade models a trade for a quote.
+type Trade struct {
+	Price                 float64   `json:"price"`
+	Size                  int       `json:"size"`
+	TradeID               int       `json:"tradeId"`
+	IsISO                 bool      `json:"isISO"`
+	IsOddLot              bool      `json:"isOddLot"`
+	IsOutsideRegularHours bool      `json:"isOutsideRegularHours"`
+	IsSinglePriceCross    bool      `json:"isSinglePriceCross"`
+	IsTradeThroughExempt  bool      `json:"isTradeThroughExempt"`
+	Timestamp             EpochTime `json:"timestamp"`
+}
+
+// TradingStatus models the current trading status of a security
+type TradingStatus struct {
+	Status    string    `json:"status"`
+	Reason    string    `json:"reason"`
+	Timestamp EpochTime `json:"timestamp"`
 }
 
 // VolumeRecord models the record volume.
