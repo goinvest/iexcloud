@@ -175,6 +175,7 @@ type Split struct {
 	ExDate       Date    `json:"exDate"`
 	DeclaredDate Date    `json:"declaredDate"`
 	Ratio        float64 `json:"ratio"`
+	ToFactor     float64 `json:"toFactor"`
 	FromFactor   float64 `json:"fromFactor"`
 	Description  string  `json:"description"`
 }

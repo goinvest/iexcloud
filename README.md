@@ -92,7 +92,8 @@ you want a particular API to be developed next, please open an issue.
 - [x] Financials
 - [ ] Financials As Reported
 - [x] Income Statement
-- [ ] SEC Filings
+- [ ] SEC Filings — Use the Financials As Reported endpoint for raw SEC filings
+      data.
 - [ ] Splits (Basic)
 
 ### Stock Research
