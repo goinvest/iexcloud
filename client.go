@@ -69,58 +69,43 @@ func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) er
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest("GET", address, nil)
+	data, err := c.getBytes(ctx, address)
 	if err != nil {
 		return err
 	}
-	resp, err := c.httpClient.Do(req.WithContext(ctx))
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	// Even if GET didn't return an error, check the status code to make sure
-	// everything was ok.
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
-	}
-	return json.NewDecoder(resp.Body).Decode(v)
+	return json.Unmarshal(data, v)
 }
 
 // GetJSONWithoutToken gets the JSON data from the given endpoint without
 // adding a token to the URL.
 func (c *Client) GetJSONWithoutToken(ctx context.Context, endpoint string, v interface{}) error {
 	address := c.baseURL + endpoint
-	req, err := http.NewRequest("GET", address, nil)
+	data, err := c.getBytes(ctx, address)
 	if err != nil {
 		return err
 	}
-	resp, err := c.httpClient.Do(req.WithContext(ctx))
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	// Even if GET didn't return an error, check the status code to make sure
-	// everything was ok.
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
-	}
-	return json.NewDecoder(resp.Body).Decode(v)
-}
-
-func (c *Client) addToken(endpoint string) (string, error) {
-	u, err := url.Parse(c.baseURL + endpoint)
-	if err != nil {
-		return "", err
-	}
-	v := u.Query()
-	v.Add("token", c.token)
-	u.RawQuery = v.Encode()
-	return u.String(), nil
+	return json.Unmarshal(data, v)
 }
 
 // GetBytes gets the data from the given endpoint.
 func (c *Client) GetBytes(ctx context.Context, endpoint string) ([]byte, error) {
-	address := c.baseURL + endpoint + "?token=" + c.token
+	address, err := c.addToken(endpoint)
+	if err != nil {
+		return []byte{}, err
+	}
+	return c.getBytes(ctx, address)
+}
+
+// GetFloat64 gets the number from the given endpoint.
+func (c *Client) GetFloat64(ctx context.Context, endpoint string) (float64, error) {
+	b, err := c.GetBytes(ctx, endpoint)
+	if err != nil {
+		return 0.0, err
+	}
+	return strconv.ParseFloat(string(b), 64)
+}
+
+func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	req, err := http.NewRequest("GET", address, nil)
 	if err != nil {
 		return []byte{}, err
@@ -138,14 +123,15 @@ func (c *Client) GetBytes(ctx context.Context, endpoint string) ([]byte, error) 
 	return ioutil.ReadAll(resp.Body)
 }
 
-// GetFloat64 gets the number from the given endpoint.
-func (c *Client) GetFloat64(ctx context.Context, endpoint string) (float64, error) {
-	b, err := c.GetBytes(ctx, endpoint)
+func (c *Client) addToken(endpoint string) (string, error) {
+	u, err := url.Parse(c.baseURL + endpoint)
 	if err != nil {
-		return 0.0, err
+		return "", err
 	}
-	return strconv.ParseFloat(string(b), 64)
-
+	v := u.Query()
+	v.Add("token", c.token)
+	u.RawQuery = v.Encode()
+	return u.String(), nil
 }
 
 //////////////////////////////////////////////////////////////////////////////
