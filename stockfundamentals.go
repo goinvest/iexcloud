@@ -141,7 +141,6 @@ type Financial struct {
 	ShareholderEquity      float64 `json:"shareholderEquity"`
 	CashChange             float64 `json:"cashChange"`
 	CashFlow               float64 `json:"cashFlow"`
-	OperatingGainsLosses   string  `json:"operatingGainsLosses"`
 }
 
 // IncomeStatements pulls income statement data. Available quarterly (4 quarters) and
