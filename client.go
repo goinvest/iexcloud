@@ -569,7 +569,7 @@ func (c Client) RelevantStocks(ctx context.Context, symbol string) (RelevantStoc
 
 // SectorPerformance returns the performance of each sector for the current
 // trading day. Performance is based on each sector ETF.
-func (c Client) SectorPerformance(ctx context.Contect) ([]SectorPerformance, error) {
+func (c Client) SectorPerformance(ctx context.Context) ([]SectorPerformance, error) {
 	r := []SectorPerformance{}
 	endpoint := "/stock/market/sector-performance"
 	err := c.GetJSON(ctx, endpoint, &r)
