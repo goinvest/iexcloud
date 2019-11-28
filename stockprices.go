@@ -33,17 +33,6 @@ type DelayedQuote struct {
 	ProcessedTime    int     `json:"processedTime"`
 }
 
-// EffectiveSpread models the effective spread, eligible volume, and price
-// improvement of a stock by market.
-type EffectiveSpread struct {
-	Volume           int     `json:"volume"`
-	Venue            string  `json:"venue"`
-	VenueName        string  `json:"venueName"`
-	EffectiveSpread  float64 `json:"effectiveSpread"`
-	EffectiveQuoted  float64 `json:"effectiveQuoted"`
-	PriceImprovement float64 `json:"priceImprovement"`
-}
-
 // HistoricalPrice models the data for a historical stock price.
 type HistoricalPrice struct {
 	Date string `json:"date"`

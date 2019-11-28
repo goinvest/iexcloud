@@ -295,15 +295,6 @@ func (c Client) DelayedQuote(ctx context.Context, symbol string) (DelayedQuote, 
 	return dq, err
 }
 
-// EffectiveSpreads returns the effective spreads from the IEX Cloud endpoint
-// for the given stock symbol.
-func (c Client) EffectiveSpreads(ctx context.Context, symbol string) ([]EffectiveSpread, error) {
-	es := []EffectiveSpread{}
-	endpoint := fmt.Sprintf("/stock/%s/effective-spread", url.PathEscape(symbol))
-	err := c.GetJSON(ctx, endpoint, &es)
-	return es, err
-}
-
 // Estimates returns the latest consensue estimates for the next fiscal period.
 func (c Client) Estimates(ctx context.Context, symbol string, num int) (Estimates, error) {
 	estimates := Estimates{}

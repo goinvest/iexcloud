@@ -235,7 +235,6 @@ you want a particular API to be developed next, please open an issue.
 
 ### Need to Reclassify/Remove
 
-- [x] Effective Spread (@FIXME: Has been removed from API.)
 - [x] Recommendation Trends
 - [x] Relevant Stocks
 
