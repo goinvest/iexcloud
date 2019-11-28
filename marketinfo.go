@@ -9,19 +9,21 @@ package iex
 // before the open and after market close. Each array contains an object with
 // all keys from earnings, a quote object, and a headline key.
 type EarningsToday struct {
-	BeforeOpen []TodayEarning `json:"bto"`
-	AfterClose []TodayEarning `json:"amc"`
+	BeforeOpen    []TodayEarning `json:"bto"`
+	AfterClose    []TodayEarning `json:"amc"`
+	DuringTrading []TodayEarning `json:"other"`
 }
 
 // TodayEarning models a single earning being reported today containing all
 // keys from earnings, a quote object, and a headline.
 type TodayEarning struct {
-	Earning
-	EstimatedChangePercent float64 `json:"estimatedChangePercent"`
-	SymbolID               int     `json:"symbolId"`
-	Symbol                 string  `json:"symbol"`
-	Quote                  Quote   `json:"quote"`
-	Headline               string  `json:"headline"`
+	ConsensusEPS      float64      `json:"consensusEPS"`
+	AnnounceTime      AnnounceTime `json:"announcetime"`
+	NumberOfEstimates int          `json:"numberOfEstimates"`
+	FiscalPeriod      string       `json:"fiscalPeriod"`
+	FiscalEndDate     Date         `json:"fiscalEndDate"`
+	Symbol            string       `json:"symbol"`
+	Quote             Quote        `json:"quote"`
 }
 
 // Market models the traded volume on U.S. markets.

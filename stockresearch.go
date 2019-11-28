@@ -74,9 +74,9 @@ type FundOwner struct {
 
 // InstitutionalOwner models an institutional owner of a stock.
 type InstitutionalOwner struct {
-	EntityName          string    `json:"entityProperName"`
 	AdjustedHolding     float64   `json:"adjHolding"`
 	AdjustedMarketValue float64   `json:"adjMv"`
+	EntityName          string    `json:"entityProperName"`
 	ReportDate          EpochTime `json:"reportDate"`
 	ReportedHolding     float64   `json:"reportedHolding"`
 }
@@ -89,9 +89,11 @@ type KeyStats struct {
 	Week52Low           float64 `json:"week52Low"`
 	Week52Change        float64 `json:"week52Change"`
 	SharesOutstanding   float64 `json:"sharesOutstanding"`
-	Avg30Volume         float64 `json:"avg30Volume"`
-	Avg10Volume         float64 `json:"avg10Volume"`
 	Float               float64 `json:"float"`
+	Avg10Volume         float64 `json:"avg10Volume"`
+	Avg30Volume         float64 `json:"avg30Volume"`
+	Day200MovingAvg     float64 `json:"day200MovingAvg"`
+	Day50MovingAvg      float64 `json:"day50MovingAvg"`
 	Employees           int     `json:"employees"`
 	TTMEPS              float64 `json:"ttmEPS"`
 	TTMDividendRate     float64 `json:"ttmDividendRate"`
@@ -101,8 +103,6 @@ type KeyStats struct {
 	NextEarningsDate    Date    `json:"nextEarningsDate"`
 	PERatio             float64 `json:"peRatio"`
 	Beta                float64 `json:"beta"`
-	Day200MovingAvg     float64 `json:"day200MovingAvg"`
-	Day50MovingAvg      float64 `json:"day50MovingAvg"`
 	MaxChangePercent    float64 `json:"maxChangePercent"`
 	Year5ChangePercent  float64 `json:"year5ChangePercent"`
 	Year2ChangePercent  float64 `json:"year2ChangePercent"`
