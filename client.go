@@ -183,6 +183,13 @@ func (c Client) DataPoint(ctx context.Context, symbol, key string) ([]byte, erro
 	return c.GetBytes(ctx, endpoint)
 }
 
+// DataPointNumber returns the float64 for the requested data point key and the
+// given symbol.
+func (c Client) DataPointNumber(ctx context.Context, symbol, key string) (float64, error) {
+	endpoint := fmt.Sprintf("/data-points/%s/%s", url.PathEscape(symbol), url.PathEscape(key))
+	return c.GetFloat64(ctx, endpoint)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Stock related endpoints
@@ -754,7 +761,41 @@ func (c Client) ExchangeRate(ctx context.Context, from, to string) (ExchangeRate
 	return r, err
 }
 
-// # Investors Exchange Data related endpoints. #
+//////////////////////////////////////////////////////////////////////////////
+//
+// Commodities Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// OilType indicates the type of crude oil.
+type OilType string
+
+var oilTypes = map[OilType]string{
+	WestTexas:   "West Texas",
+	BrentEurope: "Brent Europe",
+}
+
+func (oil OilType) String() string {
+	return oilTypes[oil]
+}
+
+// Available oil types.
+const (
+	WestTexas   OilType = "DCOILWTICO"
+	BrentEurope OilType = "DCOILBRENTEU"
+)
+
+// OilPrice returns the oil price for the given oil type of either West Texas
+// or Brent Europe.
+func (c Client) OilPrice(ctx context.Context, oil OilType) (float64, error) {
+	return c.DataPointNumber(ctx, "market", string(oil))
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Investors Exchange Data Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
 
 // TOPS is used to receive real-time top of book quotations direct from IEX.
 // The quotations received via TOPS provide an aggregated size and do not
@@ -926,7 +967,11 @@ func (c Client) intradayHistoricalEndpointWithOpts(endpoint string, opts *Intrad
 	return endpoint, nil
 }
 
-// # API System Metadata related endpoints. #
+//////////////////////////////////////////////////////////////////////////////
+//
+// API System Metadata
+//
+//////////////////////////////////////////////////////////////////////////////
 
 // Status returns the IEX Cloud system status.
 func (c Client) Status(ctx context.Context) (Status, error) {
