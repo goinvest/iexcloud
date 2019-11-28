@@ -118,6 +118,26 @@ func (c *Client) addToken(endpoint string) (string, error) {
 	return u.String(), nil
 }
 
+// GetBytes gets the data from the given endpoint.
+func (c *Client) GetBytes(ctx context.Context, endpoint string) ([]byte, error) {
+	address := c.baseURL + endpoint + "?token=" + c.token
+	req, err := http.NewRequest("GET", address, nil)
+	if err != nil {
+		return []byte{}, err
+	}
+	resp, err := c.httpClient.Do(req.WithContext(ctx))
+	if err != nil {
+		return []byte{}, err
+	}
+	defer resp.Body.Close()
+	// Even if GET didn't return an error, check the status code to make sure
+	// everything was ok.
+	if resp.StatusCode != http.StatusOK {
+		return []byte{}, fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+	}
+	return ioutil.ReadAll(resp.Body)
+}
+
 // GetFloat64 gets the number from the given endpoint.
 func (c *Client) GetFloat64(ctx context.Context, endpoint string) (float64, error) {
 	address := c.baseURL + endpoint + "?token=" + c.token
@@ -187,9 +207,9 @@ func (c Client) AvailableDataPoints(ctx context.Context, symbol string) ([]DataP
 
 // DataPoint returns the plain text value for the requested data point key for
 // the given symbol.
-func (c Client) DataPoint(ctx context.Context, symbol, key string) (float64, error) {
+func (c Client) DataPoint(ctx context.Context, symbol, key string) ([]byte, error) {
 	endpoint := fmt.Sprintf("/data-points/%s/%s", url.PathEscape(symbol), url.PathEscape(key))
-	return c.GetFloat64(ctx, endpoint)
+	return c.GetBytes(ctx, endpoint)
 }
 
 //////////////////////////////////////////////////////////////////////////////

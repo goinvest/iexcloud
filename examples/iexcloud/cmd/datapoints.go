@@ -61,6 +61,6 @@ var dataPoint = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error getting data point (symbol = %s / key = %s): %s", symbol, key, err)
 		}
-		fmt.Printf("%s %s = %f\n", symbol, key, dataPoint)
+		fmt.Printf("%s %s = %s\n", symbol, key, dataPoint)
 	},
 }
