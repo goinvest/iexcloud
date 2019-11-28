@@ -108,25 +108,6 @@ type Earning struct {
 	YearAgoChangePercent float64      `json:"yearAgoChangePercent"`
 }
 
-// EarningsToday models the earning that will be reported today as two arrays:
-// before the open and after market close. Each array contains an object with
-// all keys from earnings, a quote object, and a headline key.
-type EarningsToday struct {
-	BeforeOpen []TodayEarning `json:"bto"`
-	AfterClose []TodayEarning `json:"amc"`
-}
-
-// TodayEarning models a single earning being reported today containing all
-// keys from earnings, a quote object, and a headline.
-type TodayEarning struct {
-	Earning
-	EstimatedChangePercent float64 `json:"estimatedChangePercent"`
-	SymbolID               int     `json:"symbolId"`
-	Symbol                 string  `json:"symbol"`
-	Quote                  Quote   `json:"quote"`
-	Headline               string  `json:"headline"`
-}
-
 // Financials models income statement, balance sheet, and cash flow data from
 // the most recent reported quarter.
 type Financials struct {
@@ -134,8 +115,10 @@ type Financials struct {
 	Financials []Financial `json:"financials"`
 }
 
-// Financial pulls income statement, balance sheet, and cash flow data from
-// the most recent reported quarter.
+// Financial pulls income statement, balance sheet, and cash flow data from the
+// most recent reported quarter. This endpoint is carried over from the IEX 1.0
+// API. Use the new cash-flow, income statement, and balance-sheet endpoints
+// for new data.
 type Financial struct {
 	ReportDate             Date    `json:"reportDate"`
 	GrossProfit            float64 `json:"grossProfit"`
