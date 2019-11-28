@@ -587,13 +587,18 @@ func (c Client) Quote(ctx context.Context, symbol string) (Quote, error) {
 	return r, err
 }
 
-// RecommendationTrends provides a list of recommendations with the start and
-// end date for each rating.
-func (c Client) RecommendationTrends(ctx context.Context, symbol string) ([]Recommendation, error) {
+// AnalystRecommendations pulls data from the last four months.
+func (c Client) AnalystRecommendations(ctx context.Context, symbol string) ([]Recommendation, error) {
 	r := []Recommendation{}
 	endpoint := fmt.Sprintf("/stock/%s/recommendation-trends", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
+}
+
+// RecommendationTrends provides a list of recommendations with the start and
+// end date for each rating. Keep to not break API.
+func (c Client) RecommendationTrends(ctx context.Context, symbol string) ([]Recommendation, error) {
+	return c.AnalystRecommendations(ctx, symbol)
 }
 
 // RelevantStocks is similar to the peers endpoint, except this will return

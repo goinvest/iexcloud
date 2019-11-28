@@ -35,15 +35,16 @@ type AdvancedStats struct {
 
 // Recommendation models the buy, hold, sell recommendations for a stock.
 type Recommendation struct {
-	ConsensusEndDate   EpochTime `json:"consensusEndDate"`
-	ConsensusStartDate EpochTime `json:"consensusStartDate"`
-	BuyRatings         int       `json:"ratingBuy"`
-	HoldRatings        int       `json:"ratingHold"`
-	NoRatings          int       `json:"ratingNone"`
-	OverweightRatings  int       `json:"ratingOverweight"`
-	SellRatings        int       `json:"ratingSell"`
-	UnderweightRatings int       `json:"ratingUnderweight"`
-	ConsensusRating    float64   `json:"ratingScaleMark"`
+	ConsensusEndDate            EpochTime `json:"consensusEndDate"`
+	ConsensusStartDate          EpochTime `json:"consensusStartDate"`
+	CorporateActionsAppliedDate EpochTime `json:"corporateActionsAppliedDate"`
+	BuyRatings                  int       `json:"ratingBuy"`
+	OverweightRatings           int       `json:"ratingOverweight"`
+	HoldRatings                 int       `json:"ratingHold"`
+	UnderweightRatings          int       `json:"ratingUnderweight"`
+	SellRatings                 int       `json:"ratingSell"`
+	NoRatings                   int       `json:"ratingNone"`
+	ConsensusRating             float64   `json:"ratingScaleMark"`
 }
 
 // Estimates models the latest consensus esimtate for the next fiscal period.

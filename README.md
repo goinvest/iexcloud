@@ -99,7 +99,7 @@ you want a particular API to be developed next, please open an issue.
 ### Stock Research
 
 - [x] Advanced Stats
-- [ ] Analyst Recommendations
+- [x] Analyst Recommendations
 - [x] Estimates
 - [x] Fund Ownership
 - [x] Institutional Ownership
