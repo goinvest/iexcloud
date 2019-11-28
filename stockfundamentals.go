@@ -72,14 +72,18 @@ type CashFlow struct {
 	ExchangeRateEffect      float64 `json:"exchangeRateEffect"`
 }
 
-// Dividend models one dividend.
+// Dividend models one dividend (basic) for the stock fundamentals.
 type Dividend struct {
+	Symbol       string  `json:"symbol"`
 	ExDate       Date    `json:"exDate"`
 	PaymentDate  Date    `json:"paymentDate"`
 	RecordDate   Date    `json:"recordDate"`
 	DeclaredDate Date    `json:"declaredDate"`
 	Amount       float64 `json:"amount,string"`
 	Flag         string  `json:"flag"`
+	Currency     string  `json:"currency"`
+	Description  string  `json:"description"`
+	Frequency    string  `json:"frequency"`
 }
 
 // Earnings provides earnings data for a given company including the actual
