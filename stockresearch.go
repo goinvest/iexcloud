@@ -9,6 +9,7 @@ package iex
 // stats such as EBITDA, ratios, key financial data, and more.
 type AdvancedStats struct {
 	KeyStats
+	Beta                     float64 `json:"beta"`
 	TotalCash                float64 `json:"totalCash"`
 	CurrentDebt              float64 `json:"currentDebt"`
 	Revenue                  float64 `json:"revenue"`
@@ -16,6 +17,7 @@ type AdvancedStats struct {
 	TotalRevenue             float64 `json:"totalRevenue"`
 	EBITDA                   float64 `json:"EBITDA"`
 	RevenuePerShare          float64 `json:"revenuePerShare"`
+	RevenuePerEmployee       float64 `json:"revenuePerEmployee"`
 	DebtToEquity             float64 `json:"debtToEquity"`
 	ProfitMargin             float64 `json:"profitMargin"`
 	EnterpriseValue          float64 `json:"enterpriseValue"`
@@ -24,7 +26,11 @@ type AdvancedStats struct {
 	PriceToBook              float64 `json:"priceToBook"`
 	ForwardPERatio           float64 `json:"forwardPERatio"`
 	PEGRatio                 float64 `json:"pegRatio"`
-	Beta                     float64 `json:"beta"`
+	PEHigh                   float64 `json:"peHigh"`
+	PELow                    float64 `json:"peLow"`
+	Week52HighDate           float64 `json:"week52highDate"`
+	Week52LowDate            float64 `json:"week52lowDate"`
+	PutCallRatio             float64 `json:"putCallRatio"`
 }
 
 // Recommendation models the buy, hold, sell recommendations for a stock.
