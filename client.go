@@ -767,28 +767,48 @@ func (c Client) ExchangeRate(ctx context.Context, from, to string) (ExchangeRate
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// OilType indicates the type of crude oil.
-type OilType string
+// CommodityType indicates the type of commodity.
+type CommodityType string
 
-var oilTypes = map[OilType]string{
-	WestTexas:   "West Texas",
-	BrentEurope: "Brent Europe",
-}
-
-func (oil OilType) String() string {
-	return oilTypes[oil]
-}
-
-// Available oil types.
+// Available commodities.
 const (
-	WestTexas   OilType = "DCOILWTICO"
-	BrentEurope OilType = "DCOILBRENTEU"
+	WestTexasOil       CommodityType = "DCOILWTICO"
+	BrentEuropeOil     CommodityType = "DCOILBRENTEU"
+	HenryHubNG         CommodityType = "DHHNGSP"
+	NYHeatingOil       CommodityType = "DHOILNYH"
+	GulfCoastJetFuel   CommodityType = "DJFUELUSGULF"
+	USDiesel           CommodityType = "GASDESW"
+	USRegularGas       CommodityType = "GASREGCOVW"
+	USMidgradeGas      CommodityType = "GASMIDCOVW"
+	USPremiumGas       CommodityType = "GASPRMCOVW"
+	MontBelvieuPropane CommodityType = "DPROPANEMBTX"
 )
 
-// OilPrice returns the oil price for the given oil type of either West Texas
-// or Brent Europe.
-func (c Client) OilPrice(ctx context.Context, oil OilType) (float64, error) {
-	return c.DataPointNumber(ctx, "market", string(oil))
+var commodityDescriptions = map[CommodityType]string{
+	WestTexasOil:       "Crude Oil West Texas Intermediate ($USD/barrel)",
+	BrentEuropeOil:     "Crude Oil Brent Europe ($USD/barrel)",
+	HenryHubNG:         "Henry Hub Natural Gas Spot Price ($USD/million BTU)",
+	NYHeatingOil:       "No. 2 Heating Oil New York Harbor ($USD/gallon)",
+	GulfCoastJetFuel:   "Kerosene Type Jet Fuel US Gulf Coast ($USD/gallon)",
+	USDiesel:           "US Diesel ($USD/gallon)",
+	USRegularGas:       "US Regular Conventional Gas ($USD/gallon)",
+	USMidgradeGas:      "US Midgrade Conventional Gas ($USD/gallon)",
+	USPremiumGas:       "US Premium Conventional Gas ($USD/gallon)",
+	MontBelvieuPropane: "Mont Belvieu Texas Propane ($USD/gallon)",
+}
+
+// String provides the Stringer interface for CommodityType.
+func (ct CommodityType) String() string {
+	return commodityDescriptions[ct]
+}
+
+// CommodityPrice returns the price for the given commodity not seasonally
+// adjusted.
+func (c Client) CommodityPrice(ctx context.Context, ct CommodityType) (float64, error) {
+	// By using an explicit type conversion to string we get the commodity symbol
+	// instead of the description, which we would get if we utilized the Stringer
+	// interface.
+	return c.DataPointNumber(ctx, "market", string(ct))
 }
 
 //////////////////////////////////////////////////////////////////////////////
