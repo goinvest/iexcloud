@@ -183,6 +183,13 @@ func (c Client) DataPoint(ctx context.Context, symbol, key string) ([]byte, erro
 	return c.GetBytes(ctx, endpoint)
 }
 
+// DataPointNumber returns the float64 for the requested data point key and the
+// given symbol.
+func (c Client) DataPointNumber(ctx context.Context, symbol, key string) (float64, error) {
+	endpoint := fmt.Sprintf("/data-points/%s/%s", url.PathEscape(symbol), url.PathEscape(key))
+	return c.GetFloat64(ctx, endpoint)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Stock related endpoints
@@ -754,7 +761,61 @@ func (c Client) ExchangeRate(ctx context.Context, from, to string) (ExchangeRate
 	return r, err
 }
 
-// # Investors Exchange Data related endpoints. #
+//////////////////////////////////////////////////////////////////////////////
+//
+// Commodities Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// CommodityType indicates the type of commodity.
+type CommodityType string
+
+// Available commodities.
+const (
+	WestTexasOil       CommodityType = "DCOILWTICO"
+	BrentEuropeOil     CommodityType = "DCOILBRENTEU"
+	HenryHubNG         CommodityType = "DHHNGSP"
+	NYHeatingOil       CommodityType = "DHOILNYH"
+	GulfCoastJetFuel   CommodityType = "DJFUELUSGULF"
+	USDiesel           CommodityType = "GASDESW"
+	USRegularGas       CommodityType = "GASREGCOVW"
+	USMidgradeGas      CommodityType = "GASMIDCOVW"
+	USPremiumGas       CommodityType = "GASPRMCOVW"
+	MontBelvieuPropane CommodityType = "DPROPANEMBTX"
+)
+
+var commodityDescriptions = map[CommodityType]string{
+	WestTexasOil:       "Crude Oil West Texas Intermediate ($USD/barrel)",
+	BrentEuropeOil:     "Crude Oil Brent Europe ($USD/barrel)",
+	HenryHubNG:         "Henry Hub Natural Gas Spot Price ($USD/million BTU)",
+	NYHeatingOil:       "No. 2 Heating Oil New York Harbor ($USD/gallon)",
+	GulfCoastJetFuel:   "Kerosene Type Jet Fuel US Gulf Coast ($USD/gallon)",
+	USDiesel:           "US Diesel ($USD/gallon)",
+	USRegularGas:       "US Regular Conventional Gas ($USD/gallon)",
+	USMidgradeGas:      "US Midgrade Conventional Gas ($USD/gallon)",
+	USPremiumGas:       "US Premium Conventional Gas ($USD/gallon)",
+	MontBelvieuPropane: "Mont Belvieu Texas Propane ($USD/gallon)",
+}
+
+// String provides the Stringer interface for CommodityType.
+func (ct CommodityType) String() string {
+	return commodityDescriptions[ct]
+}
+
+// CommodityPrice returns the price for the given commodity not seasonally
+// adjusted.
+func (c Client) CommodityPrice(ctx context.Context, ct CommodityType) (float64, error) {
+	// By using an explicit type conversion to string we get the commodity symbol
+	// instead of the description, which we would get if we utilized the Stringer
+	// interface.
+	return c.DataPointNumber(ctx, "market", string(ct))
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Investors Exchange Data Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
 
 // TOPS is used to receive real-time top of book quotations direct from IEX.
 // The quotations received via TOPS provide an aggregated size and do not
@@ -926,7 +987,11 @@ func (c Client) intradayHistoricalEndpointWithOpts(endpoint string, opts *Intrad
 	return endpoint, nil
 }
 
-// # API System Metadata related endpoints. #
+//////////////////////////////////////////////////////////////////////////////
+//
+// API System Metadata
+//
+//////////////////////////////////////////////////////////////////////////////
 
 // Status returns the IEX Cloud system status.
 func (c Client) Status(ctx context.Context) (Status, error) {
