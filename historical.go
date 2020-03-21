@@ -2,6 +2,7 @@
 // Project site: https://github.com/goinvest/iexcloud
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
+
 package iex
 
 // HistoricalTimeFrame enum for selecting time frame of historical data
