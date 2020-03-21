@@ -145,9 +145,9 @@ type Quote struct {
 	PERatio               float64   `json:"peRatio"`
 }
 
-// Volume models the 15 minute delayed and 30 day average consolidated volume
-// percentage of a stock by market.
-type Volume struct {
+// VenueVolume models the 15 minute delayed and 30 day average consolidated
+// volume percentage of a stock by market.
+type VenueVolume struct {
 	Volume               int     `json:"volume"`
 	Venue                string  `json:"venue"`
 	VenueName            string  `json:"venueName"`

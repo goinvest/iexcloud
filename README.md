@@ -58,7 +58,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Metadata
 - [ ] Pay as you go
 - [ ] Signed Requests
-- [ ] Usage
+- [x] Usage
 
 ### API System Metadata
 
@@ -69,17 +69,17 @@ you want a particular API to be developed next, please open an issue.
 - [x] Book
 - [x] Charts — Use historical and intraday price endpoints.
 - [x] Delayed Quote
-- [ ] Extended Hours Quote — Use quote endpoint.
-- [ ] Historical Prices
+- [x] Extended Hours Quote — Use Quote.
+- [x] Historical Prices
 - [x] Intraday Prices
 - [x] Largest Trades
-- [x] Open / Close Price
+- [x] Open / Close Price - Use OHLC.
 - [x] OHLC
 - [x] Previous Day Price
 - [x] Price Only
 - [x] Quote
-- [ ] Real-time Quote — Use quote endpoint.
-- [ ] Volume by Venue
+- [x] Real-time Quote — Use Quote.
+- [x] Volume by Venue
 
 ### Stock Profiles
 
@@ -88,7 +88,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Insider Summary
 - [x] Insider Transactions
 - [x] Logo
-- [ ] Peer Groups
+- [x] Peer Groups
 
 ### Stock Fundamentals
 

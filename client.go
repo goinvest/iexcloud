@@ -354,8 +354,7 @@ func (c Client) PreviousDay(ctx context.Context, symbol string) (PreviousDay, er
 	return pd, err
 }
 
-// Price returns the current stock price from the IEX Cloud endpoint for the
-// given stock symbol.
+// Price returns the current stock price for the given stock symbol.
 func (c Client) Price(ctx context.Context, symbol string) (float64, error) {
 	endpoint := fmt.Sprintf("/stock/%s/price", url.PathEscape(symbol))
 	return c.GetFloat64(ctx, endpoint)
@@ -366,6 +365,16 @@ func (c Client) Price(ctx context.Context, symbol string) (float64, error) {
 func (c Client) Quote(ctx context.Context, symbol string) (Quote, error) {
 	r := Quote{}
 	endpoint := fmt.Sprintf("/stock/%s/quote", url.PathEscape(symbol))
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
+// VolumeByVenue returns the 15 minute delayed and 30 day average consolidated
+// volume percentage of a stock by market. This will return 13 values sorted in
+// ascending order by current day trading volume percentage.
+func (c Client) VolumeByVenue(ctx context.Context, symbol string) ([]VenueVolume, error) {
+	r := []VenueVolume{}
+	endpoint := fmt.Sprintf("/stock/%s/volume-by-venue", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
 }
