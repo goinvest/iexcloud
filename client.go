@@ -922,6 +922,11 @@ func (c Client) CreditCardInterestRate(ctx context.Context) (float64, error) {
 	return c.DataPointNumber(ctx, "market", "TERMCBCCALLNS")
 }
 
+// FederalFundsRate returns the effective federal funds rate.
+func (c Client) FederalFundsRate(ctx context.Context) (float64, error) {
+	return c.DataPointNumber(ctx, "market", "FEDFUNDS")
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Reference Data Endpoints

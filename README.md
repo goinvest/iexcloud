@@ -188,7 +188,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] CD Rates
 - [x] Consumer Price Index
 - [x] Credit Card Interest Rate
-- [ ] Federal Fund Rates
+- [x] Federal Fund Rates
 - [ ] Real GDP
 - [ ] Institutional Money Funds
 - [ ] Initial Claims
