@@ -916,6 +916,12 @@ func (c Client) CPI(ctx context.Context) (float64, error) {
 	return c.DataPointNumber(ctx, "market", "CPIAUCSL")
 }
 
+// CreditCardInterestRate returns the commercial bank credit card interest
+// rate.
+func (c Client) CreditCardInterestRate(ctx context.Context) (float64, error) {
+	return c.DataPointNumber(ctx, "market", "TERMCBCCALLNS")
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Reference Data Endpoints
