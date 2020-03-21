@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -325,4 +326,37 @@ func (a *AnnounceTime) MarshalJSON() ([]byte, error) {
 // String implements the Stringer interface for AnnounceTime.
 func (a AnnounceTime) String() string {
 	return announceTimeDescription[a]
+}
+
+// HourMinute models a duration of hours and minutes.
+type HourMinute time.Duration
+
+// UnmarshalJSON implements the Unmarshaler interface for Date.
+func (hm *HourMinute) UnmarshalJSON(data []byte) error {
+	var aux string
+	err := json.Unmarshal(data, &aux)
+	if err != nil {
+		return fmt.Errorf("error unmarshaling minute to string: %s", err)
+	}
+	if aux == "" {
+		aux = "00:00"
+	}
+	splits := strings.Split(aux, ":")
+	if len(splits) != 2 {
+		return fmt.Errorf("error getting hour and minutes from %s", aux)
+	}
+	hour, err := strconv.Atoi(splits[0])
+	if err != nil {
+		return fmt.Errorf("error getting hour from %s: %s", aux, err)
+	}
+	min, err := strconv.Atoi(splits[1])
+	if err != nil {
+		return fmt.Errorf("error getting minutes from %s: %s", aux, err)
+	}
+	dur, err := time.ParseDuration(fmt.Sprintf("%dh%dm", hour, min))
+	if err != nil {
+		return fmt.Errorf("error converting %s string to date: %s", aux, err)
+	}
+	*hm = HourMinute(dur)
+	return nil
 }

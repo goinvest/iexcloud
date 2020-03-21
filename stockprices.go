@@ -38,6 +38,32 @@ type HistoricalPrice struct {
 	Date string `json:"date"`
 }
 
+// IntradayPrice models the data for an aggregated intraday price in one minute
+// buckets.
+type IntradayPrice struct {
+	Date                 Date       `json:"date"`
+	Minute               HourMinute `json:"minute"`
+	Label                string     `json:"label"`
+	MarketOpen           float64    `json:"marketOpen"`
+	MarketClose          float64    `json:"marketClose"`
+	MarketHigh           float64    `json:"marketHigh"`
+	MarketLow            float64    `json:"marketLow"`
+	MarketAverage        float64    `json:"marketAverage"`
+	MarketVolume         int        `json:"marketVolume"`
+	MarketNotional       float64    `json:"marketNotional"`
+	MarketNumTrades      int        `json:"marketNumberOfTrades"`
+	MarketChangeOverTime float64    `json:"marketChangeOverTime"`
+	High                 float64    `json:"High"`
+	Low                  float64    `json:"Low"`
+	Open                 float64    `json:"Open"`
+	Close                float64    `json:"Close"`
+	Average              float64    `json:"average"`
+	Volume               int        `json:"volume"`
+	Notional             float64    `json:"notional"`
+	NumTrades            int        `json:"numberOfTrades"`
+	ChangeOverTime       float64    `json:"changeOverTime"`
+}
+
 // LargestTrade models the 15 minute delayed, last sale eligible trades.
 type LargestTrade struct {
 	Price     float64 `json:"price"`
