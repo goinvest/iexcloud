@@ -30,17 +30,17 @@ var oilCmd = &cobra.Command{
 			log.Fatalf("Error reading config file: %s", err)
 		}
 		client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-		var oilType iex.OilType
+		var oilType iex.CommodityType
 		switch oilText {
 		case "west":
-			oilType = iex.WestTexas
+			oilType = iex.WestTexasOil
 		case "brent":
-			oilType = iex.BrentEurope
+			oilType = iex.BrentEuropeOil
 		default:
-			oilType = iex.WestTexas
+			oilType = iex.WestTexasOil
 		}
 
-		price, err := client.OilPrice(context.Background(), oilType)
+		price, err := client.CommodityPrice(context.Background(), oilType)
 		if err != nil {
 			log.Fatalf("Error getting commodity price: %s", err)
 		}
