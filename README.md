@@ -186,7 +186,7 @@ you want a particular API to be developed next, please open an issue.
 ### Economic Data
 
 - [x] CD Rates
-- [ ] Consumer Price Index
+- [x] Consumer Price Index
 - [ ] Credit Card Interest Rate
 - [ ] Federal Fund Rates
 - [ ] Real GDP

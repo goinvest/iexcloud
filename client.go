@@ -911,6 +911,11 @@ func (c Client) CDRate(ctx context.Context, cd CDRateType) (float64, error) {
 	return c.DataPointNumber(ctx, "market", string(cd))
 }
 
+// CPI returns the consumer price index for all urban consumers.
+func (c Client) CPI(ctx context.Context) (float64, error) {
+	return c.DataPointNumber(ctx, "market", "CPIAUCSL")
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Reference Data Endpoints
