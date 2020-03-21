@@ -883,6 +883,34 @@ func (c Client) CommodityPrice(ctx context.Context, ct CommodityType) (float64, 
 //
 //////////////////////////////////////////////////////////////////////////////
 
+// CDRateType indicates the type of CD Rate.
+type CDRateType string
+
+// Available CD Rates.
+const (
+	NonJumboCD CDRateType = "MMNRNJ"
+	JumboCD    CDRateType = "MMNRJD"
+)
+
+var cdRateDescriptions = map[CDRateType]string{
+	NonJumboCD: "CD Rate Non-Jumbo less than $100,000 money market",
+	JumboCD:    "CD Rate Jumbo more than $100,000 money market",
+}
+
+// String provides the Stringer interface for CDRateType.
+func (cd CDRateType) String() string {
+	return cdRateDescriptions[cd]
+}
+
+// CDRate returns the price for the given commodity not seasonally
+// adjusted.
+func (c Client) CDRate(ctx context.Context, cd CDRateType) (float64, error) {
+	// By using an explicit type conversion to string we get the CD Rate symbol
+	// instead of the description, which we would get if we utilized the Stringer
+	// interface.
+	return c.DataPointNumber(ctx, "market", string(cd))
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Reference Data Endpoints
