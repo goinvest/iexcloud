@@ -131,11 +131,11 @@ you want a particular API to be developed next, please open an issue.
 
 - [x] Collections
 - [x] Earnings Today
-- [ ] IPO Calendar
+- [x] IPO Calendar
 - [x] List
 - [x] Market Volume (U.S.)
 - [x] Sector Performance
-- [ ] Upcoming Events
+- [x] Upcoming Events
 
 ### News
 

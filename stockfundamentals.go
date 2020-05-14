@@ -172,6 +172,7 @@ type IncomeStatement struct {
 
 // Split models the a stock split.
 type Split struct {
+	Symbol       string  `json:"symbol"`
 	ExDate       Date    `json:"exDate"`
 	DeclaredDate Date    `json:"declaredDate"`
 	Ratio        float64 `json:"ratio"`

@@ -46,3 +46,81 @@ type SectorPerformance struct {
 	Performance float64   `json:"performance"`
 	LastUpdated EpochTime `json:"lastUpdated"`
 }
+
+// IPO is all available data for an IPO.
+type IPO struct {
+	Symbol                 string   `json:"symbol"`
+	CompanyName            string   `json:"companyName"`
+	ExpectedDate           Date     `json:"expectedDate"`
+	LeadUnderwriters       []string `json:"leadUnderwriters"`
+	Underwriters           []string `json:"underwriters"`
+	CompanyCounsel         []string `json:"companyCounsel"`
+	UnderwriterCounsel     []string `json:"underwriterCounsel"`
+	Auditor                string   `json:"auditor"`
+	Market                 string   `json:"market"`
+	CIK                    string   `json:"cik"`
+	Address                string   `json:"address"`
+	City                   string   `json:"city"`
+	State                  string   `json:"state"`
+	Zip                    string   `json:"zip"`
+	Phone                  string   `json:"phone"`
+	CEO                    string   `json:"ceo"`
+	Employees              int      `json:"employees"`
+	URL                    string   `json:"url"`
+	Status                 string   `json:"status"`
+	SharesOffered          int      `json:"sharesOffered"`
+	PriceLow               float64  `json:"priceLow"`
+	PriceHigh              float64  `json:"priceHigh"`
+	OfferAmount            int      `json:"offerAmount"`
+	TotalExpenses          int      `json:"totalExpenses"`
+	SharesOverAlloted      int      `json:"sharesOverAlloted"`
+	ShareholderShares      int      `json:"shareholderShares"`
+	SharesOutstanding      int      `json:"sharesOutstanding"`
+	LockupPeriodExpiration string   `json:"lockupPeriodExpiration"`
+	QuietPeriodExpiration  string   `json:"quietPeriodExpiration"`
+	Revenue                int      `json:"revenue"`
+	NetIncome              int      `json:"netIncome"`
+	TotalAssets            int      `json:"totalAssets"`
+	TotalLiabilities       int      `json:"totalLiabilities"`
+	StockholderEquity      int      `json:"stockholderEquity"`
+	CompanyDescription     string   `json:"companyDescription"`
+	BusinessDescription    string   `json:"businessDescription"`
+	UseOfProceeds          string   `json:"useOfProceeds"`
+	Competition            string   `json:"competition"`
+	Amount                 int      `json:"amount"`
+	PercentOffered         string   `json:"percentOffered"`
+}
+
+// IPOView is IPO data structured for display to a user.
+type IPOView struct {
+	Company  string `json:"Company"`
+	Symbol   string `json:"Symbol"`
+	Price    string `json:"Price"`
+	Shares   string `json:"Shares"`
+	Amount   string `json:"Amount"`
+	Float    string `json:"Float"`
+	Percent  string `json:"Percent"`
+	Market   string `json:"Market"`
+	Expected Date   `json:"Expected"`
+}
+
+// IPOCalendar is a list of IPOs.
+type IPOCalendar struct {
+	RawData  []IPO     `json:"rawData"`
+	ViewData []IPOView `json:"viewData"`
+}
+
+// UpcomingEarning is an upcoming earnings event.
+type UpcomingEarning struct {
+	Estimate
+	Symbol   string `json:"symbol"`
+	SymbolId string `json:"symbolId"`
+}
+
+// UpcomingEvents is all of the upcoming events.
+type UpcomingEvents struct {
+	IPOs      IPOCalendar       `json:"ipos"`
+	Earnings  []UpcomingEarning `json:"earnings"`
+	Dividends []Dividend        `json:"dividends"`
+	Splits    []Split           `json:"splits"`
+}
