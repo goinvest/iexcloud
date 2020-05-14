@@ -118,7 +118,14 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	// Even if GET didn't return an error, check the status code to make sure
 	// everything was ok.
 	if resp.StatusCode != http.StatusOK {
-		return []byte{}, fmt.Errorf("%d %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+		b, err := ioutil.ReadAll(resp.Body)
+		msg := ""
+
+		if err == nil {
+			msg = string(b)
+		}
+
+		return []byte{}, fmt.Errorf("%d %s: %s", resp.StatusCode, http.StatusText(resp.StatusCode), msg)
 	}
 	return ioutil.ReadAll(resp.Body)
 }
