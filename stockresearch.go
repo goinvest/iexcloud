@@ -60,6 +60,8 @@ type Estimate struct {
 	FiscalPeriod      string  `json:"fiscalPeriod"`
 	FiscalEndDate     Date    `json:"fiscalEndDate"`
 	ReportDate        Date    `json:"reportDate"`
+	AnnounceTime      string  `json:"announceTime"`
+	Currency          string  `json:"currency"`
 }
 
 // FundOwner models a fund owning a stock.

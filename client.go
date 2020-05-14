@@ -676,6 +676,14 @@ func (c Client) EarningsToday(ctx context.Context) (EarningsToday, error) {
 	return e, err
 }
 
+// IPOsToday returns the IPOs that are scheduled to occur today.
+func (c Client) IPOsToday(ctx context.Context) (IPOCalendar, error) {
+	ic := IPOCalendar{}
+	endpoint := "/stock/market/today-ipos"
+	err := c.GetJSON(ctx, endpoint, &ic)
+	return ic, err
+}
+
 // MostActive returns a list of quotes for the top 10 most active stocks from
 // the IEX Cloud endpoint updated intraday, 15 minute delayed.
 func (c Client) MostActive(ctx context.Context) ([]Quote, error) {
@@ -740,6 +748,80 @@ func (c Client) SectorPerformance(ctx context.Context) ([]SectorPerformance, err
 	endpoint := "/stock/market/sector-performance"
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
+}
+
+// UpcomingEvents returns all upcoming events for a given symbol.  If an empty string is passed in for the symbol,
+// data for the entire market, including IPOs, is returned.  If fullUpcomingEarnings is set to true, full estimates
+// objects are returned; otherwise, earnings will only return Symbol and ReportDate.
+func (c Client) UpcomingEvents(ctx context.Context, symbol string, fullUpcomingEarnings bool) (UpcomingEvents, error) {
+	if symbol == "" {
+		symbol = "market"
+	}
+
+	fue := ""
+
+	if fullUpcomingEarnings {
+		fue = "?fullUpcomingEarnings=true"
+	}
+
+	e := UpcomingEvents{}
+	endpoint := fmt.Sprintf("/stock/%v/upcoming-events%v", symbol, fue)
+	err := c.GetJSON(ctx, endpoint, &e)
+	return e, err
+}
+
+// UpcomingEarnings returns all upcoming earnings for a given symbol.  If an empty string is passed in for the symbol,
+// data for the entire market is returned.  If fullUpcomingEarnings is set to true, full estimates
+// objects are returned; otherwise, earnings will only return Symbol and ReportDate.
+func (c Client) UpcomingEarnings(ctx context.Context, symbol string, fullUpcomingEarnings bool) ([]UpcomingEarning, error) {
+	if symbol == "" {
+		symbol = "market"
+	}
+
+	fue := ""
+
+	if fullUpcomingEarnings {
+		fue = "?fullUpcomingEarnings=true"
+	}
+
+	e := []UpcomingEarning{}
+	endpoint := fmt.Sprintf("/stock/%v/upcoming-earnings%v", symbol, fue)
+	err := c.GetJSON(ctx, endpoint, &e)
+	return e, err
+}
+
+// UpcomingDividends returns all upcoming dividends for a given symbol.  If an empty string is passed in for the symbol,
+// data for the entire market is returned.
+func (c Client) UpcomingDividends(ctx context.Context, symbol string) ([]Dividend, error) {
+	if symbol == "" {
+		symbol = "market"
+	}
+
+	e := []Dividend{}
+	endpoint := fmt.Sprintf("/stock/%v/upcoming-dividends", symbol)
+	err := c.GetJSON(ctx, endpoint, &e)
+	return e, err
+}
+
+// UpcomingSplits returns all upcoming splits for a given symbol.  If an empty string is passed in for the symbol,
+// data for the entire market is returned.
+func (c Client) UpcomingSplits(ctx context.Context, symbol string) ([]Split, error) {
+	if symbol == "" {
+		symbol = "market"
+	}
+
+	e := []Split{}
+	endpoint := fmt.Sprintf("/stock/%v/upcoming-splits", symbol)
+	err := c.GetJSON(ctx, endpoint, &e)
+	return e, err
+}
+
+// UpcomingIPOs returns all upcoming IPOs for the entire market.
+func (c Client) UpcomingIPOs(ctx context.Context) (IPOCalendar, error) {
+	e := IPOCalendar{}
+	endpoint := fmt.Sprintf("/stock/market/upcoming-ipos")
+	err := c.GetJSON(ctx, endpoint, &e)
+	return e, err
 }
 
 //////////////////////////////////////////////////////////////////////////////
