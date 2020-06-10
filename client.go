@@ -29,6 +29,17 @@ type Client struct {
 	httpClient *http.Client
 }
 
+// Error represents an IEX API error
+type Error struct {
+	StatusCode int
+	Message    string
+}
+
+// Error implements the error interface
+func (e Error) Error() string {
+	return fmt.Sprintf("%d %s: %s", e.StatusCode, http.StatusText(e.StatusCode), e.Message)
+}
+
 // NewClient creates a client with the given authorization toke.
 func NewClient(token string, options ...func(*Client)) *Client {
 	client := &Client{
@@ -125,7 +136,7 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 			msg = string(b)
 		}
 
-		return []byte{}, fmt.Errorf("%d %s: %s", resp.StatusCode, http.StatusText(resp.StatusCode), msg)
+		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
 	}
 	return ioutil.ReadAll(resp.Body)
 }
