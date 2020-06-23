@@ -5,6 +5,8 @@
 
 package iex
 
+import "time"
+
 // HistoricalTimeFrame enum for selecting time frame of historical data
 type HistoricalTimeFrame string
 
@@ -103,4 +105,22 @@ type HistoricalDataPoint struct {
 	ChangePercent  float64 `json:"changePercent"`
 	Label          string  `json:"label"`
 	ChangeOverTime float64 `json:"changeOverTime"`
+}
+
+// IntradayOptions optional query params to pass to intraday endpoint
+// If values are false or 0 they aren't passed.
+type IntradayOptions struct {
+	ChartIEXOnly     bool   `url:"chartIEXOnly,omitempty"`
+	ChartReset       bool   `url:"chartReset,omitempty"`
+	ChartSimplify    bool   `url:"chartSimplify,omitempty"`
+	ChartInterval    int    `url:"chartInterval,omitempty"`
+	ChangeFromClose  bool   `url:"changeFromClose,omitempty"`
+	ChartLast        int    `url:"chartLast,omitempty"`
+	ExactDate        string `url:"exactDate,omitempty"` // Formatted as YYYYMMDD
+	ChartIEXWhenNull bool   `url:"chartIEXWhenNull,omitempty"`
+}
+
+// SetExactDate formats a given date as IEX expects
+func (opt IntradayOptions) SetExactDate(day time.Time) {
+	opt.ExactDate = day.Format("20060102")
 }
