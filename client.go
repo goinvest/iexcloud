@@ -345,6 +345,37 @@ func (c Client) IntradayPrices(ctx context.Context, symbol string) ([]IntradayPr
 	return ip, err
 }
 
+// IntradayPricesWithOpts returns the aggregated intraday prices in one minute buckets for the given options.
+func (c Client) IntradayPricesWithOpts(ctx context.Context, symbol string, options *IntradayOptions) ([]IntradayPrice, error) {
+	ip := []IntradayPrice{}
+	endpoint := fmt.Sprintf("/stock/%s/intraday-prices", url.PathEscape(symbol))
+	endpoint, err := c.intradayEndpointWithOpts(endpoint, options, false)
+	if err != nil {
+		return ip, err
+	}
+	err = c.GetJSON(ctx, endpoint, &ip)
+	return ip, err
+}
+
+func (c Client) intradayEndpointWithOpts(endpoint string, opts *IntradayOptions, existingParams bool) (string, error) {
+	if opts == nil {
+		return endpoint, nil
+	}
+	v, err := query.Values(opts)
+	if err != nil {
+		return "", err
+	}
+	sep := "?"
+	if existingParams {
+		sep = "&"
+	}
+	optParams := v.Encode()
+	if optParams != "" {
+		endpoint = fmt.Sprintf("%s%s%s", endpoint, sep, optParams)
+	}
+	return endpoint, nil
+}
+
 // LargestTrades returns the 15 minute delayed, last sale eligible trade from
 // the IEX Cloud endpoint for the given stock symbol.
 func (c Client) LargestTrades(ctx context.Context, symbol string) ([]LargestTrade, error) {
