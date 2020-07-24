@@ -1126,6 +1126,22 @@ func (c Client) Symbols(ctx context.Context) ([]Symbol, error) {
 	return symbols, err
 }
 
+// SymbolsByExchange returns an array of symbols from the defined market that IEX Cloud supports for API calls.
+func (c Client) SymbolsByExchange(ctx context.Context, exchange string) ([]Symbol, error) {
+	symbols := []Symbol{}
+	endpoint := "/ref-data/exchange/" + exchange + "/symbols"
+	err := c.GetJSON(ctx, endpoint, &symbols)
+	return symbols, err
+}
+
+// SymbolsByRegion returns an array of symbols from the defined region that IEX Cloud supports for API calls.
+func (c Client) SymbolsByRegion(ctx context.Context, region string) ([]Symbol, error) {
+	symbols := []Symbol{}
+	endpoint := "/ref-data/region/" + region + "/symbols"
+	err := c.GetJSON(ctx, endpoint, &symbols)
+	return symbols, err
+}
+
 // Tags returns an array of tags.  Tags can
 // be found for each on each company.
 func (c Client) Tags(ctx context.Context) ([]Tag, error) {
