@@ -125,6 +125,8 @@ type Financials struct {
 // for new data.
 type Financial struct {
 	ReportDate             Date    `json:"reportDate"`
+	FiscalDate             Date    `json:"fiscalDate"`
+	Currency               string  `json:"currency"`
 	GrossProfit            float64 `json:"grossProfit"`
 	CostOfRevenue          float64 `json:"costOfRevenue"`
 	OperatingRevenue       float64 `json:"operatingRevenue"`
@@ -157,6 +159,8 @@ type IncomeStatements struct {
 // IncomeStatement models one income statement.
 type IncomeStatement struct {
 	ReportDate             Date    `json:"reportDate"`
+	FiscalDate             Date    `json:"fiscalDate"`
+	Currency               string  `json:"currency"`
 	TotalRevenue           float64 `json:"totalRevenue"`
 	CostOfRevenue          float64 `json:"costOfRevenue"`
 	GrossProfit            float64 `json:"grossProfit"`
