@@ -17,6 +17,8 @@ type BalanceSheets struct {
 // float; therefore, these are all floats.
 type BalanceSheet struct {
 	ReportDate              Date    `json:"reportDate"`
+	FiscalDate              Date    `json:"fiscalDate"`
+	Currency                string  `json:"currency"`
 	CurrentCash             float64 `json:"currentCash"`
 	ShortTermInvestments    float64 `json:"shortTermInvestments"`
 	Receivables             float64 `json:"receivables"`
