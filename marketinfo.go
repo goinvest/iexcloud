@@ -114,7 +114,7 @@ type IPOCalendar struct {
 type UpcomingEarning struct {
 	Estimate
 	Symbol   string `json:"symbol"`
-	SymbolId string `json:"symbolId"`
+	SymbolID string `json:"symbolId"`
 }
 
 // UpcomingEvents is all of the upcoming events.
