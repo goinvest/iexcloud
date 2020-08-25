@@ -28,8 +28,8 @@ type AdvancedStats struct {
 	PEGRatio                 float64 `json:"pegRatio"`
 	PEHigh                   float64 `json:"peHigh"`
 	PELow                    float64 `json:"peLow"`
-	Week52HighDate           float64 `json:"week52highDate"`
-	Week52LowDate            float64 `json:"week52lowDate"`
+	Week52HighDate           Date    `json:"week52highDate"`
+	Week52LowDate            Date    `json:"week52lowDate"`
 	PutCallRatio             float64 `json:"putCallRatio"`
 }
 
