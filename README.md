@@ -17,12 +17,12 @@ be a in flux for this library.
 ## Installation
 
 ```bash
-$ go get github.com/goinvest/iexcloud
+$ go get github.com/goinvest/iexcloud/v2
 ```
 
 ## Examples
 
-See the [iexcloud CLI example README][2].
+Examples are available at <https://github.com/goinvest/iexcloud-examples/>.
 
 ## Implementation Status
 
@@ -99,7 +99,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] Financials
 - [ ] Financials As Reported
 - [x] Income Statement
-- [ ] SEC Filings — Use the Financials As Reported endpoint for raw SEC filings
+- [x] SEC Filings — Use the Financials As Reported endpoint for raw SEC filings
       data.
 - [ ] Splits (Basic)
 
