@@ -149,6 +149,25 @@ type Financial struct {
 	CashFlow               float64 `json:"cashFlow"`
 }
 
+// FinancialsAsReported models multiple SEC financial 10-K or 10-Q filings.
+type FinancialsAsReported []FinancialAsReported
+
+// FinancialAsReported models an SEC financial filing.
+type FinancialAsReported struct {
+	ID            string    `json:"id"`
+	Source        string    `json:"source"`
+	Key           string    `json:"key"`
+	Subkey        string    `json:"subkey"`
+	Date          EpochTime `json:"date"`
+	Updated       EpochTime `json:"updated"`
+	FiscalYear    int64     `json:"formFiscalYear"`
+	Version       string    `json:"version"`
+	PeriodStart   EpochTime `json:"periodStart"`
+	PeriodEnd     EpochTime `json:"periodEnd"`
+	DateFiled     EpochTime `json:"dateFiled"`
+	FiscalQuarter int64     `json:"formFiscalQuarter"`
+}
+
 // IncomeStatements pulls income statement data. Available quarterly (4 quarters) and
 // annually (4 years).
 type IncomeStatements struct {

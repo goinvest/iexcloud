@@ -590,6 +590,21 @@ func (c Client) financials(ctx context.Context, endpoint string) (Financials, er
 	return financials, err
 }
 
+// QuarterlyFinancialsAsReported returns the specified number of most recent
+// quarterly 10-Q filings from the IEX Cloud endpoint for the given stock
+// symbol.
+func (c Client) QuarterlyFinancialsAsReported(ctx context.Context, symbol string, num int) (FinancialsAsReported, error) {
+	endpoint := fmt.Sprintf("/time-series/reported_financials/%s/10-Q?limit=%d",
+		url.PathEscape(symbol), num)
+	return c.financialsAsReported(ctx, endpoint)
+}
+
+func (c Client) financialsAsReported(ctx context.Context, endpoint string) (FinancialsAsReported, error) {
+	f := FinancialsAsReported{}
+	err := c.GetJSON(ctx, endpoint, &f)
+	return f, err
+}
+
 // AnnualIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualIncomeStatements(ctx context.Context, symbol string, num int) (IncomeStatements, error) {
