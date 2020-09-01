@@ -16,6 +16,11 @@ import (
 // Date models a report date
 type Date time.Time
 
+// String implements the stringer interface for the Date type.
+func (d Date) String() string {
+	return time.Time(d).Format("2006-01-02")
+}
+
 // UnmarshalJSON implements the Unmarshaler interface for Date.
 func (d *Date) UnmarshalJSON(data []byte) error {
 	var aux string
