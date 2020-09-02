@@ -308,7 +308,7 @@ func (c Client) IntradayHistoricalPrices(ctx context.Context, symbol string, opt
 // IntradayHistoricalPricesByDay retrieves intraday historical market-wide data for a given day
 func (c Client) IntradayHistoricalPricesByDay(ctx context.Context, symbol string, day time.Time, options *IntradayHistoricalOptions) ([]IntradayHistoricalDataPoint, error) {
 	h := make([]IntradayHistoricalDataPoint, 0)
-	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s?chartByDay=true",
+	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s",
 		url.PathEscape(symbol), day.Format("20060102"))
 	endpoint, err := c.intradayHistoricalEndpointWithOpts(endpoint, options, true)
 	if err != nil {

@@ -80,6 +80,7 @@ type HistoricalOptions struct {
 // IntradayHistoricalOptions optional query params to pass to intraday historical endpoint
 // If values are false or 0 they aren't passed.
 type IntradayHistoricalOptions struct {
+	ChartByDay      bool `url:"chartByDay,omitempty"`
 	ChartIEXOnly    bool `url:"chartIEXOnly,omitempty"`
 	ChartReset      bool `url:"chartReset,omitempty"`
 	ChartSimplify   bool `url:"chartSimplify,omitempty"`
