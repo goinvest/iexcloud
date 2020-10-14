@@ -418,6 +418,14 @@ func (c Client) Quote(ctx context.Context, symbol string) (Quote, error) {
 	return r, err
 }
 
+// BatchQuote returns the quote data for up to 100 stock symbols.
+func (c Client) BatchQuote(ctx context.Context, symbols []string) ([]Quote, error) {
+	var r []Quote
+	endpoint := fmt.Sprintf("/stock/market/batch?symbols=%s&types=quote", url.PathEscape(strings.Join(symbols, ",")))
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
 // VolumeByVenue returns the 15 minute delayed and 30 day average consolidated
 // volume percentage of a stock by market. This will return 13 values sorted in
 // ascending order by current day trading volume percentage.
