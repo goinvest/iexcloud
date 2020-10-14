@@ -1116,6 +1116,15 @@ func (c Client) MutualFundSymbols(ctx context.Context) ([]Symbol, error) {
 	return r, err
 }
 
+// OptionsSymbols returns a map keyed by symbol with the value of each symbol
+// being an slice of available contract dates
+func (c Client) OptionsSymbols(ctx context.Context) (map[string][]string, error) {
+	r := map[string][]string{}
+	endpoint := "/ref-data/options/symbols"
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
 // OTCSymbols returns an array of Over-the-Counter (OTC) stocks that IEX Cloud
 // supports for API calls.
 func (c Client) OTCSymbols(ctx context.Context) ([]Symbol, error) {
