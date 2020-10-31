@@ -418,6 +418,20 @@ func (c Client) Quote(ctx context.Context, symbol string) (Quote, error) {
 	return r, err
 }
 
+// BatchQuote returns the quote data for up to 100 stock symbols.
+func (c Client) BatchQuote(ctx context.Context, symbols []string) (map[string]Quote, error) {
+	r := map[string]struct {
+		Quote Quote
+	}{}
+	endpoint := fmt.Sprintf("/stock/market/batch?symbols=%s&types=quote", url.PathEscape(strings.Join(symbols, ",")))
+	err := c.GetJSON(ctx, endpoint, &r)
+	quotes := make(map[string]Quote, len(r))
+	for symbol, quote := range r {
+		quotes[symbol] = quote.Quote
+	}
+	return quotes, err
+}
+
 // VolumeByVenue returns the 15 minute delayed and 30 day average consolidated
 // volume percentage of a stock by market. This will return 13 values sorted in
 // ascending order by current day trading volume percentage.
@@ -1112,6 +1126,15 @@ func (c Client) IEXSymbols(ctx context.Context) ([]TradedSymbol, error) {
 func (c Client) MutualFundSymbols(ctx context.Context) ([]Symbol, error) {
 	r := []Symbol{}
 	endpoint := "/ref-data/mutual-funds/symbols"
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
+// OptionsSymbols returns a map keyed by symbol with the value of each symbol
+// being an slice of available contract dates
+func (c Client) OptionsSymbols(ctx context.Context) (map[string][]string, error) {
+	r := map[string][]string{}
+	endpoint := "/ref-data/options/symbols"
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
 }
