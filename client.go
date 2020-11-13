@@ -931,6 +931,14 @@ func (c Client) MarketNews(ctx context.Context, num int) ([]News, error) {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+// Crypto provides a quote for a given cryptocurrency symbol.
+func (c Client) Crypto(ctx context.Context, symbol string) (CryptoQuote, error) {
+	r := CryptoQuote{}
+	endpoint := fmt.Sprintf("/crypto/%s/quote", url.PathEscape(symbol))
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
 // CryptoQuote provides a quote for a given cryptocurrency symbol.
 func (c Client) CryptoQuote(ctx context.Context, symbol string) (CryptoQuote, error) {
 	r := CryptoQuote{}
