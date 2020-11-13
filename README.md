@@ -145,10 +145,10 @@ you want a particular API to be developed next, please open an issue.
 
 ### Cryptocurrency
 
-- [ ] Cryptocurrency Book
+- [x] Cryptocurrency Book
 - [ ] Cryptocurrency Events
-- [ ] Cryptocurrency Price
-- [ ] Cryptocurrency Quote
+- [x] Cryptocurrency Price
+- [x] Cryptocurrency Quote
 
 ### Forex / Currencies
 
