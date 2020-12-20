@@ -102,7 +102,7 @@ type Earnings struct {
 type Earning struct {
 	ActualEPS            float64      `json:"actualEPS"`
 	ConsensusEPS         float64      `json:"consensusEPS"`
-	AnnounceTime         AnnounceTime `json:"announcetime"`
+	AnnounceTime         AnnounceTime `json:"announceTime"`
 	NumberOfEstimates    int          `json:"numberOfEstimates"`
 	EPSSurpriseDollar    float64      `json:"EPSSurpriseDollar"`
 	EPSReportDate        Date         `json:"EPSReportDate"`
