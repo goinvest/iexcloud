@@ -100,16 +100,25 @@ type Earnings struct {
 
 // Earning models the earnings for one date.
 type Earning struct {
-	ActualEPS            float64      `json:"actualEPS"`
-	ConsensusEPS         float64      `json:"consensusEPS"`
-	AnnounceTime         AnnounceTime `json:"announceTime"`
-	NumberOfEstimates    int          `json:"numberOfEstimates"`
-	EPSSurpriseDollar    float64      `json:"EPSSurpriseDollar"`
-	EPSReportDate        Date         `json:"EPSReportDate"`
-	FiscalPeriod         string       `json:"fiscalPeriod"`
-	FiscalEndDate        Date         `json:"fiscalEndDate"`
-	YearAgo              float64      `json:"yearAgo"`
-	YearAgoChangePercent float64      `json:"yearAgoChangePercent"`
+	EPSReportDate            Date         `json:"EPSReportDate"`
+	EPSSurpriseDollar        float64      `json:"EPSSurpriseDollar"`
+	EPSSurpriseDollarPercent float64      `json:"EPSSurpriseDollarPercent"`
+	ActualEPS                float64      `json:"actualEPS"`
+	AnnounceTime             AnnounceTime `json:"announceTime"`
+	ConsensusEPS             float64      `json:"consensusEPS"`
+	Currency                 string       `json:"currency"`
+	FiscalEndDate            Date         `json:"fiscalEndDate"`
+	FiscalPeriod             string       `json:"fiscalPeriod"`
+	NumberOfEstimates        int          `json:"numberOfEstimates"`
+	PeriodType               string       `json:"periodType"`
+	Symbol                   string       `json:"symbol"`
+	YearAgo                  float64      `json:"yearAgo"`
+	YearAgoChangePercent     float64      `json:"yearAgoChangePercent"`
+	ID                       string       `json:"id"`
+	Key                      string       `json:"key"`
+	SubKey                   string       `json:"subkey"`
+	Date                     uint64       `json:"date"`
+	Updated                  uint64       `json:"updated"`
 }
 
 // Financials models income statement, balance sheet, and cash flow data from
