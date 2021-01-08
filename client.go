@@ -1268,6 +1268,14 @@ func (c Client) PreviousHoliday(ctx context.Context) (TradeHolidayDate, error) {
 	return r, err
 }
 
+// ISINMapping convert ISIN to IEX Cloud symbols.
+func (c Client) ISINMapping(ctx context.Context, symbol string) ([]SymbolDetails, error) {
+	sd := []SymbolDetails{}
+	endpoint := fmt.Sprintf("/ref-data/isin?isin=%s", symbol)
+	err := c.GetJSON(ctx, endpoint, &sd)
+	return sd, err
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Investors Exchange Data Endpoints

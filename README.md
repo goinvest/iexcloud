@@ -209,7 +209,7 @@ you want a particular API to be developed next, please open an issue.
 - [x] IEX Symbols
 - [ ] International Symbols
 - [ ] International Exchanges
-- [ ] ISIN Mapping
+- [x] ISIN Mapping
 - [x] Mutual Fund Symbols
 - [ ] Options Symbols
 - [x] OTC Symbols
