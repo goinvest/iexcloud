@@ -5,6 +5,7 @@
 *.so
 *.dylib
 examples/iexcloud/dist/
+*.idea
 
 # Test binary, build with `go test -c`
 *.test

@@ -403,6 +403,24 @@ func (c Client) PreviousDay(ctx context.Context, symbol string) (PreviousDay, er
 	return pd, err
 }
 
+// PreviousDayBatch eturns the previous day adjusted price data from the IEX Cloud
+// endpoint for the entire market.
+func (c Client) PreviousDayBatch(ctx context.Context, symbols []string) ([]PreviousDay, error) {
+	pd := []PreviousDay{}
+	endpoint := fmt.Sprintf("/stock/market/previous?symbol=%s", url.PathEscape(strings.Join(symbols, ",")))
+	err := c.GetJSON(ctx, endpoint, &pd)
+	return pd, err
+}
+
+// PreviousDayMarket returns the previous day adjusted price data from the IEX Cloud
+// endpoint for the entire market.
+func (c Client) PreviousDayMarket(ctx context.Context) ([]PreviousDay, error) {
+	pds := []PreviousDay{}
+	endpoint := "/stock/market/previous"
+	err := c.GetJSON(ctx, endpoint, &pds)
+	return pds, err
+}
+
 // Price returns the current stock price for the given stock symbol.
 func (c Client) Price(ctx context.Context, symbol string) (float64, error) {
 	endpoint := fmt.Sprintf("/stock/%s/price", url.PathEscape(symbol))
