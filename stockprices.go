@@ -97,8 +97,8 @@ type PreviousDay struct {
 	High             float64 `json:"high"`
 	Low              float64 `json:"Low"`
 	Close            float64 `json:"close"`
-	Volume           int     `json:"volume"`
-	UnadjustedVolume int     `json:"unadjustedVolume"`
+	Volume           float64     `json:"volume"`
+	UnadjustedVolume float64     `json:"unadjustedVolume"`
 	Change           float64 `json:"change"`
 	ChangePercent    float64 `json:"changePercent"`
 }
