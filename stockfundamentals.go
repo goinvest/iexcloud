@@ -83,7 +83,7 @@ type Dividend struct {
 	PaymentDate  Date    `json:"paymentDate"`
 	RecordDate   Date    `json:"recordDate"`
 	DeclaredDate Date    `json:"declaredDate"`
-	Amount       float64 `json:"amount,string"`
+	Amount       float64 `json:"amount"`
 	Flag         string  `json:"flag"`
 	Currency     string  `json:"currency"`
 	Description  string  `json:"description"`
