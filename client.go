@@ -432,6 +432,20 @@ func (c Client) BatchQuote(ctx context.Context, symbols []string) (map[string]Qu
 	return quotes, err
 }
 
+// BatchPrevious returns the previous day price for up to 100 stock symbols.
+func (c Client) BatchPrevious(ctx context.Context, symbols []string) (map[string]PreviousDay, error) {
+	r := map[string]struct {
+		PreviousDay PreviousDay
+	}{}
+	endpoint := fmt.Sprintf("/stock/market/batch?symbols=%s&types=previous", url.PathEscape(strings.Join(symbols, ",")))
+	err := c.GetJSON(ctx, endpoint, &r)
+	previousday := make(map[string]PreviousDay, len(r))
+	for symbol, quote := range r {
+		previousday[symbol] = quote.PreviousDay
+	}
+	return previousday, err
+}
+
 // VolumeByVenue returns the 15 minute delayed and 30 day average consolidated
 // volume percentage of a stock by market. This will return 13 values sorted in
 // ascending order by current day trading volume percentage.
