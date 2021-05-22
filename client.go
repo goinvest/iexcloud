@@ -310,7 +310,7 @@ func (c Client) IntradayHistoricalPricesByDay(ctx context.Context, symbol string
 	h := make([]IntradayHistoricalDataPoint, 0)
 	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s",
 		url.PathEscape(symbol), day.Format("20060102"))
-	endpoint, err := c.intradayHistoricalEndpointWithOpts(endpoint, options, true)
+	endpoint, err := c.intradayHistoricalEndpointWithOpts(endpoint, options, false)
 	if err != nil {
 		return h, err
 	}
