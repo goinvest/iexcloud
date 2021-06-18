@@ -151,7 +151,7 @@ type EpochTime time.Time
 
 // MarshalJSON implements the Marshaler interface for EpochTime.
 func (e EpochTime) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprint(time.Time(e).Unix())), nil
+	return []byte(fmt.Sprint(time.Time(e).Unix() * 1000)), nil
 }
 
 // UnmarshalJSON implements the Unmarshaler interface for EpochTime.
