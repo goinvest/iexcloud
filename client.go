@@ -721,7 +721,7 @@ func (c Client) FundOwnership(ctx context.Context, symbol string) ([]FundOwner, 
 // information.
 func (c Client) InstitutionalOwnership(ctx context.Context, symbol string) ([]InstitutionalOwner, error) {
 	r := []InstitutionalOwner{}
-	endpoint := fmt.Sprintf("/stock/%s/institutional-owernship", url.PathEscape(symbol))
+	endpoint := fmt.Sprintf("/stock/%s/institutional-ownership", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
 }
