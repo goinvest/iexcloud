@@ -31,18 +31,19 @@ type Company struct {
 
 // InsiderRoster models the top 10 insiders with the most recent information.
 type InsiderRoster struct {
-	EntityName string `json:"entityName"`
-	Position   int    `json:"position"`
-	ReportDate Date   `json:"reportDate"`
+	EntityName string    `json:"entityName"`
+	Position   float64   `json:"position"`
+	ReportDate EpochTime `json:"reportDate"`
 }
 
 // InsiderSummary models a summary of insider information.
 type InsiderSummary struct {
-	Name           string `json:"fullName"`
-	NetTransaction int    `json:"netTransaction"`
-	ReportedTitle  string `json:"reportedTitle"`
-	TotalBought    int    `json:"totalBought"`
-	TotalSold      int    `json:"totalSold"`
+	Name           string    `json:"fullName"`
+	NetTransaction int       `json:"netTransaction"`
+	ReportedTitle  string    `json:"reportedTitle"`
+	TotalBought    int       `json:"totalBought"`
+	TotalSold      int       `json:"totalSold"`
+	Updated        EpochTime `json:"updated"`
 }
 
 // InsiderTransaction models a buy or sell transaction made by an insider of a
