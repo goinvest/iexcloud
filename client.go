@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -64,6 +65,22 @@ func NewClient(token string, options ...func(*Client)) *Client {
 func WithHTTPClient(httpClient *http.Client) func(*Client) {
 	return func(client *Client) {
 		client.httpClient = httpClient
+	}
+}
+
+// WithSecureHTTPClient sets a secure http.Client for a new IEX Client
+func WithSecureHTTPClient() func(*Client) {
+	return func(client *Client) {
+		client.httpClient = &http.Client{
+			Transport: &http.Transport{
+				Dial: (&net.Dialer{
+					Timeout:   30 * time.Second,
+					KeepAlive: 30 * time.Second,
+				}).Dial,
+				TLSHandshakeTimeout:   10 * time.Second,
+				ResponseHeaderTimeout: 10 * time.Second,
+				ExpectContinueTimeout: 1 * time.Second,
+			}}
 	}
 }
 
