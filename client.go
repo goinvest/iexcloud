@@ -44,7 +44,7 @@ func (e Error) Error() string {
 func NewClient(token string, options ...func(*Client)) *Client {
 	client := &Client{
 		token:      token,
-		httpClient: &http.Client{},
+		httpClient: &http.Client{Timeout: time.Second * 60},
 	}
 
 	// apply options
