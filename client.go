@@ -40,7 +40,7 @@ func (e Error) Error() string {
 	return fmt.Sprintf("%d %s: %s", e.StatusCode, http.StatusText(e.StatusCode), e.Message)
 }
 
-// NewClient creates a client with the given authorization toke.
+// NewClient creates a client with the given authorization token.
 func NewClient(token string, options ...func(*Client)) *Client {
 	client := &Client{
 		token:      token,
