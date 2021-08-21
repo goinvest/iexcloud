@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 The iexcloud developers. All rights reserved.
+// Copyright (c) 2019-2021 The iexcloud developers. All rights reserved.
 // Project site: https://github.com/goinvest/iexcloud
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
@@ -28,6 +28,8 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return fmt.Errorf("error unmarshaling date to string: %s", err)
 	}
+	// FIXME: If we receive a blank date, do we want to return an error instead
+	// of a magic string?
 	if aux == "" {
 		aux = "1929-10-24"
 	}
