@@ -12,3 +12,10 @@ type ExchangeRate struct {
 	ToCurrency   string  `json:"toCurrency"`
 	Rate         float64 `json:"rate"`
 }
+
+// CurrencyRate returns real-time foreign currency exchange rates data.
+type CurrencyRate struct {
+	Symbol    string    `json:"symbol"`
+	Rate      float64   `json:"rate"`
+	Timestamp EpochTime `json:"timestamp"`
+}

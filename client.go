@@ -997,7 +997,19 @@ func (c Client) CryptoBooks(ctx context.Context, symbol string) (Books, error) {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+// CurrencyRates returns real-time foreign currency exchange rates data
+// updated every 250 milliseconds.
+func (c Client) CurrencyRates(ctx context.Context, symbols []string) ([]CurrencyRate, error) {
+	r := []CurrencyRate{}
+	endpoint := fmt.Sprintf("/fx/latest?symbols=%s", url.PathEscape(strings.Join(symbols, ",")))
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
 // ExchangeRate returns an end of day exchange rate of a given currency pair.
+//
+// Deprecated: This endpoint does no longer exist.
+// See https://www.iexcloud.io/docs/api/#forex-currencies
 func (c Client) ExchangeRate(ctx context.Context, from, to string) (ExchangeRate, error) {
 	r := ExchangeRate{}
 	endpoint := fmt.Sprintf("/fx/rate/%s/%s",
