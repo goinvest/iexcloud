@@ -1,15 +1,18 @@
 help:
 	@echo "You can perform the following:"
 	@echo ""
-	@echo "  check         Format, lint, vet, and test Go code"
+	@echo "  check         Format, vet, and test Go code"
 	@echo "  cover         Show test coverage in html"
+	@echo "  lint          Lint Go code using staticcheck"
 
 check:
 	@echo 'Formatting, linting, vetting, and testing Go code'
 	go fmt ./...
-	golint ./...
 	go vet ./...
 	go test ./... -cover
+
+lint:
+	staticcheck -f stylish ./...
 
 cover:
 	@echo 'Test coverage in html'
