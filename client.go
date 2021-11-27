@@ -452,13 +452,13 @@ func (c Client) BatchQuote(ctx context.Context, symbols []string) (map[string]Qu
 // BatchPrevious returns the previous day price for up to 100 stock symbols.
 func (c Client) BatchPrevious(ctx context.Context, symbols []string) (map[string]PreviousDay, error) {
 	r := map[string]struct {
-		PreviousDay PreviousDay
+		Previous PreviousDay
 	}{}
 	endpoint := fmt.Sprintf("/stock/market/batch?symbols=%s&types=previous", url.PathEscape(strings.Join(symbols, ",")))
 	err := c.GetJSON(ctx, endpoint, &r)
 	previousday := make(map[string]PreviousDay, len(r))
 	for symbol, quote := range r {
-		previousday[symbol] = quote.PreviousDay
+		previousday[symbol] = quote.Previous
 	}
 	return previousday, err
 }
