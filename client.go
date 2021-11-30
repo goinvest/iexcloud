@@ -1299,6 +1299,24 @@ func (c Client) PreviousHoliday(ctx context.Context) (TradeHolidayDate, error) {
 	return r, err
 }
 
+// Holidays returns the last or next dates of holidays, for the
+// given number of days, from the given start date.
+func (c Client) Holidays(ctx context.Context, dir string, last int, startDate time.Time) ([]TradeHolidayDate, error) {
+	r := []TradeHolidayDate{}
+	endpoint := fmt.Sprintf("/ref-data/us/dates/holiday/%s/%d/%s", dir, last, startDate.Format("20060102"))
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
+// TradingDays returns the last or next dates of trading days, for the
+// given number of days, from the given start date.
+func (c Client) TradingDays(ctx context.Context, dir string, last int, startDate time.Time) ([]TradeHolidayDate, error) {
+	r := []TradeHolidayDate{}
+	endpoint := fmt.Sprintf("/ref-data/us/dates/trade/%s/%d/%s", dir, last, startDate.Format("20060102"))
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
 // ISINMapping convert ISIN to IEX Cloud symbols.
 func (c Client) ISINMapping(ctx context.Context, symbol string) ([]SymbolDetails, error) {
 	sd := []SymbolDetails{}
