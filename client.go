@@ -1232,6 +1232,14 @@ func (c Client) SymbolsByRegion(ctx context.Context, region string) ([]Symbol, e
 	return symbols, err
 }
 
+// Search returns an array of search results for the given symbol fragment.
+func (c Client) Search(ctx context.Context, fragment string) ([]SearchResult, error) {
+	searchResult := []SearchResult{}
+	endpoint := fmt.Sprintf("/search/%s", fragment)
+	err := c.GetJSON(ctx, endpoint, &searchResult)
+	return searchResult, err
+}
+
 // Tags returns an array of tags.  Tags can
 // be found for each on each company.
 func (c Client) Tags(ctx context.Context) ([]Tag, error) {

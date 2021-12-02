@@ -27,6 +27,17 @@ type Symbol struct {
 	IsEnabled bool   `json:"isEnabled"`
 }
 
+// SearchResult models the data for a single search result.
+type SearchResult struct {
+	Symbol       string `json:"symbol"`
+	SecurityName string `json:"securityName"`
+	SecurityType string `json:"securityType"`
+	Region       string `json:"region"`
+	Exchange     string `json:"exchange"`
+	Sector       string `json:"sector"`
+	CIK          string `json:"cik"`
+}
+
 // USExchange provides information about one U.S. exchange including the name,
 // the Market identifier code, the ID used to identify the exchange on the
 // consolidated tape, the FINRA OATS exchange participant ID, and the type of
