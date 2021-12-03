@@ -14,3 +14,4 @@ examples/iexcloud/dist/
 
 examples/iexcloud/config.toml
 config.toml
+config_test.toml

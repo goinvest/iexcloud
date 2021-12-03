@@ -44,7 +44,7 @@ func (htf HistoricalTimeFrame) Valid() bool {
 
 // IntradayHistoricalDataPoint Represents a single intraday data point for a stock
 type IntradayHistoricalDataPoint struct {
-	Date                 string  `json:"date"`
+	Date                 Date    `json:"date"`
 	Minute               string  `json:"minute"`
 	Label                string  `json:"label"`
 	High                 float64 `json:"high"`
@@ -90,12 +90,16 @@ type IntradayHistoricalOptions struct {
 
 // HistoricalDataPoint Represents a single historical data point for a stock
 type HistoricalDataPoint struct {
-	Date           string  `json:"date"`
-	Open           float64 `json:"open"`
 	Close          float64 `json:"close"`
 	High           float64 `json:"high"`
 	Low            float64 `json:"low"`
+	Open           float64 `json:"open"`
+	Symbol         string  `json:"symbol"`
 	Volume         int     `json:"volume"`
+	ID             string  `json:"id"`
+	Key            string  `json:"key"`
+	Subkey         string  `json:"subkey"`
+	Date           Date    `json:"date"`
 	UOpen          float64 `json:"uOpen"`
 	UClose         float64 `json:"uClose"`
 	UHigh          float64 `json:"uHigh"`
