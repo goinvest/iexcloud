@@ -245,6 +245,37 @@ func (c Client) Status(ctx context.Context) (Status, error) {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+// AnalystRecommendationsAndTargets provides current and historical consensus
+// analyst recommendations and price targets.
+func (c Client) AnalystRecommendationsAndTargets(ctx context.Context, symbol string) (CoreEstimate, error) {
+	estimate := CoreEstimate{}
+	endpoint := fmt.Sprintf("/time-series/CORE_ESTIMATES/%s", url.PathEscape(symbol))
+	err := c.GetJSON(ctx, endpoint, &estimate)
+	return estimate, err
+}
+
+// AnnualBalanceSheets returns the specified number of most recent annual
+// balance sheets from the IEX Cloud endpoint for the given stock symbol.
+func (c Client) AnnualBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
+		url.PathEscape(symbol), num)
+	return c.balanceSheets(ctx, endpoint)
+}
+
+// QuarterlyBalanceSheets returns the specified number of most recent quarterly
+// balance sheets from the IEX Cloud endpoint for the given stock symbol.
+func (c Client) QuarterlyBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
+		url.PathEscape(symbol), num)
+	return c.balanceSheets(ctx, endpoint)
+}
+
+func (c Client) balanceSheets(ctx context.Context, endpoint string) (BalanceSheets, error) {
+	bs := BalanceSheets{}
+	err := c.GetJSON(ctx, endpoint, &bs)
+	return bs, err
+}
+
 // Book returns the quote, bids, asks, and trades for a given stock symbol.
 func (c Client) Book(ctx context.Context, symbol string) (Book, error) {
 	book := Book{}
@@ -549,28 +580,6 @@ func (c Client) RelevantStocks(ctx context.Context, symbol string) (RelevantStoc
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// AnnualBalanceSheets returns the specified number of most recent annual
-// balance sheets from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
-		url.PathEscape(symbol), num)
-	return c.balanceSheets(ctx, endpoint)
-}
-
-// QuarterlyBalanceSheets returns the specified number of most recent quarterly
-// balance sheets from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
-		url.PathEscape(symbol), num)
-	return c.balanceSheets(ctx, endpoint)
-}
-
-func (c Client) balanceSheets(ctx context.Context, endpoint string) (BalanceSheets, error) {
-	bs := BalanceSheets{}
-	err := c.GetJSON(ctx, endpoint, &bs)
-	return bs, err
-}
-
 // AnnualCashFlows returns the specified number of most recent annual cash flow
 // statements from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualCashFlows(ctx context.Context, symbol string, num int) (CashFlows, error) {
@@ -601,15 +610,6 @@ func (c Client) Dividends(ctx context.Context, symbol string, r PathRange) ([]Di
 		url.PathEscape(symbol), PathRangeJSON[r])
 	err := c.GetJSON(ctx, endpoint, &dividends)
 	return dividends, err
-}
-
-// Earnings returns the specified number of most recent earnings data from the
-// IEX Cloud endpoint for the given stock symbol.
-func (c Client) Earnings(ctx context.Context, symbol string, num int) (Earnings, error) {
-	earnings := Earnings{}
-	endpoint := fmt.Sprintf("/stock/%s/earnings/%d", url.PathEscape(symbol), num)
-	err := c.GetJSON(ctx, endpoint, &earnings)
-	return earnings, err
 }
 
 // AnnualFinancials returns the specified number of most recent annual
@@ -693,14 +693,6 @@ func (c Client) RecommendationTrends(ctx context.Context, symbol string) ([]Reco
 	return c.AnalystRecommendations(ctx, symbol)
 }
 
-// Estimates returns the latest consensue estimates for the next fiscal period.
-func (c Client) Estimates(ctx context.Context, symbol string, num int) (Estimates, error) {
-	estimates := Estimates{}
-	endpoint := fmt.Sprintf("/stock/%s/estimates/%d", url.PathEscape(symbol), num)
-	err := c.GetJSON(ctx, endpoint, &estimates)
-	return estimates, err
-}
-
 // FundOwnership returns the ten top holders of the given stock.
 func (c Client) FundOwnership(ctx context.Context, symbol string) ([]FundOwner, error) {
 	r := []FundOwner{}
@@ -725,15 +717,6 @@ func (c Client) KeyStats(ctx context.Context, symbol string) (KeyStats, error) {
 	endpoint := fmt.Sprintf("/stock/%s/stats", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &stats)
 	return stats, err
-}
-
-// PriceTarget returns the latest average, high, and low analyst price target
-// for a given stock symbol.
-func (c Client) PriceTarget(ctx context.Context, symbol string) (PriceTarget, error) {
-	pt := PriceTarget{}
-	endpoint := fmt.Sprintf("/stock/%s/price-target", url.PathEscape(symbol))
-	err := c.GetJSON(ctx, endpoint, &pt)
-	return pt, err
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1450,4 +1433,30 @@ func (c Client) AnalystRecommendations(ctx context.Context, symbol string) ([]Re
 	endpoint := fmt.Sprintf("/stock/%s/recommendation-trends", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
+}
+
+// Earnings returns the specified number of most recent earnings data from the
+// IEX Cloud endpoint for the given stock symbol.
+func (c Client) Earnings(ctx context.Context, symbol string, num int) (Earnings, error) {
+	earnings := Earnings{}
+	endpoint := fmt.Sprintf("/stock/%s/earnings/%d", url.PathEscape(symbol), num)
+	err := c.GetJSON(ctx, endpoint, &earnings)
+	return earnings, err
+}
+
+// Estimates returns the latest consensue estimates for the next fiscal period.
+func (c Client) Estimates(ctx context.Context, symbol string, num int) (Estimates, error) {
+	estimates := Estimates{}
+	endpoint := fmt.Sprintf("/stock/%s/estimates/%d", url.PathEscape(symbol), num)
+	err := c.GetJSON(ctx, endpoint, &estimates)
+	return estimates, err
+}
+
+// PriceTarget returns the latest average, high, and low analyst price target
+// for a given stock symbol.
+func (c Client) PriceTarget(ctx context.Context, symbol string) (PriceTarget, error) {
+	pt := PriceTarget{}
+	endpoint := fmt.Sprintf("/stock/%s/price-target", url.PathEscape(symbol))
+	err := c.GetJSON(ctx, endpoint, &pt)
+	return pt, err
 }
