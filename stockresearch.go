@@ -33,37 +33,6 @@ type AdvancedStats struct {
 	PutCallRatio             float64 `json:"putCallRatio"`
 }
 
-// Recommendation models the buy, hold, sell recommendations for a stock.
-type Recommendation struct {
-	ConsensusEndDate            EpochTime `json:"consensusEndDate"`
-	ConsensusStartDate          EpochTime `json:"consensusStartDate"`
-	CorporateActionsAppliedDate EpochTime `json:"corporateActionsAppliedDate"`
-	BuyRatings                  int       `json:"ratingBuy"`
-	OverweightRatings           int       `json:"ratingOverweight"`
-	HoldRatings                 int       `json:"ratingHold"`
-	UnderweightRatings          int       `json:"ratingUnderweight"`
-	SellRatings                 int       `json:"ratingSell"`
-	NoRatings                   int       `json:"ratingNone"`
-	ConsensusRating             float64   `json:"ratingScaleMark"`
-}
-
-// Estimates models the latest consensus esimtate for the next fiscal period.
-type Estimates struct {
-	Symbol    string     `json:"symbol"`
-	Estimates []Estimate `json:"estimates"`
-}
-
-// Estimate models one estimate.
-type Estimate struct {
-	ConsensusEPS      float64 `json:"consensusEPS"`
-	NumberOfEstimates int     `json:"numberOfEstimates"`
-	FiscalPeriod      string  `json:"fiscalPeriod"`
-	FiscalEndDate     Date    `json:"fiscalEndDate"`
-	ReportDate        Date    `json:"reportDate"`
-	AnnounceTime      string  `json:"announceTime"`
-	Currency          string  `json:"currency"`
-}
-
 // FundOwner models a fund owning a stock.
 type FundOwner struct {
 	AdjustedHolding     float64   `json:"adjHolding"`
@@ -115,15 +84,4 @@ type KeyStats struct {
 	Month1ChangePercent float64 `json:"month1ChangePercent"`
 	Day30ChangePercent  float64 `json:"day30ChangePercent"`
 	Day5ChangePercent   float64 `json:"day5ChangePercent"`
-}
-
-// PriceTarget models the latest average, high, and low analyst price target for
-// a symbol.
-type PriceTarget struct {
-	Symbol      string  `json:"symbol"`
-	UpdatedDate Date    `json:"updatedDate"`
-	Average     float64 `json:"priceTargetAverage"`
-	High        float64 `json:"priceTargetHigh"`
-	Low         float64 `json:"priceTargetLow"`
-	NumAnalysts int     `json:"numberOfAnalysts"`
 }

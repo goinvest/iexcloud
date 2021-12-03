@@ -241,7 +241,7 @@ func (c Client) Status(ctx context.Context) (Status, error) {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Stock Prices Endpoints
+// Stock / Equities Endpoints
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -685,14 +685,6 @@ func (c Client) AdvancedStats(ctx context.Context, symbol string) (AdvancedStats
 	endpoint := fmt.Sprintf("/stock/%s/advanced-stats", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &stats)
 	return stats, err
-}
-
-// AnalystRecommendations pulls data from the last four months.
-func (c Client) AnalystRecommendations(ctx context.Context, symbol string) ([]Recommendation, error) {
-	r := []Recommendation{}
-	endpoint := fmt.Sprintf("/stock/%s/recommendation-trends", url.PathEscape(symbol))
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
 }
 
 // RecommendationTrends provides a list of recommendations with the start and
@@ -1435,6 +1427,27 @@ func (c Client) IntradayStats(ctx context.Context, symbol string) (IntradayStats
 	// FIXME(mdr): symbol isn't used, so this is a bad method. Need to delete.
 	r := IntradayStats{}
 	endpoint := "/stats/intraday"
+	err := c.GetJSON(ctx, endpoint, &r)
+	return r, err
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Premium Data Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Refinitiv Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// AnalystRecommendations pulls data from the last four months using premium
+// data from Refinitiv.
+func (c Client) AnalystRecommendations(ctx context.Context, symbol string) ([]Recommendation, error) {
+	r := []Recommendation{}
+	endpoint := fmt.Sprintf("/stock/%s/recommendation-trends", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
 }
