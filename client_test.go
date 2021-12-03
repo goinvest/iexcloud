@@ -44,6 +44,63 @@ func readConfig(configFile string) (Config, error) {
 	return cfg, err
 }
 
+func TestAnnualBalanceSheets(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
+	if err != nil {
+		log.Fatalf("Error getting balance sheets: %s", err)
+	}
+	assertString(t, "symbol", bs.Symbol, "AAPL")
+	assertInt(t, "number of years", len(bs.Statements), 4)
+	q1 := bs.Statements[0]
+	assertString(t, "filing type", q1.FilingType, "10-K")
+	assertInt(t, "fiscal quarter", q1.FiscalQuarter, 0)
+	isPositiveInt(t, "fiscal year", q1.FiscalYear)
+	assertString(t, "currency", q1.Currency, "USD")
+}
+
+func TestQuarterlyBalanceSheets(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 2)
+	if err != nil {
+		log.Fatalf("Error getting balance sheets: %s", err)
+	}
+	assertString(t, "symbol", bs.Symbol, "AAPL")
+	assertInt(t, "number of quarters", len(bs.Statements), 2)
+	q1 := bs.Statements[0]
+	assertString(t, "filing type", q1.FilingType, "10-K")
+	isPositiveInt(t, "fiscal quarter", q1.FiscalQuarter)
+	isPositiveInt(t, "fiscal year", q1.FiscalYear)
+	assertString(t, "currency", q1.Currency, "USD")
+}
+
+func TestBook(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	got, err := client.Book(context.Background(), "aapl")
+	if err != nil {
+		log.Fatalf("Error getting book: %s", err)
+	}
+	assertString(t, "symbol", got.Quote.Symbol, "AAPL")
+	assertString(t, "company name", got.Quote.CompanyName, "Apple Inc")
+	assertScrambledString(t, "primary exchange", got.Quote.PrimaryExchange, "NASDAQ")
+	assertString(t, "calculation price", got.Quote.CalculationPrice, "close")
+	isPositiveFloat64(t, "open", got.Quote.Open)
+	assertScrambledString(t, "open source", got.Quote.OpenSource, "official")
+	isPositiveFloat64(t, "latest price", got.Quote.LatestPrice)
+}
+
 func TestHistoricalPrices(t *testing.T) {
 	cfg, err := readConfig("config_test.toml")
 	if err != nil {
@@ -65,7 +122,6 @@ func TestHistoricalPrices(t *testing.T) {
 	assertScrambledString(t, "id", got.ID, "HISTORICAL_PRICES")
 	assertScrambledString(t, "key", got.Key, "AAPL")
 	assertString(t, "subkey", got.Subkey, "")
-
 }
 
 func assertInt(t *testing.T, label string, got, want int) {

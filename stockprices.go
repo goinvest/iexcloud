@@ -107,13 +107,20 @@ type PreviousDay struct {
 type Quote struct {
 	Symbol                string    `json:"symbol,omitempty"`
 	CompanyName           string    `json:"companyName,omitempty"`
+	PrimaryExchange       string    `json:"primaryExchange,omitempty"`
 	CalculationPrice      string    `json:"calculationPrice,omitempty"`
 	Open                  float64   `json:"open,omitempty"`
 	OpenTime              EpochTime `json:"openTime,omitempty"`
+	OpenSource            string    `json:"openSource,omitempty"`
 	Close                 float64   `json:"close,omitempty"`
 	CloseTime             EpochTime `json:"closeTime,omitempty"`
+	CloseSource           string    `json:"closeSource,omitempty"`
 	High                  float64   `json:"high,omitempty"`
+	HighTime              EpochTime `json:"highTime,omitempty"`
+	HighSource            string    `json:"highSource,omitempty"`
 	Low                   float64   `json:"low,omitempty"`
+	LowTime               EpochTime `json:"lowTime,omitempty"`
+	LowSource             string    `json:"lowSource,omitempty"`
 	LatestPrice           float64   `json:"latestPrice,omitempty"`
 	LatestSource          string    `json:"latestSource,omitempty"`
 	LatestTime            string    `json:"latestTime,omitempty"`
