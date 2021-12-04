@@ -33,10 +33,11 @@ const (
 // Valid Determines if HistoricalTimeFrame is a defined constant
 func (htf HistoricalTimeFrame) Valid() bool {
 	switch htf {
-	case OneMonthHistorical, ThreeMonthHistorical,
-		SixMonthHistorical, OneYearHistorical,
-		TwoYearHistorical, FiveYearHistorical,
-		YearToDateHistorical, MaxHistorical:
+	case FiveDayHistorical, OneMonthHistorical,
+		ThreeMonthHistorical, SixMonthHistorical,
+		OneYearHistorical, TwoYearHistorical,
+		FiveYearHistorical, YearToDateHistorical,
+		MaxHistorical:
 		return true
 	default:
 		return false
