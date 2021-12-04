@@ -11,6 +11,7 @@ import "time"
 type HistoricalTimeFrame string
 
 const (
+	FiveDayHistorical HistoricalTimeFrame = "5d"
 	// OneMonthHistorical One month (default) historically adjusted market-wide data
 	OneMonthHistorical HistoricalTimeFrame = "1m"
 	// ThreeMonthHistorical Three months historically adjusted market-wide data
@@ -70,11 +71,16 @@ type IntradayHistoricalDataPoint struct {
 // HistoricalOptions optional query params to pass to historical endpoint
 // If values are false or 0 they aren't passed.
 type HistoricalOptions struct {
-	ChartCloseOnly  bool `url:"chartCloseOnly,omitempty"`
-	ChartSimplify   bool `url:"chartSimplify,omitempty"`
-	ChartInterval   int  `url:"chartInterval,omitempty"`
-	ChangeFromClose bool `url:"changeFromClose,omitempty"`
-	ChartLast       int  `url:"chartLast,omitempty"`
+	ChartCloseOnly  bool   `url:"chartCloseOnly,omitempty"`
+	ChartSimplify   bool   `url:"chartSimplify,omitempty"`
+	ChartInterval   int    `url:"chartInterval,omitempty"`
+	ChangeFromClose bool   `url:"changeFromClose,omitempty"`
+	ChartLast       int    `url:"chartLast,omitempty"`
+	DisplayPercent  bool   `url:"displayPercent,omitempty"`
+	Range           string `url:"range,omitempty"`
+	ExactDate       string `url:"exactDate,omitempty"`
+	Sort            string `url:"sort,omitempty"`
+	IncludeToday    bool   `url:"includeToday,omitempty"`
 }
 
 // IntradayHistoricalOptions optional query params to pass to intraday historical endpoint

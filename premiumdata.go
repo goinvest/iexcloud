@@ -20,37 +20,6 @@ type Recommendation struct {
 	ConsensusRatingOneToFive    float64   `json:"ratingScaleMarkOneToFive"`
 }
 
-// Earnings provides earnings data for a given company including the actual
-// EPS, consensus, and fiscal period. Earnings are available quarterly (last 4
-// quarters) and annually (last 4 years).
-type Earnings struct {
-	Symbol   string    `json:"symbol"`
-	Earnings []Earning `json:"earnings"`
-}
-
-// Earning models the earnings for one date.
-type Earning struct {
-	EPSReportDate            Date         `json:"EPSReportDate"`
-	EPSSurpriseDollar        float64      `json:"EPSSurpriseDollar"`
-	EPSSurpriseDollarPercent float64      `json:"EPSSurpriseDollarPercent"`
-	ActualEPS                float64      `json:"actualEPS"`
-	AnnounceTime             AnnounceTime `json:"announceTime"`
-	ConsensusEPS             float64      `json:"consensusEPS"`
-	Currency                 string       `json:"currency"`
-	FiscalEndDate            Date         `json:"fiscalEndDate"`
-	FiscalPeriod             string       `json:"fiscalPeriod"`
-	NumberOfEstimates        int          `json:"numberOfEstimates"`
-	PeriodType               string       `json:"periodType"`
-	Symbol                   string       `json:"symbol"`
-	YearAgo                  float64      `json:"yearAgo"`
-	YearAgoChangePercent     float64      `json:"yearAgoChangePercent"`
-	ID                       string       `json:"id"`
-	Key                      string       `json:"key"`
-	SubKey                   string       `json:"subkey"`
-	Date                     uint64       `json:"date"`
-	Updated                  uint64       `json:"updated"`
-}
-
 // Estimates models the latest consensus esimtate for the next fiscal period.
 type Estimates struct {
 	Symbol    string     `json:"symbol"`
