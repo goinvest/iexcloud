@@ -102,6 +102,7 @@ func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) er
 	return c.FetchURLToJSON(ctx, u, v)
 }
 
+// GetJSONWithQueryParams gets the JSON data from the given endpoint with the query parameters attached.
 func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, queryParams map[string]string, v interface{}) error {
 	u, err := c.url(endpoint, queryParams)
 	if err != nil {
