@@ -177,13 +177,8 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 
 // Adds the client's token to the URL.
 func (c *Client) addToken(u *url.URL) {
-	addQueryParam("token", c.token, u)
-}
-
-// Adds the name and value to the URL's query parameters.
-func addQueryParam(name string, value string, u *url.URL) {
 	v := u.Query()
-	v.Add(name, value)
+	v.Add("token", c.token)
 	u.RawQuery = v.Encode()
 }
 
@@ -195,9 +190,11 @@ func (c *Client) url(endpoint string, queryParams map[string]string) (*url.URL, 
 	}
 	u.Path = path.Join(u.Path, endpoint)
 	if queryParams != nil {
+		q := u.Query()
 		for k, v := range queryParams {
-			addQueryParam(k, v, u)
+			q.Add(k, v)
 		}
+		u.RawQuery = q.Encode()
 	}
 	return u, nil
 }
