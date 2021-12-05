@@ -94,21 +94,20 @@ func WithBaseURL(baseURL string) func(*Client) {
 
 // GetJSON gets the JSON data from the given endpoint.
 func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) error {
-	u, err := c.url(endpoint, nil)
+	u, err := c.url(endpoint, map[string]string{"token": c.token})
 	if err != nil {
 		return err
 	}
-	c.addToken(u)
 	return c.FetchURLToJSON(ctx, u, v)
 }
 
 // GetJSONWithQueryParams gets the JSON data from the given endpoint with the query parameters attached.
 func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, queryParams map[string]string, v interface{}) error {
+	queryParams["token"] = c.token
 	u, err := c.url(endpoint, queryParams)
 	if err != nil {
 		return err
 	}
-	c.addToken(u)
 	return c.FetchURLToJSON(ctx, u, v)
 }
 
@@ -133,11 +132,10 @@ func (c *Client) GetJSONWithoutToken(ctx context.Context, endpoint string, v int
 
 // GetBytes gets the data from the given endpoint.
 func (c *Client) GetBytes(ctx context.Context, endpoint string) ([]byte, error) {
-	u, err := c.url(endpoint, nil)
+	u, err := c.url(endpoint, map[string]string{"token": c.token})
 	if err != nil {
 		return nil, err
 	}
-	c.addToken(u)
 	return c.getBytes(ctx, u.String())
 }
 
@@ -173,13 +171,6 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
 	}
 	return ioutil.ReadAll(resp.Body)
-}
-
-// Adds the client's token to the URL.
-func (c *Client) addToken(u *url.URL) {
-	v := u.Query()
-	v.Add("token", c.token)
-	u.RawQuery = v.Encode()
 }
 
 // Returns an URL object that points to the endpoint with optional query parameters.
