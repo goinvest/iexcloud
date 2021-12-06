@@ -14,6 +14,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -93,11 +94,26 @@ func WithBaseURL(baseURL string) func(*Client) {
 
 // GetJSON gets the JSON data from the given endpoint.
 func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) error {
-	address, err := c.addToken(endpoint)
+	u, err := c.url(endpoint, map[string]string{"token": c.token})
 	if err != nil {
 		return err
 	}
-	data, err := c.getBytes(ctx, address)
+	return c.FetchURLToJSON(ctx, u, v)
+}
+
+// GetJSONWithQueryParams gets the JSON data from the given endpoint with the query parameters attached.
+func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, queryParams map[string]string, v interface{}) error {
+	queryParams["token"] = c.token
+	u, err := c.url(endpoint, queryParams)
+	if err != nil {
+		return err
+	}
+	return c.FetchURLToJSON(ctx, u, v)
+}
+
+// Fetches JSON content from the given URL and unmarshals it into `v`.
+func (c *Client) FetchURLToJSON(ctx context.Context, u *url.URL, v interface{}) error {
+	data, err := c.getBytes(ctx, u.String())
 	if err != nil {
 		return err
 	}
@@ -107,21 +123,20 @@ func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) er
 // GetJSONWithoutToken gets the JSON data from the given endpoint without
 // adding a token to the URL.
 func (c *Client) GetJSONWithoutToken(ctx context.Context, endpoint string, v interface{}) error {
-	address := c.baseURL + endpoint
-	data, err := c.getBytes(ctx, address)
+	u, err := c.url(endpoint, nil)
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(data, v)
+	return c.FetchURLToJSON(ctx, u, v)
 }
 
 // GetBytes gets the data from the given endpoint.
 func (c *Client) GetBytes(ctx context.Context, endpoint string) ([]byte, error) {
-	address, err := c.addToken(endpoint)
+	u, err := c.url(endpoint, map[string]string{"token": c.token})
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
-	return c.getBytes(ctx, address)
+	return c.getBytes(ctx, u.String())
 }
 
 // GetFloat64 gets the number from the given endpoint.
@@ -158,15 +173,21 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func (c *Client) addToken(endpoint string) (string, error) {
-	u, err := url.Parse(c.baseURL + endpoint)
+// Returns an URL object that points to the endpoint with optional query parameters.
+func (c *Client) url(endpoint string, queryParams map[string]string) (*url.URL, error) {
+	u, err := url.Parse(c.baseURL)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	v := u.Query()
-	v.Add("token", c.token)
-	u.RawQuery = v.Encode()
-	return u.String(), nil
+	u.Path = path.Join(u.Path, endpoint)
+	if queryParams != nil {
+		q := u.Query()
+		for k, v := range queryParams {
+			q.Add(k, v)
+		}
+		u.RawQuery = q.Encode()
+	}
+	return u, nil
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -770,44 +791,48 @@ func (c Client) IPOsToday(ctx context.Context) (IPOCalendar, error) {
 
 // MostActive returns a list of quotes for the top 10 most active stocks from
 // the IEX Cloud endpoint updated intraday, 15 minute delayed.
-func (c Client) MostActive(ctx context.Context) ([]Quote, error) {
-	return c.list(ctx, "mostactive")
+func (c Client) MostActive(ctx context.Context, limit int) ([]Quote, error) {
+	return c.list(ctx, "mostactive", limit)
 }
 
 // Gainers returns a list of quotes for the top 10 stock gainers from
 // the IEX Cloud endpoint updated intraday, 15 minute delayed.
-func (c Client) Gainers(ctx context.Context) ([]Quote, error) {
-	return c.list(ctx, "gainers")
+func (c Client) Gainers(ctx context.Context, limit int) ([]Quote, error) {
+	return c.list(ctx, "gainers", limit)
 }
 
 // Losers returns a list of quotes for the top 10 stock losers from
 // the IEX Cloud endpoint updated intraday, 15 minute delayed.
-func (c Client) Losers(ctx context.Context) ([]Quote, error) {
-	return c.list(ctx, "losers")
+func (c Client) Losers(ctx context.Context, limit int) ([]Quote, error) {
+	return c.list(ctx, "losers", limit)
 }
 
 // IEXVolume returns a list of quotes for the top 10 IEX stocks by volume from
 // the IEX Cloud endpoint updated intraday, 15 minute delayed.
-func (c Client) IEXVolume(ctx context.Context) ([]Quote, error) {
-	return c.list(ctx, "iexvolume")
+func (c Client) IEXVolume(ctx context.Context, limit int) ([]Quote, error) {
+	return c.list(ctx, "iexvolume", limit)
 }
 
 // IEXPercent returns a list of quotes for the top 10 IEX stocks by percent
 // from the IEX Cloud endpoint updated intraday, 15 minute delayed.
-func (c Client) IEXPercent(ctx context.Context) ([]Quote, error) {
-	return c.list(ctx, "iexpercent")
+func (c Client) IEXPercent(ctx context.Context, limit int) ([]Quote, error) {
+	return c.list(ctx, "iexpercent", limit)
 }
 
 // InFocus returns a list of quotes for the top 10 in focus stocks from the IEX
 // Cloud endpoint updated intraday, 15 minute delayed.
-func (c Client) InFocus(ctx context.Context) ([]Quote, error) {
-	return c.list(ctx, "infocus")
+func (c Client) InFocus(ctx context.Context, limit int) ([]Quote, error) {
+	return c.list(ctx, "infocus", limit)
 }
 
-func (c Client) list(ctx context.Context, list string) ([]Quote, error) {
+func (c Client) list(ctx context.Context, list string, limit int) ([]Quote, error) {
 	q := []Quote{}
 	endpoint := "/stock/market/list/" + list
-	err := c.GetJSON(ctx, endpoint, &q)
+	params := make(map[string]string)
+	if limit > 0 {
+		params["listLimit"] = fmt.Sprintf("%d", limit)
+	}
+	err := c.GetJSONWithQueryParams(ctx, endpoint, params, &q)
 	return q, err
 }
 
