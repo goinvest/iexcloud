@@ -11,8 +11,14 @@ import "time"
 type HistoricalTimeFrame string
 
 const (
+	// FiveDayHistorical Five days historically adjusted market-wide data
+	FiveDayHistorical HistoricalTimeFrame = "5d"
+	// FiveDay10MinuteHistorical Five days historically adjusted market-wide data in 10 minute intervals
+	FiveDay10MinuteHistorical HistoricalTimeFrame = "5dm"
 	// OneMonthHistorical One month (default) historically adjusted market-wide data
 	OneMonthHistorical HistoricalTimeFrame = "1m"
+	// OneMonth30MinuteHistorical One month historically adjusted market-wide data in 30 minute intervals
+	OneMonth30MinuteHistorical HistoricalTimeFrame = "1mm"
 	// ThreeMonthHistorical Three months historically adjusted market-wide data
 	ThreeMonthHistorical HistoricalTimeFrame = "3m"
 	// SixMonthHistorical Six months historically adjusted market-wide data
@@ -32,10 +38,18 @@ const (
 // Valid Determines if HistoricalTimeFrame is a defined constant
 func (htf HistoricalTimeFrame) Valid() bool {
 	switch htf {
-	case OneMonthHistorical, ThreeMonthHistorical,
-		SixMonthHistorical, OneYearHistorical,
-		TwoYearHistorical, FiveYearHistorical,
-		YearToDateHistorical, MaxHistorical:
+	case
+		FiveDayHistorical,
+		FiveDay10MinuteHistorical,
+		OneMonthHistorical,
+		OneMonth30MinuteHistorical,
+		ThreeMonthHistorical,
+		SixMonthHistorical,
+		OneYearHistorical,
+		TwoYearHistorical,
+		FiveYearHistorical,
+		YearToDateHistorical,
+		MaxHistorical:
 		return true
 	default:
 		return false
@@ -70,11 +84,16 @@ type IntradayHistoricalDataPoint struct {
 // HistoricalOptions optional query params to pass to historical endpoint
 // If values are false or 0 they aren't passed.
 type HistoricalOptions struct {
-	ChartCloseOnly  bool `url:"chartCloseOnly,omitempty"`
-	ChartSimplify   bool `url:"chartSimplify,omitempty"`
-	ChartInterval   int  `url:"chartInterval,omitempty"`
-	ChangeFromClose bool `url:"changeFromClose,omitempty"`
-	ChartLast       int  `url:"chartLast,omitempty"`
+	ChartCloseOnly  bool   `url:"chartCloseOnly,omitempty"`
+	ChartSimplify   bool   `url:"chartSimplify,omitempty"`
+	ChartInterval   int    `url:"chartInterval,omitempty"`
+	ChangeFromClose bool   `url:"changeFromClose,omitempty"`
+	ChartLast       int    `url:"chartLast,omitempty"`
+	DisplayPercent  bool   `url:"displayPercent,omitempty"`
+	Range           string `url:"range,omitempty"`
+	ExactDate       string `url:"exactDate,omitempty"`
+	Sort            string `url:"sort,omitempty"`
+	IncludeToday    bool   `url:"includeToday,omitempty"`
 }
 
 // IntradayHistoricalOptions optional query params to pass to intraday historical endpoint
@@ -125,6 +144,6 @@ type IntradayOptions struct {
 }
 
 // SetExactDate formats a given date as IEX expects
-func (opt IntradayOptions) SetExactDate(day time.Time) {
+func (opt *IntradayOptions) SetExactDate(day time.Time) {
 	opt.ExactDate = day.Format("20060102")
 }
