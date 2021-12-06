@@ -281,22 +281,21 @@ func (c Client) AnalystRecommendationsAndTargets(ctx context.Context, symbol str
 // AnnualBalanceSheets returns the specified number of most recent annual
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
-		url.PathEscape(symbol), num)
-	return c.balanceSheets(ctx, endpoint)
+	return c.BalanceSheets(ctx, symbol, "annual", num)
 }
 
 // QuarterlyBalanceSheets returns the specified number of most recent quarterly
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) QuarterlyBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
-		url.PathEscape(symbol), num)
-	return c.balanceSheets(ctx, endpoint)
+	return c.BalanceSheets(ctx, symbol, "quarter", num)
 }
 
-func (c Client) balanceSheets(ctx context.Context, endpoint string) (BalanceSheets, error) {
+// BalanceSheets returns the specified number of most recent balance sheets
+// with the given period (either "annual" or "quarter").
+func (c Client) BalanceSheets(ctx context.Context, symbol, period string, num int) (BalanceSheets, error) {
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d", url.PathEscape(symbol), num)
 	bs := BalanceSheets{}
-	err := c.GetJSON(ctx, endpoint, &bs)
+	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{"period": period}, &bs)
 	return bs, err
 }
 
