@@ -20,7 +20,7 @@ import (
 const testToken = "not-a-real-token"
 
 // Returns the base address for the given test server.
-func baseAddress(s *httptest.Server) ClientOption {
+func withBaseAddress(s *httptest.Server) ClientOption {
 	return WithBaseURL("http://" + s.Listener.Addr().String())
 }
 
@@ -28,7 +28,7 @@ func TestBalanceSheets(t *testing.T) {
 	fakeIEX := fakeiexcloud.FakeIEXCloud{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
 	defer s.Close()
-	client := NewClient(testToken, baseAddress(s))
+	client := NewClient(testToken, withBaseAddress(s))
 
 	const nominalBalanceSheetJSON = `{
 		"symbol": "AAPL",
@@ -175,30 +175,116 @@ func TestBalanceSheets(t *testing.T) {
 	}
 }
 
-// func TestBook(t *testing.T) {
-// 	cfg, err := readConfig("config_test.toml")
-// 	if err != nil {
-// 		log.Fatalf("Error reading config file: %s", err)
-// 	}
-// 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-// 	got, err := client.Book(context.Background(), "aapl")
-// 	if err != nil {
-// 		log.Fatalf("Error getting book: %s", err)
-// 	}
-// 	assertString(t, "symbol", got.Quote.Symbol, "AAPL")
-// 	assertString(t, "company name", got.Quote.CompanyName, "Apple Inc")
-// 	assertScrambledString(t, "primary exchange", got.Quote.PrimaryExchange, "NASDAQ")
-// 	assertString(t, "calculation price", got.Quote.CalculationPrice, "close")
-// 	isPositiveFloat64(t, "open", got.Quote.Open)
-// 	assertScrambledString(t, "open source", got.Quote.OpenSource, "official")
-// 	isPositiveFloat64(t, "latest price", got.Quote.LatestPrice)
-// }
+func TestBook(t *testing.T) {
+	fakeIEX := fakeiexcloud.FakeIEXCloud{}
+	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
+	defer s.Close()
+	client := NewClient(testToken, withBaseAddress(s))
+
+	testCases := []struct {
+		name string
+
+		// These parameters will be used in the request.
+		requestSymbol string
+
+		// These configure the fake response.
+		responseJSON       string
+		responseHTTPStatus int
+
+		// These set our expectations for the test result.
+		wantRequestPath string
+		wantBook        Book
+		wantErr         bool
+	}{
+		{
+			name:          "nominal",
+			requestSymbol: "aapl",
+			responseJSON: `{
+				"quote": { "symbol": "AAPL" },
+				"bids": [{ "price": 120, "size": 10000, "timestamp": 1638820374000 }],
+				"asks": [{ "price": 122, "size": 10030, "timestamp": 1638820374000 }],
+				"trades": [{
+					"price": 120,
+					"size": 141432,
+					"tradeId": 12,
+					"isISO": true,
+					"isOddLot": true,
+					"isOutsideRegularHours": true,
+					"isSinglePriceCross": true,
+					"isTradeThroughExempt": true,
+					"timestamp": 1638820374000
+				}],
+				"systemEvent": { "systemEvent": "foo", "timestamp": 1638820374000 }
+			}`,
+			wantRequestPath: "/stock/aapl/book",
+			wantBook: Book{
+				Quote: Quote{Symbol: "AAPL"},
+				Bids: []BidAsk{{
+					Price:     120,
+					Size:      10000,
+					Timestamp: EpochTime(time.Unix(1638820374, 0)),
+				}},
+				Asks: []BidAsk{{
+					Price:     122,
+					Size:      10030,
+					Timestamp: EpochTime(time.Unix(1638820374, 0)),
+				}},
+				Trades: []Trade{{
+					Price:                 120,
+					Size:                  141432,
+					TradeID:               12,
+					IsISO:                 true,
+					IsOddLot:              true,
+					IsOutsideRegularHours: true,
+					IsSinglePriceCross:    true,
+					IsTradeThroughExempt:  true,
+					Timestamp:             EpochTime(time.Unix(1638820374, 0)),
+				}},
+				SystemEvent: SystemEvent{
+					SystemEvent: "foo",
+					Timestamp:   EpochTime(time.Unix(1638820374, 0)),
+				},
+			},
+		},
+		{
+			name:               "error",
+			requestSymbol:      "aapl",
+			responseHTTPStatus: http.StatusNotFound,
+			wantRequestPath:    "/stock/aapl/book",
+			wantErr:            true,
+		},
+	}
+
+	for _, tc := range testCases {
+		fakeIEX.ResponseJSON = tc.responseJSON
+		fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
+
+		book, err := client.Book(context.TODO(), tc.requestSymbol)
+		if err != nil {
+			if tc.wantErr {
+				return // error was expected
+			}
+			t.Fatalf("%s: Error getting book: %s", tc.name, err)
+		}
+		if tc.wantErr {
+			t.Fatalf("%s: Got nil error, want error", tc.name)
+		}
+
+		if diff := deep.Equal(book, tc.wantBook); diff != nil {
+			t.Fatalf("%s: Got unexpected values:\n%s", tc.name, diff)
+		}
+
+		if got, want := fakeIEX.LastURLReceived.Path, tc.wantRequestPath; got != want {
+			t.Errorf("%s: Got %q, want %q", tc.name, got, want)
+		}
+	}
+}
 
 func TestHistoricalPrices(t *testing.T) {
 	fakeIEX := fakeiexcloud.FakeIEXCloud{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
 	defer s.Close()
-	client := NewClient(testToken, baseAddress(s))
+	client := NewClient(testToken, withBaseAddress(s))
 
 	testCases := []struct {
 		name string
