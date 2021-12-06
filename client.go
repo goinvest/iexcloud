@@ -37,21 +37,24 @@ type Error struct {
 	Message    string
 }
 
+// ClientOption applies an option to the client.
+type ClientOption func(*Client)
+
 // Error implements the error interface
 func (e Error) Error() string {
 	return fmt.Sprintf("%d %s: %s", e.StatusCode, http.StatusText(e.StatusCode), e.Message)
 }
 
 // NewClient creates a client with the given authorization token.
-func NewClient(token string, options ...func(*Client)) *Client {
+func NewClient(token string, options ...ClientOption) *Client {
 	client := &Client{
 		token:      token,
 		httpClient: &http.Client{Timeout: time.Second * 60},
 	}
 
 	// apply options
-	for _, option := range options {
-		option(client)
+	for _, applyOption := range options {
+		applyOption(client)
 	}
 
 	// set default values
@@ -63,14 +66,14 @@ func NewClient(token string, options ...func(*Client)) *Client {
 }
 
 // WithHTTPClient sets the http.Client for a new IEX Client
-func WithHTTPClient(httpClient *http.Client) func(*Client) {
+func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(client *Client) {
 		client.httpClient = httpClient
 	}
 }
 
 // WithSecureHTTPClient sets a secure http.Client for a new IEX Client
-func WithSecureHTTPClient() func(*Client) {
+func WithSecureHTTPClient() ClientOption {
 	return func(client *Client) {
 		client.httpClient = &http.Client{
 			Transport: &http.Transport{
@@ -86,7 +89,7 @@ func WithSecureHTTPClient() func(*Client) {
 }
 
 // WithBaseURL sets the baseURL for a new IEX Client
-func WithBaseURL(baseURL string) func(*Client) {
+func WithBaseURL(baseURL string) ClientOption {
 	return func(client *Client) {
 		client.baseURL = baseURL
 	}

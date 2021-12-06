@@ -3,195 +3,196 @@
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
 
-package iex_test
+package iex
 
 import (
 	"context"
-	"io/ioutil"
-	"log"
-	"math"
-	"os"
-	"sort"
+	"net/http"
+	"net/http/httptest"
 	"testing"
+	"time"
 
-	"github.com/BurntSushi/toml"
-	iex "github.com/goinvest/iexcloud/v2"
+	"github.com/go-test/deep"
+	"github.com/goinvest/iexcloud/v2/test/fakeiexcloud"
 )
 
-// Config contains the configuration information neecded to program and test
-// the adapaters.
-type Config struct {
-	Token   string
-	BaseURL string
-}
+const testToken = "not-a-real-token"
 
-// ReadConfig will read the TOML config file.
-func readConfig(configFile string) (Config, error) {
+// func TestAnnualBalanceSheets(t *testing.T) {
+// 	cfg, err := readConfig("config_test.toml")
+// 	if err != nil {
+// 		log.Fatalf("Error reading config file: %s", err)
+// 	}
+// 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+// 	bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
+// 	if err != nil {
+// 		log.Fatalf("Error getting balance sheets: %s", err)
+// 	}
+// 	assertString(t, "symbol", bs.Symbol, "AAPL")
+// 	assertInt(t, "number of years", len(bs.Statements), 4)
+// 	q1 := bs.Statements[0]
+// 	assertString(t, "filing type", q1.FilingType, "10-K")
+// 	assertInt(t, "fiscal quarter", q1.FiscalQuarter, 0)
+// 	isPositiveInt(t, "fiscal year", q1.FiscalYear)
+// 	assertString(t, "currency", q1.Currency, "USD")
+// }
 
-	var cfg Config
+// func TestQuarterlyBalanceSheets(t *testing.T) {
+// 	cfg, err := readConfig("config_test.toml")
+// 	if err != nil {
+// 		log.Fatalf("Error reading config file: %s", err)
+// 	}
+// 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+// 	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 2)
+// 	if err != nil {
+// 		log.Fatalf("Error getting balance sheets: %s", err)
+// 	}
+// 	assertString(t, "symbol", bs.Symbol, "AAPL")
+// 	assertInt(t, "number of quarters", len(bs.Statements), 2)
+// 	q1 := bs.Statements[0]
+// 	assertString(t, "filing type", q1.FilingType, "10-K")
+// 	isPositiveInt(t, "fiscal quarter", q1.FiscalQuarter)
+// 	isPositiveInt(t, "fiscal year", q1.FiscalYear)
+// 	assertString(t, "currency", q1.Currency, "USD")
+// }
 
-	// Read config file
-	f, err := os.Open(configFile)
-	if err != nil {
-		return cfg, err
-	}
-	defer f.Close()
-	buf, err := ioutil.ReadAll(f)
-	if err != nil {
-		return cfg, err
-	}
-	err = toml.Unmarshal(buf, &cfg)
-	return cfg, err
-}
+// func TestBook(t *testing.T) {
+// 	cfg, err := readConfig("config_test.toml")
+// 	if err != nil {
+// 		log.Fatalf("Error reading config file: %s", err)
+// 	}
+// 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+// 	got, err := client.Book(context.Background(), "aapl")
+// 	if err != nil {
+// 		log.Fatalf("Error getting book: %s", err)
+// 	}
+// 	assertString(t, "symbol", got.Quote.Symbol, "AAPL")
+// 	assertString(t, "company name", got.Quote.CompanyName, "Apple Inc")
+// 	assertScrambledString(t, "primary exchange", got.Quote.PrimaryExchange, "NASDAQ")
+// 	assertString(t, "calculation price", got.Quote.CalculationPrice, "close")
+// 	isPositiveFloat64(t, "open", got.Quote.Open)
+// 	assertScrambledString(t, "open source", got.Quote.OpenSource, "official")
+// 	isPositiveFloat64(t, "latest price", got.Quote.LatestPrice)
+// }
 
-func TestAnnualBalanceSheets(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-	bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
-	if err != nil {
-		log.Fatalf("Error getting balance sheets: %s", err)
-	}
-	assertString(t, "symbol", bs.Symbol, "AAPL")
-	assertInt(t, "number of years", len(bs.Statements), 4)
-	q1 := bs.Statements[0]
-	assertString(t, "filing type", q1.FilingType, "10-K")
-	assertInt(t, "fiscal quarter", q1.FiscalQuarter, 0)
-	isPositiveInt(t, "fiscal year", q1.FiscalYear)
-	assertString(t, "currency", q1.Currency, "USD")
-}
-
-func TestQuarterlyBalanceSheets(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 2)
-	if err != nil {
-		log.Fatalf("Error getting balance sheets: %s", err)
-	}
-	assertString(t, "symbol", bs.Symbol, "AAPL")
-	assertInt(t, "number of quarters", len(bs.Statements), 2)
-	q1 := bs.Statements[0]
-	assertString(t, "filing type", q1.FilingType, "10-K")
-	isPositiveInt(t, "fiscal quarter", q1.FiscalQuarter)
-	isPositiveInt(t, "fiscal year", q1.FiscalYear)
-	assertString(t, "currency", q1.Currency, "USD")
-}
-
-func TestBook(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-	got, err := client.Book(context.Background(), "aapl")
-	if err != nil {
-		log.Fatalf("Error getting book: %s", err)
-	}
-	assertString(t, "symbol", got.Quote.Symbol, "AAPL")
-	assertString(t, "company name", got.Quote.CompanyName, "Apple Inc")
-	assertScrambledString(t, "primary exchange", got.Quote.PrimaryExchange, "NASDAQ")
-	assertString(t, "calculation price", got.Quote.CalculationPrice, "close")
-	isPositiveFloat64(t, "open", got.Quote.Open)
-	assertScrambledString(t, "open source", got.Quote.OpenSource, "official")
-	isPositiveFloat64(t, "latest price", got.Quote.LatestPrice)
+// Returns the base address for the test server.
+func baseAddress(s *httptest.Server) ClientOption {
+	return WithBaseURL("http://" + s.Listener.Addr().String())
 }
 
 func TestHistoricalPrices(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
+	fakeIEX := fakeiexcloud.FakeIEXCloud{}
+	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
+	defer s.Close()
+	client := NewClient(testToken, baseAddress(s))
+
+	testCases := []struct {
+		name string
+
+		// These parameters will be used in the request.
+		requestSymbol    string
+		requestTimeframe HistoricalTimeFrame
+
+		// These configure the fake response.
+		responseJSON       string
+		responseHTTPStatus int
+
+		// These set our expectations for the test result.
+		wantRequestPath string
+		wantPrices      []HistoricalDataPoint
+		wantErr         bool
+	}{
+		{
+			name:             "nominal",
+			requestSymbol:    "aapl",
+			requestTimeframe: "1m",
+			responseJSON: `[
+				{
+					"close": 161.84,
+					"high": 164.96,
+					"low": 159.72,
+					"open": 164.02,
+					"symbol": "AAPL",
+					"volume": 118023116,
+					"id": "HISTORICAL_PRICES",
+					"key": "AAPL",
+					"subkey": "12345",
+					"date": "2021-12-03",
+					"uOpen": 164.02,
+					"uClose": 161.84,
+					"uHigh": 164.96,
+					"uLow": 159.72,
+					"uVolume": 118023116,
+					"change": -1.9199999999999875,
+					"changePercent": -0.0117,
+					"label": "Dec 3, 21",
+					"changeOverTime": 0.07577771869183732
+				}
+			]`,
+			wantRequestPath: "/stock/aapl/chart/1m",
+			wantPrices: []HistoricalDataPoint{{
+				Close:          161.84,
+				High:           164.96,
+				Low:            159.72,
+				Open:           164.02,
+				Symbol:         "AAPL",
+				Volume:         118023116,
+				ID:             "HISTORICAL_PRICES",
+				Key:            "AAPL",
+				Subkey:         "12345",
+				Date:           Date(time.Date(2021, 12, 3, 0, 0, 0, 0, time.UTC)),
+				UOpen:          164.02,
+				UClose:         161.84,
+				UHigh:          164.96,
+				ULow:           159.72,
+				UVolume:        118023116,
+				Change:         -1.9199999999999875,
+				ChangePercent:  -0.0117,
+				Label:          "Dec 3, 21",
+				ChangeOverTime: 0.07577771869183732,
+			}},
+		},
+		{
+			name:             "invalid time frame",
+			requestTimeframe: "asdf",
+			responseJSON:     "",
+			wantErr:          true,
+		},
+		{
+			name:               "server error",
+			requestTimeframe:   "1m",
+			responseHTTPStatus: http.StatusInternalServerError,
+			wantErr:            true,
+		},
 	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-	timeframe := iex.OneMonthHistorical
-	histPrices, err := client.HistoricalPrices(context.Background(), "aapl", timeframe, nil)
-	if err != nil {
-		log.Fatalf("Error getting historical prices: %s", err)
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Set up the fake response.
+			fakeIEX.ResponseJSON = tc.responseJSON
+			fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
+
+			// Run the fetch.
+			histPrices, err := client.HistoricalPrices(context.TODO(), tc.requestSymbol, tc.requestTimeframe, nil)
+
+			// Compare the response with our test expectations.
+			if err != nil {
+				if tc.wantErr {
+					return // error was expected
+				}
+				t.Fatalf("%s: Error getting historical prices: %s", tc.name, err)
+			}
+			if tc.wantErr {
+				t.Fatalf("%s: Got nil error, want error", tc.name)
+			}
+
+			if diff := deep.Equal(histPrices, tc.wantPrices); diff != nil {
+				t.Fatalf("%s: Got unexpected values:\n%s", tc.name, diff)
+			}
+
+			if got, want := fakeIEX.LastURLReceived.Path, tc.wantRequestPath; got != want {
+				t.Errorf("%s: Got %q, want %q", tc.name, got, want)
+			}
+		})
 	}
-	got := histPrices[0]
-	isPositiveFloat64(t, "close", got.Close)
-	isPositiveFloat64(t, "high", got.High)
-	isPositiveFloat64(t, "low", got.Low)
-	isPositiveFloat64(t, "open", got.Open)
-	assertString(t, "symbol", got.Symbol, "AAPL")
-	isPositiveInt(t, "volume", got.Volume)
-	assertScrambledString(t, "id", got.ID, "HISTORICAL_PRICES")
-	assertScrambledString(t, "key", got.Key, "AAPL")
-	assertString(t, "subkey", got.Subkey, "")
-}
-
-func assertInt(t *testing.T, label string, got, want int) {
-	if got != want {
-		t.Errorf("\t got = %d %s\n\t\twant = %d", got, label, want)
-	}
-}
-
-func assertFloat64(t *testing.T, label string, got, want, tolerance float64) {
-	if diff := math.Abs(want - got); diff >= tolerance {
-		t.Errorf("\t got = %f %s\n\t\t\twant = %f", got, label, want)
-	}
-}
-
-func assertBool(t *testing.T, label string, got, want bool) {
-	if got != want {
-		t.Errorf("\t got = %t %s\n\t\t\twant = %t", got, label, want)
-	}
-}
-
-func assertString(t *testing.T, label string, got, want string) {
-	if got != want {
-		t.Errorf("\t got = %s %s\n\t\t\twant = %s", got, label, want)
-	}
-}
-
-// IEX scrambles their responses when using the testing sandbox. Therefore, the
-// best we can do is assert that all the letters are there even if scrambled.
-func assertScrambledString(t *testing.T, label string, got, want string) {
-	gotSorted := sortString(got)
-	wantSorted := sortString(want)
-	if gotSorted != wantSorted {
-		t.Errorf("\t got = %s %s\n\t\t\twant = %s", got, label, want)
-	}
-}
-
-func isPositiveInt(t *testing.T, label string, got int) {
-	if got <= 0 {
-		t.Errorf("\t got = %d %s\n\t\twant int > 0", got, label)
-	}
-}
-
-func isPositiveFloat64(t *testing.T, label string, got float64) {
-	if got <= 0.0 {
-		t.Errorf("\t got = %f %s\n\t\twant float64 > 0.0", got, label)
-	}
-}
-
-func isString(t *testing.T, label string, got string) {
-	if got == "" {
-		t.Errorf("\t got = %s %s\n\t\twant non-empty string", got, label)
-	}
-}
-
-type sortRunes []rune
-
-func (s sortRunes) Less(i, j int) bool {
-	return s[i] < s[j]
-}
-
-func (s sortRunes) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
-}
-
-func (s sortRunes) Len() int {
-	return len(s)
-}
-
-func sortString(s string) string {
-	r := []rune(s)
-	sort.Sort(sortRunes(r))
-	return string(r)
 }
