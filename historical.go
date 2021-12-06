@@ -11,9 +11,14 @@ import "time"
 type HistoricalTimeFrame string
 
 const (
+	// FiveDayMinuteHistorical Five day historically adjusted market-wide data with 10 minutes interval
+	FiveDayMinuteHistorical HistoricalTimeFrame = "5dm"
+	// FiveDayHistorical Five day historically adjusted market-wide data
 	FiveDayHistorical HistoricalTimeFrame = "5d"
 	// OneMonthHistorical One month (default) historically adjusted market-wide data
 	OneMonthHistorical HistoricalTimeFrame = "1m"
+	// OneMonthMinuteHistorical One month (default) historically adjusted market-wide data with 10 minutes interval
+	OneMonthMinuteHistorical HistoricalTimeFrame = "1mm"
 	// ThreeMonthHistorical Three months historically adjusted market-wide data
 	ThreeMonthHistorical HistoricalTimeFrame = "3m"
 	// SixMonthHistorical Six months historically adjusted market-wide data
@@ -33,10 +38,17 @@ const (
 // Valid Determines if HistoricalTimeFrame is a defined constant
 func (htf HistoricalTimeFrame) Valid() bool {
 	switch htf {
-	case FiveDayHistorical, OneMonthHistorical,
-		ThreeMonthHistorical, SixMonthHistorical,
-		OneYearHistorical, TwoYearHistorical,
-		FiveYearHistorical, YearToDateHistorical,
+	case
+		FiveDayMinuteHistorical,
+		FiveDayHistorical,
+		OneMonthHistorical,
+		OneMonthMinuteHistorical,
+		ThreeMonthHistorical,
+		SixMonthHistorical,
+		OneYearHistorical,
+		TwoYearHistorical,
+		FiveYearHistorical,
+		YearToDateHistorical,
 		MaxHistorical:
 		return true
 	default:
@@ -132,6 +144,6 @@ type IntradayOptions struct {
 }
 
 // SetExactDate formats a given date as IEX expects
-func (opt IntradayOptions) SetExactDate(day time.Time) {
+func (opt *IntradayOptions) SetExactDate(day time.Time) {
 	opt.ExactDate = day.Format("20060102")
 }
