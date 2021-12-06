@@ -10,7 +10,7 @@ import (
 // Use it as follows:
 //
 // fakeIEX := FakeIEXCloud{
-//	 ResponseJSON: <arbitrary JSON string>
+//   ResponseJSON: <arbitrary JSON string>
 //   ResponseHTTPStatus: <optional non-ok status>
 // }
 // s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
