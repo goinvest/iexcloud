@@ -3,7 +3,6 @@
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
 
-//go:build integration
 // +build integration
 
 package iex
