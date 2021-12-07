@@ -930,7 +930,7 @@ func (c Client) UpcomingSplits(ctx context.Context, symbol string) ([]Split, err
 // UpcomingIPOs returns all upcoming IPOs for the entire market.
 func (c Client) UpcomingIPOs(ctx context.Context) (IPOCalendar, error) {
 	e := IPOCalendar{}
-	endpoint := fmt.Sprintf("/stock/market/upcoming-ipos")
+	endpoint := "/stock/market/upcoming-ipos"
 	err := c.GetJSON(ctx, endpoint, &e)
 	return e, err
 }
