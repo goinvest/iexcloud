@@ -5,7 +5,10 @@
 
 package iex
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // HistoricalTimeFrame enum for selecting time frame of historical data
 type HistoricalTimeFrame string
@@ -119,6 +122,7 @@ type HistoricalDataPoint struct {
 	Key            string  `json:"key"`
 	Subkey         string  `json:"subkey"`
 	Date           Date    `json:"date"`
+	Minute         string  `json:"minute"`
 	UOpen          float64 `json:"uOpen"`
 	UClose         float64 `json:"uClose"`
 	UHigh          float64 `json:"uHigh"`
@@ -128,6 +132,19 @@ type HistoricalDataPoint struct {
 	ChangePercent  float64 `json:"changePercent"`
 	Label          string  `json:"label"`
 	ChangeOverTime float64 `json:"changeOverTime"`
+}
+
+// Time merges HistoricalDataPoint's Date and Mintue field and
+// get the exact time. Useful for "5dm" and "1mm" time frames
+func (p HistoricalDataPoint) Time() time.Time {
+	if p.Minute == "" {
+		return time.Time(p.Date)
+	}
+
+	layout := "2006-01-02 15:04"
+	dateStr := fmt.Sprintf("%s %s", p.Date.String(), p.Minute)
+	t, _ := time.Parse(layout, dateStr)
+	return t
 }
 
 // IntradayOptions optional query params to pass to intraday endpoint
