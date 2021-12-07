@@ -3,9 +3,10 @@
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
 
+//go:build integration
 // +build integration
 
-package iex
+package iex_test
 
 import (
 	"context"
@@ -17,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/BurntSushi/toml"
+	iex "github.com/goinvest/iexcloud/v2"
 )
 
 // Config contains the configuration information neecded to program and test
@@ -50,7 +52,7 @@ func TestIntegrationAnnualBalanceSheets(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := NewClient(cfg.Token, WithBaseURL(cfg.BaseURL))
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 	bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
 	if err != nil {
 		log.Fatalf("Error getting balance sheets: %s", err)
@@ -69,7 +71,7 @@ func TestIntegrationQuarterlyBalanceSheets(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := NewClient(cfg.Token, WithBaseURL(cfg.BaseURL))
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 2)
 	if err != nil {
 		log.Fatalf("Error getting balance sheets: %s", err)
@@ -88,7 +90,7 @@ func TestIntegrationBook(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := NewClient(cfg.Token, WithBaseURL(cfg.BaseURL))
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 	got, err := client.Book(context.Background(), "aapl")
 	if err != nil {
 		log.Fatalf("Error getting book: %s", err)
@@ -107,8 +109,8 @@ func TestIntegrationHistoricalPrices(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := NewClient(cfg.Token, WithBaseURL(cfg.BaseURL))
-	timeframe := OneMonthHistorical
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	timeframe := iex.OneMonthHistorical
 	histPrices, err := client.HistoricalPrices(context.Background(), "aapl", timeframe, nil)
 	if err != nil {
 		log.Fatalf("Error getting historical prices: %s", err)
