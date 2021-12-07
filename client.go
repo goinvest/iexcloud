@@ -37,21 +37,24 @@ type Error struct {
 	Message    string
 }
 
+// ClientOption applies an option to the client.
+type ClientOption func(*Client)
+
 // Error implements the error interface
 func (e Error) Error() string {
 	return fmt.Sprintf("%d %s: %s", e.StatusCode, http.StatusText(e.StatusCode), e.Message)
 }
 
 // NewClient creates a client with the given authorization token.
-func NewClient(token string, options ...func(*Client)) *Client {
+func NewClient(token string, options ...ClientOption) *Client {
 	client := &Client{
 		token:      token,
 		httpClient: &http.Client{Timeout: time.Second * 60},
 	}
 
 	// apply options
-	for _, option := range options {
-		option(client)
+	for _, applyOption := range options {
+		applyOption(client)
 	}
 
 	// set default values
@@ -63,14 +66,14 @@ func NewClient(token string, options ...func(*Client)) *Client {
 }
 
 // WithHTTPClient sets the http.Client for a new IEX Client
-func WithHTTPClient(httpClient *http.Client) func(*Client) {
+func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(client *Client) {
 		client.httpClient = httpClient
 	}
 }
 
 // WithSecureHTTPClient sets a secure http.Client for a new IEX Client
-func WithSecureHTTPClient() func(*Client) {
+func WithSecureHTTPClient() ClientOption {
 	return func(client *Client) {
 		client.httpClient = &http.Client{
 			Transport: &http.Transport{
@@ -86,7 +89,7 @@ func WithSecureHTTPClient() func(*Client) {
 }
 
 // WithBaseURL sets the baseURL for a new IEX Client
-func WithBaseURL(baseURL string) func(*Client) {
+func WithBaseURL(baseURL string) ClientOption {
 	return func(client *Client) {
 		client.baseURL = baseURL
 	}
@@ -278,22 +281,21 @@ func (c Client) AnalystRecommendationsAndTargets(ctx context.Context, symbol str
 // AnnualBalanceSheets returns the specified number of most recent annual
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=annual",
-		url.PathEscape(symbol), num)
-	return c.balanceSheets(ctx, endpoint)
+	return c.BalanceSheets(ctx, symbol, "annual", num)
 }
 
 // QuarterlyBalanceSheets returns the specified number of most recent quarterly
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) QuarterlyBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d?period=quarter",
-		url.PathEscape(symbol), num)
-	return c.balanceSheets(ctx, endpoint)
+	return c.BalanceSheets(ctx, symbol, "quarter", num)
 }
 
-func (c Client) balanceSheets(ctx context.Context, endpoint string) (BalanceSheets, error) {
+// BalanceSheets returns the specified number of most recent balance sheets
+// with the given period (either "annual" or "quarter").
+func (c Client) BalanceSheets(ctx context.Context, symbol, period string, num int) (BalanceSheets, error) {
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d", url.PathEscape(symbol), num)
 	bs := BalanceSheets{}
-	err := c.GetJSON(ctx, endpoint, &bs)
+	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{"period": period}, &bs)
 	return bs, err
 }
 
