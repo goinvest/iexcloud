@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/go-test/deep"
-	"github.com/goinvest/iexcloud/v2/test/fakeiexcloud"
+	"github.com/karagog/testutil-go/fakehttpserver"
 )
 
 const testToken = "not-a-real-token"
@@ -76,7 +76,7 @@ func TestURL(t *testing.T) {
 }
 
 func TestBalanceSheets(t *testing.T) {
-	fakeIEX := fakeiexcloud.FakeIEXCloud{}
+	fakeIEX := fakehttpserver.FakeHTTPServer{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
 	defer s.Close()
 	client := NewClient(testToken, withBaseAddress(s))
@@ -227,7 +227,7 @@ func TestBalanceSheets(t *testing.T) {
 }
 
 func TestBook(t *testing.T) {
-	fakeIEX := fakeiexcloud.FakeIEXCloud{}
+	fakeIEX := fakehttpserver.FakeHTTPServer{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
 	defer s.Close()
 	client := NewClient(testToken, withBaseAddress(s))
@@ -332,7 +332,7 @@ func TestBook(t *testing.T) {
 }
 
 func TestHistoricalPrices(t *testing.T) {
-	fakeIEX := fakeiexcloud.FakeIEXCloud{}
+	fakeIEX := fakehttpserver.FakeHTTPServer{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
 	defer s.Close()
 	client := NewClient(testToken, withBaseAddress(s))
