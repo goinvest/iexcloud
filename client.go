@@ -14,7 +14,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -178,11 +177,11 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 
 // Returns an URL object that points to the endpoint with optional query parameters.
 func (c *Client) url(endpoint string, queryParams map[string]string) (*url.URL, error) {
-	u, err := url.Parse(c.baseURL)
+	u, err := url.Parse(c.baseURL + endpoint)
 	if err != nil {
 		return nil, err
 	}
-	u.Path = path.Join(u.Path, endpoint)
+
 	if queryParams != nil {
 		q := u.Query()
 		for k, v := range queryParams {
