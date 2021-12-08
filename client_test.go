@@ -24,6 +24,57 @@ func withBaseAddress(s *httptest.Server) ClientOption {
 	return WithBaseURL("http://" + s.Listener.Addr().String())
 }
 
+func TestURL(t *testing.T) {
+	baseAddr := "http://base"
+	c := NewClient("", WithBaseURL(baseAddr))
+
+	for _, tc := range []struct {
+		name        string
+		endpoint    string
+		queryParams map[string]string
+
+		wantURL string
+		wantErr bool
+	}{
+		{
+			name:     "nominal",
+			endpoint: "/path",
+			wantURL:  "http://base/path",
+		},
+		{
+			name:        "nominal w/ query params",
+			endpoint:    "/path",
+			queryParams: map[string]string{"param1": "value1", "param2": "value2"},
+			wantURL:     "http://base/path?param1=value1&param2=value2",
+		},
+		{
+			name:        "query params baked into endpoint",
+			endpoint:    "/path?param1=value1",
+			queryParams: map[string]string{"param2": "value2"},
+			wantURL:     "http://base/path?param1=value1&param2=value2",
+		},
+		{
+			name:     "error",
+			endpoint: "not a valid url",
+			wantErr:  true,
+		},
+	} {
+		u, err := c.url(tc.endpoint, tc.queryParams)
+		if err != nil {
+			if tc.wantErr {
+				continue // error was expected
+			}
+			t.Fatalf("%s: %s", tc.name, err)
+		}
+		if tc.wantErr {
+			t.Errorf("%s: Got nil error, want error", tc.name)
+		}
+		if got, want := u.String(), tc.wantURL; got != want {
+			t.Fatalf("%s: Got %v, want %v", tc.name, got, want)
+		}
+	}
+}
+
 func TestBalanceSheets(t *testing.T) {
 	fakeIEX := fakeiexcloud.FakeIEXCloud{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
