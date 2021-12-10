@@ -675,22 +675,22 @@ func (c Client) financialsAsReported(ctx context.Context, endpoint string) (Fina
 // AnnualIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) AnnualIncomeStatements(ctx context.Context, symbol string, num int) (IncomeStatements, error) {
-	endpoint := fmt.Sprintf("/stock/%s/income/%d?period=annual",
-		url.PathEscape(symbol), num)
-	return c.incomeStatements(ctx, endpoint)
+	return c.IncomeStatements(ctx, symbol, "annual", num)
 }
 
 // QuarterlyIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
 func (c Client) QuarterlyIncomeStatements(ctx context.Context, symbol string, num int) (IncomeStatements, error) {
-	endpoint := fmt.Sprintf("/stock/%s/income/%d?period=quarter",
-		url.PathEscape(symbol), num)
-	return c.incomeStatements(ctx, endpoint)
+	return c.IncomeStatements(ctx, symbol, "quarter", num)
 }
 
-func (c Client) incomeStatements(ctx context.Context, endpoint string) (IncomeStatements, error) {
+// IncomeStatements returns the specified number of most recent
+// income statements from the IEX Cloud endpoint for the given stock symbol and period.
+func (c Client) IncomeStatements(ctx context.Context, symbol string, period string, num int) (IncomeStatements, error) {
+	endpoint := fmt.Sprintf("/stock/%s/income/%d",
+		url.PathEscape(symbol), num)
 	is := IncomeStatements{}
-	err := c.GetJSON(ctx, endpoint, &is)
+	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{"period": period}, &is)
 	return is, err
 }
 
