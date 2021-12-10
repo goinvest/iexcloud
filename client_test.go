@@ -331,7 +331,7 @@ func TestIncomeStatements(t *testing.T) {
 		fakeIEX.ResponseJSON = tc.responseJSON
 		fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
 
-		incomeStatements, err := client.IncomeStatements(context.TODO(), tc.requestSymbol, tc.requestPeriod, tc.requestNumber)
+		incomeStatements, err := client.incomeStatements(context.TODO(), tc.requestSymbol, tc.requestPeriod, tc.requestNumber)
 		if err != nil {
 			if tc.wantErr {
 				return // error was expected
