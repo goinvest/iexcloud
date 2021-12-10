@@ -1293,8 +1293,10 @@ func (c Client) NextTradingDays(ctx context.Context, numDays int) ([]TradeHolida
 func (c Client) NextHoliday(ctx context.Context) (TradeHolidayDate, error) {
 	r := []TradeHolidayDate{}
 	endpoint := "/ref-data/us/dates/holiday/next/1"
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r[0], err
+	if err := c.GetJSON(ctx, endpoint, &r); err != nil {
+		return TradeHolidayDate{}, err
+	}
+	return r[0], nil
 }
 
 // NextHolidays returns the dates of the next holidays for the given
