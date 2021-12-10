@@ -226,6 +226,135 @@ func TestBalanceSheets(t *testing.T) {
 	}
 }
 
+func TestIncomeStatements(t *testing.T) {
+	fakeIEX := fakehttpserver.FakeHTTPServer{}
+	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
+	defer s.Close()
+	client := NewClient(testToken, withBaseAddress(s))
+
+	const nominalIncomeStatementsJSON = `{
+		"symbol": "AAPL",
+		"income": [
+			{
+				"reportDate": "2020-10-21",
+				"filingType": "10-K",
+				"fiscalDate": "2020-09-13",
+				"fiscalQuarter": 4,
+				"fiscalYear": 2010,
+				"currency": "USD",
+				"totalRevenue": 62681000000,
+				"costOfRevenue": 39086000000,
+				"grossProfit": 23595000000,
+				"researchAndDevelopment": 3750000000,
+				"sellingGeneralAndAdmin": 4216000000,
+				"operatingExpense": 47052000000,
+				"operatingIncome": 15629000000,
+				"otherIncomeExpenseNet": 792000000,
+				"ebit": 15629000000,
+				"interestIncome": 868000000,
+				"pretaxIncome": 16421000000,
+				"incomeTax": 2296000000,
+				"minorityInterest": 0,
+				"netIncome": 14125000000,
+				"netIncomeBasic": 14125000000
+			}
+		]
+	}`
+
+	var nominalIncomeStatements = IncomeStatements{
+		Symbol: "AAPL",
+		Statements: []IncomeStatement{
+			{
+				ReportDate:             Date(time.Date(2020, 10, 17, 0, 0, 0, 0, time.UTC)),
+				FiscalDate:             Date(time.Date(2020, 9, 13, 0, 0, 0, 0, time.UTC)),
+				Currency:               "USD",
+				MinorityInterest:       0,
+				TotalRevenue:           62681000000,
+				CostOfRevenue:          39086000000,
+				GrossProfit:            23595000000,
+				ResearchAndDevelopment: 3750000000,
+				SellingGeneralAndAdmin: 4216000000,
+				OperatingExpense:       47052000000,
+				OperatingIncome:        15629000000,
+				OtherIncomeExpenseNet:  792000000,
+				EBIT:                   15629000000,
+				InterestIncome:         868000000,
+				PretaxIncome:           16421000000,
+				IncomeTax:              2296000000,
+				NetIncome:              14125000000,
+				NetIncomeBasic:         14125000000,
+			},
+		},
+	}
+
+	testCases := []struct {
+		name string
+
+		// These parameters will be used in the request.
+		requestSymbol string
+		requestPeriod string // annual/quarter
+		requestNumber int
+
+		// These configure the fake response.
+		responseJSON       string
+		responseHTTPStatus int
+
+		// These set our expectations for the test result.
+		wantRequestPath      string
+		wantQueryParams      map[string][]string
+		wantIncomeStatements IncomeStatements
+		wantErr              bool
+	}{
+		{
+			name:                 "nominal - annual",
+			requestSymbol:        "aapl",
+			requestPeriod:        "annual",
+			requestNumber:        1,
+			responseJSON:         nominalIncomeStatementsJSON,
+			wantRequestPath:      "/stock/aapl/income/1",
+			wantQueryParams:      map[string][]string{"token": {testToken}, "period": {"annual"}},
+			wantIncomeStatements: nominalIncomeStatements,
+		},
+		{
+			name:                 "nominal - quarterly",
+			requestSymbol:        "goog",
+			requestPeriod:        "quarter",
+			requestNumber:        2,
+			responseJSON:         nominalIncomeStatementsJSON,
+			wantRequestPath:      "/stock/goog/income/2",
+			wantQueryParams:      map[string][]string{"token": {testToken}, "period": {"quarter"}},
+			wantIncomeStatements: nominalIncomeStatements,
+		},
+	}
+
+	for _, tc := range testCases {
+		fakeIEX.ResponseJSON = tc.responseJSON
+		fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
+
+		incomeStatements, err := client.IncomeStatements(context.TODO(), tc.requestSymbol, tc.requestPeriod, tc.requestNumber)
+		if err != nil {
+			if tc.wantErr {
+				return // error was expected
+			}
+			t.Fatalf("%s: Error getting balance sheets: %s", tc.name, err)
+		}
+		if tc.wantErr {
+			t.Fatalf("%s: Got nil error, want error", tc.name)
+		}
+
+		if diff := deep.Equal(incomeStatements, tc.wantIncomeStatements); diff != nil {
+			t.Fatalf("%s: Got unexpected values:\n%s", tc.name, diff)
+		}
+
+		if got, want := fakeIEX.LastURLReceived.Path, tc.wantRequestPath; got != want {
+			t.Errorf("%s: Got %q, want %q", tc.name, got, want)
+		}
+		if diff := deep.Equal(fakeIEX.LastURLReceived.Query(), url.Values(tc.wantQueryParams)); diff != nil {
+			t.Fatalf("%s: Got unexpected values:\n%s", tc.name, diff)
+		}
+	}
+}
+
 func TestBook(t *testing.T) {
 	fakeIEX := fakehttpserver.FakeHTTPServer{}
 	s := httptest.NewServer(http.HandlerFunc(fakeIEX.Handle))
