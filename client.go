@@ -18,6 +18,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golang/glog"
 	"github.com/google/go-querystring/query"
 )
 
@@ -155,6 +156,7 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
+	glog.V(1).Infof("Sending request to IEX Cloud: %v", req.URL.String())
 	resp, err := c.httpClient.Do(req.WithContext(ctx))
 	if err != nil {
 		return []byte{}, err
