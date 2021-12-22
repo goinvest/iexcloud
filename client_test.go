@@ -533,6 +533,16 @@ func TestHistoricalPrices(t *testing.T) {
 			}},
 		},
 		{
+			// Sometimes the historical data returns a floating point number for some reason, which
+			// can cause our JSON parsing to fail if we're not ready for it.
+			name:             "corner case - floating point volume",
+			requestSymbol:    "aapl",
+			requestTimeframe: "1y",
+			responseJSON:     `[{ "volume": 118023116.2342521 }]`,
+			wantRequestPath:  "/stock/aapl/chart/1y",
+			wantPrices:       []HistoricalDataPoint{{Volume: 118023116.2342521}},
+		},
+		{
 			name:             "invalid time frame",
 			requestTimeframe: "asdf",
 			responseJSON:     "",
