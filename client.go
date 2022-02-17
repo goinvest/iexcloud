@@ -19,13 +19,16 @@ import (
 	"time"
 
 	"github.com/google/go-querystring/query"
+	sse "github.com/r3labs/sse/v2"
 )
 
 const apiURL = "https://cloud.iexapis.com/v1"
+const sseURL = "https://cloud-sse.iexapis.com/v1"
 
 // Client models a client to consume the IEX Cloud API.
 type Client struct {
 	baseURL    string
+	sseBaseURL string
 	token      string
 	httpClient *http.Client
 }
@@ -49,16 +52,15 @@ func NewClient(token string, options ...ClientOption) *Client {
 	client := &Client{
 		token:      token,
 		httpClient: &http.Client{Timeout: time.Second * 60},
+
+		// Set default values, which may be overridden by user options.
+		baseURL:    apiURL,
+		sseBaseURL: sseURL,
 	}
 
 	// apply options
 	for _, applyOption := range options {
 		applyOption(client)
-	}
-
-	// set default values
-	if client.baseURL == "" {
-		client.baseURL = apiURL
 	}
 
 	return client
@@ -91,6 +93,13 @@ func WithSecureHTTPClient() ClientOption {
 func WithBaseURL(baseURL string) ClientOption {
 	return func(client *Client) {
 		client.baseURL = baseURL
+	}
+}
+
+// WithSSEBaseURL sets the sseBaseURL for a new IEX Client
+func WithSSEBaseURL(url string) ClientOption {
+	return func(client *Client) {
+		client.sseBaseURL = url
 	}
 }
 
@@ -486,6 +495,33 @@ func (c Client) Quote(ctx context.Context, symbol string) (Quote, error) {
 	endpoint := fmt.Sprintf("/stock/%s/quote", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
+}
+
+// QuoteStream streams quote data for the given symbols, until the context is finished.
+// If UTP is true, then you must have an outstanding agreement for UTP otherwise
+// the endpoint will fail with "unauthorized".
+func (c Client) QuoteStream(ctx context.Context, symbols []string, utp bool, callback func(quotes []Quote)) error {
+	var escapedSymbols []string
+	for _, s := range symbols {
+		escapedSymbols = append(escapedSymbols, url.PathEscape(s))
+	}
+	path := "stocksUSNoUTP"
+	if utp {
+		path = "stocksUS"
+	}
+	endpoint := fmt.Sprintf("%s/%s?symbols=%s&token=%s", c.sseBaseURL, path, strings.Join(escapedSymbols, ","), c.token)
+
+	// This blocks until either the context is done or the stream is ended.
+	return sse.NewClient(endpoint).SubscribeWithContext(ctx, "", func(ev *sse.Event) {
+		var quotes []Quote
+		if err := json.Unmarshal(ev.Data, &quotes); err != nil {
+			fmt.Printf("Error unmarshaling SSE data: %s", err)
+			return
+		}
+		if len(quotes) > 0 {
+			callback(quotes)
+		}
+	})
 }
 
 // BatchQuote returns the quote data for up to 100 stock symbols.
