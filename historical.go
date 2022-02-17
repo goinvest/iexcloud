@@ -117,7 +117,7 @@ type HistoricalDataPoint struct {
 	Low            float64 `json:"low"`
 	Open           float64 `json:"open"`
 	Symbol         string  `json:"symbol"`
-	Volume         int     `json:"volume"`
+	Volume         float64 `json:"volume"`
 	ID             string  `json:"id"`
 	Key            string  `json:"key"`
 	Subkey         string  `json:"subkey"`
