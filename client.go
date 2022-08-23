@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2020 The iexcloud developers. All rights reserved.
+// Copyright (c) 2019-2022 The iexcloud developers. All rights reserved.
 // Project site: https://github.com/goinvest/iexcloud
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
@@ -10,7 +10,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -172,7 +172,7 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	// Even if GET didn't return an error, check the status code to make sure
 	// everything was ok.
 	if resp.StatusCode != http.StatusOK {
-		b, err := ioutil.ReadAll(resp.Body)
+		b, err := io.ReadAll(resp.Body)
 		msg := ""
 
 		if err == nil {
@@ -181,7 +181,7 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 
 		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
 	}
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 // Returns an URL object that points to the endpoint with optional query parameters.

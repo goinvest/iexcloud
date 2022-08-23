@@ -10,7 +10,7 @@ package iex_test
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"log"
 	"math"
 	"os"
@@ -21,8 +21,8 @@ import (
 	iex "github.com/goinvest/iexcloud/v2"
 )
 
-// Config contains the configuration information neecded to program and test
-// the adapaters.
+// Config contains the configuration information needed to program and test the
+// adapaters.
 type Config struct {
 	Token   string
 	BaseURL string
@@ -39,7 +39,7 @@ func readConfig(configFile string) (Config, error) {
 		return cfg, err
 	}
 	defer f.Close()
-	buf, err := ioutil.ReadAll(f)
+	buf, err := io.ReadAll(f)
 	if err != nil {
 		return cfg, err
 	}
