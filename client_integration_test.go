@@ -22,6 +22,8 @@ import (
 	iex "github.com/goinvest/iexcloud/v2"
 )
 
+var client *iex.Client
+
 // Config contains the configuration information needed to program and test the
 // adapaters.
 type Config struct {
@@ -48,45 +50,34 @@ func readConfig(configFile string) (Config, error) {
 	return cfg, err
 }
 
-func TestIntegrationTests(t *testing.T) {
+func TestMain(m *testing.M) {
 	cfg, err := readConfig("config_test.toml")
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := iex.NewClient(
+	client = iex.NewClient(
 		cfg.Token,
 		iex.WithBaseURL(cfg.BaseURL),
-		iex.WithRateLimiter(time.Second, 10),
+		iex.WithRateLimiter(150*time.Millisecond, 1),
 	)
-	t.Run("Annual Balance Sheet", testIntegrationAnnualBalanceSheets(client))
+	m.Run()
 }
 
-func testIntegrationAnnualBalanceSheets(client *iex.Client) func(*testing.T) {
-	return func(t *testing.T) {
-		bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
-		if err != nil {
-			log.Fatalf("Error getting annual balance sheets: %s", err)
-		}
-		assertString(t, "symbol", bs.Symbol, "AAPL")
-		assertInt(t, "number of years", len(bs.Statements), 4)
-		y1 := bs.Statements[0]
-		assertString(t, "filing type", y1.FilingType, "10-K")
-		assertInt(t, "fiscal quarter", y1.FiscalQuarter, 0)
-		isPositiveInt(t, "fiscal year", y1.FiscalYear)
-		assertString(t, "currency", y1.Currency, "USD")
-	}
-}
-
-func testIntegrationQuarterlyBalanceSheets(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
+func TestIntegrationAnnualBalanceSheets(t *testing.T) {
+	bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
 	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
+		log.Fatalf("Error getting annual balance sheets: %s", err)
 	}
-	client := iex.NewClient(
-		cfg.Token,
-		iex.WithBaseURL(cfg.BaseURL),
-		iex.WithRateLimiter(time.Second, 10),
-	)
+	assertString(t, "symbol", bs.Symbol, "AAPL")
+	assertInt(t, "number of years", len(bs.Statements), 4)
+	y1 := bs.Statements[0]
+	assertString(t, "filing type", y1.FilingType, "10-K")
+	assertInt(t, "fiscal quarter", y1.FiscalQuarter, 0)
+	isPositiveInt(t, "fiscal year", y1.FiscalYear)
+	assertString(t, "currency", y1.Currency, "USD")
+}
+
+func TestIntegrationQuarterlyBalanceSheets(t *testing.T) {
 	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 4)
 	if err != nil {
 		log.Fatalf("Error getting balance sheets: %s", err)
@@ -100,16 +91,7 @@ func testIntegrationQuarterlyBalanceSheets(t *testing.T) {
 	assertString(t, "currency", q1.Currency, "USD")
 }
 
-func testIntegrationAnnualIncomeStatements(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(
-		cfg.Token,
-		iex.WithRateLimiter(time.Second, 10),
-		iex.WithBaseURL(cfg.BaseURL),
-	)
+func TestIntegrationAnnualIncomeStatements(t *testing.T) {
 	is, err := client.AnnualIncomeStatements(context.Background(), "f", 4)
 	if err != nil {
 		log.Fatalf("Error getting annual income statements: %s", err)
@@ -126,16 +108,7 @@ func testIntegrationAnnualIncomeStatements(t *testing.T) {
 	assertString(t, "currency", y2.Currency, "USD")
 }
 
-func testIntegrationQuarterlyIncomeStatements(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(
-		cfg.Token,
-		iex.WithRateLimiter(time.Second, 10),
-		iex.WithBaseURL(cfg.BaseURL),
-	)
+func TestIntegrationQuarterlyIncomeStatements(t *testing.T) {
 	is, err := client.QuarterlyIncomeStatements(context.Background(), "f", 4)
 	if err != nil {
 		log.Fatalf("Error getting quarterly income statements: %s", err)
@@ -151,16 +124,7 @@ func testIntegrationQuarterlyIncomeStatements(t *testing.T) {
 	assertString(t, "currency", q3.Currency, "USD")
 }
 
-func testIntegrationBook(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(
-		cfg.Token,
-		iex.WithRateLimiter(time.Second, 10),
-		iex.WithBaseURL(cfg.BaseURL),
-	)
+func TestIntegrationBook(t *testing.T) {
 	got, err := client.Book(context.Background(), "aapl")
 	if err != nil {
 		log.Fatalf("Error getting book: %s", err)
@@ -175,16 +139,7 @@ func testIntegrationBook(t *testing.T) {
 	isPositiveFloat64(t, "latest price", got.Quote.LatestPrice)
 }
 
-func testIntegrationHistoricalPrices(t *testing.T) {
-	cfg, err := readConfig("config_test.toml")
-	if err != nil {
-		log.Fatalf("Error reading config file: %s", err)
-	}
-	client := iex.NewClient(
-		cfg.Token,
-		iex.WithRateLimiter(time.Second, 10),
-		iex.WithBaseURL(cfg.BaseURL),
-	)
+func TestIntegrationHistoricalPrices(t *testing.T) {
 	timeframe := iex.OneMonthHistorical
 	histPrices, err := client.HistoricalPrices(context.Background(), "aapl", timeframe, nil)
 	if err != nil {
