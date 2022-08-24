@@ -43,13 +43,36 @@ Contributions are welcome! To contribute please:
 Prior to submitting a [pull request][], please run:
 
 ```bash
-$ make check
+$ make check    # formats, vets, and unit tests the code
+$ make lint     # lints code using staticcheck
 ```
 
 To update and view the test coverage report:
 
 ```bash
 $ make cover
+```
+
+#### Integration Testing
+
+To perform the integration tests run:
+
+```bash
+$ make int
+```
+
+Prior to doing so, you'll need to create a `config_test.toml` file with your IEX
+Cloud API Token and the base URL. It is recommended to use your sandbox token
+and the sandbox URL, so as to not be charged credits when running the
+integration tests. Sandbox tokens start with `Tpk_` instead of `pk_` for
+non-sandbox tokens. Using the sandbox does make integration a little more
+difficult, since results are scrambled in sandbox mode.
+
+Example `config_test.toml` file:
+
+```toml
+Token = "Tpk_your_iexcloud_test_token"
+BaseURL = "https://sandbox.iexapis.com/v1"
 ```
 
 ## License
