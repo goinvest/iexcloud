@@ -247,7 +247,10 @@ type IncomeStatements struct {
 // IncomeStatement models one income statement.
 type IncomeStatement struct {
 	ReportDate             Date    `json:"reportDate"`
+	FilingType             string  `json:"filingType"`
 	FiscalDate             Date    `json:"fiscalDate"`
+	FiscalQuarter          int     `json:"fiscalQuarter"`
+	FiscalYear             int     `json:"fiscalYear"`
 	Currency               string  `json:"currency"`
 	TotalRevenue           float64 `json:"totalRevenue"`
 	CostOfRevenue          float64 `json:"costOfRevenue"`

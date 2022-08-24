@@ -240,7 +240,7 @@ func TestIncomeStatements(t *testing.T) {
 				"filingType": "10-K",
 				"fiscalDate": "2020-09-13",
 				"fiscalQuarter": 4,
-				"fiscalYear": 2010,
+				"fiscalYear": 2020,
 				"currency": "USD",
 				"totalRevenue": 62681000000,
 				"costOfRevenue": 39086000000,
@@ -267,6 +267,9 @@ func TestIncomeStatements(t *testing.T) {
 			{
 				ReportDate:             Date(time.Date(2020, 10, 17, 0, 0, 0, 0, time.UTC)),
 				FiscalDate:             Date(time.Date(2020, 9, 13, 0, 0, 0, 0, time.UTC)),
+				FilingType:             "10-K",
+				FiscalQuarter:          4,
+				FiscalYear:             2020,
 				Currency:               "USD",
 				MinorityInterest:       0,
 				TotalRevenue:           62681000000,
