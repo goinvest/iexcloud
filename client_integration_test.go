@@ -16,6 +16,7 @@ import (
 	"os"
 	"sort"
 	"testing"
+	"time"
 
 	"github.com/BurntSushi/toml"
 	iex "github.com/goinvest/iexcloud/v2"
@@ -47,50 +48,119 @@ func readConfig(configFile string) (Config, error) {
 	return cfg, err
 }
 
-func TestIntegrationAnnualBalanceSheets(t *testing.T) {
+func TestIntegrationTests(t *testing.T) {
 	cfg, err := readConfig("config_test.toml")
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-	bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
-	if err != nil {
-		log.Fatalf("Error getting balance sheets: %s", err)
-	}
-	assertString(t, "symbol", bs.Symbol, "AAPL")
-	assertInt(t, "number of years", len(bs.Statements), 4)
-	q1 := bs.Statements[0]
-	assertString(t, "filing type", q1.FilingType, "10-K")
-	assertInt(t, "fiscal quarter", q1.FiscalQuarter, 0)
-	isPositiveInt(t, "fiscal year", q1.FiscalYear)
-	assertString(t, "currency", q1.Currency, "USD")
+	client := iex.NewClient(
+		cfg.Token,
+		iex.WithBaseURL(cfg.BaseURL),
+		iex.WithRateLimiter(time.Second, 10),
+	)
+	t.Run("Annual Balance Sheet", testIntegrationAnnualBalanceSheets(client))
 }
 
-func TestIntegrationQuarterlyBalanceSheets(t *testing.T) {
+func testIntegrationAnnualBalanceSheets(client *iex.Client) func(*testing.T) {
+	return func(t *testing.T) {
+		bs, err := client.AnnualBalanceSheets(context.Background(), "aapl", 4)
+		if err != nil {
+			log.Fatalf("Error getting annual balance sheets: %s", err)
+		}
+		assertString(t, "symbol", bs.Symbol, "AAPL")
+		assertInt(t, "number of years", len(bs.Statements), 4)
+		y1 := bs.Statements[0]
+		assertString(t, "filing type", y1.FilingType, "10-K")
+		assertInt(t, "fiscal quarter", y1.FiscalQuarter, 0)
+		isPositiveInt(t, "fiscal year", y1.FiscalYear)
+		assertString(t, "currency", y1.Currency, "USD")
+	}
+}
+
+func testIntegrationQuarterlyBalanceSheets(t *testing.T) {
 	cfg, err := readConfig("config_test.toml")
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
-	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 2)
+	client := iex.NewClient(
+		cfg.Token,
+		iex.WithBaseURL(cfg.BaseURL),
+		iex.WithRateLimiter(time.Second, 10),
+	)
+	bs, err := client.QuarterlyBalanceSheets(context.Background(), "aapl", 4)
 	if err != nil {
 		log.Fatalf("Error getting balance sheets: %s", err)
 	}
 	assertString(t, "symbol", bs.Symbol, "AAPL")
-	assertInt(t, "number of quarters", len(bs.Statements), 2)
+	assertInt(t, "number of quarters", len(bs.Statements), 4)
 	q1 := bs.Statements[0]
-	assertString(t, "filing type", q1.FilingType, "10-K")
+	assertString(t, "filing type", q1.FilingType, "10-Q")
 	isPositiveInt(t, "fiscal quarter", q1.FiscalQuarter)
 	isPositiveInt(t, "fiscal year", q1.FiscalYear)
 	assertString(t, "currency", q1.Currency, "USD")
 }
 
-func TestIntegrationBook(t *testing.T) {
+func testIntegrationAnnualIncomeStatements(t *testing.T) {
 	cfg, err := readConfig("config_test.toml")
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	client := iex.NewClient(
+		cfg.Token,
+		iex.WithRateLimiter(time.Second, 10),
+		iex.WithBaseURL(cfg.BaseURL),
+	)
+	is, err := client.AnnualIncomeStatements(context.Background(), "f", 4)
+	if err != nil {
+		log.Fatalf("Error getting annual income statements: %s", err)
+	}
+	assertString(t, "symbol", is.Symbol, "F")
+	if len(is.Statements) != 4 {
+		t.Errorf("\ngot = %d %s\nwant = %d", len(is.Statements), "number of years", 4)
+		t.FailNow()
+	}
+	assertInt(t, "number of years", len(is.Statements), 4)
+	y2 := is.Statements[1]
+	assertString(t, "filing type", y2.FilingType, "10-K")
+	isPositiveInt(t, "fiscal year", y2.FiscalYear)
+	assertString(t, "currency", y2.Currency, "USD")
+}
+
+func testIntegrationQuarterlyIncomeStatements(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(
+		cfg.Token,
+		iex.WithRateLimiter(time.Second, 10),
+		iex.WithBaseURL(cfg.BaseURL),
+	)
+	is, err := client.QuarterlyIncomeStatements(context.Background(), "f", 4)
+	if err != nil {
+		log.Fatalf("Error getting quarterly income statements: %s", err)
+	}
+	assertString(t, "symbol", is.Symbol, "F")
+	if len(is.Statements) != 4 {
+		t.Errorf("\ngot = %d %s\nwant = %d", len(is.Statements), "number of quarters", 4)
+		t.FailNow()
+	}
+	q3 := is.Statements[2]
+	isPositiveInt(t, "fiscal quarter", q3.FiscalQuarter)
+	isPositiveInt(t, "fiscal year", q3.FiscalYear)
+	assertString(t, "currency", q3.Currency, "USD")
+}
+
+func testIntegrationBook(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(
+		cfg.Token,
+		iex.WithRateLimiter(time.Second, 10),
+		iex.WithBaseURL(cfg.BaseURL),
+	)
 	got, err := client.Book(context.Background(), "aapl")
 	if err != nil {
 		log.Fatalf("Error getting book: %s", err)
@@ -98,18 +168,23 @@ func TestIntegrationBook(t *testing.T) {
 	assertString(t, "symbol", got.Quote.Symbol, "AAPL")
 	assertString(t, "company name", got.Quote.CompanyName, "Apple Inc")
 	assertScrambledString(t, "primary exchange", got.Quote.PrimaryExchange, "NASDAQ")
-	assertString(t, "calculation price", got.Quote.CalculationPrice, "close")
-	isPositiveFloat64(t, "open", got.Quote.Open)
+	assertStringFromOptions(t, "calculation price", got.Quote.CalculationPrice,
+		[]string{"tops", "sip", "previousclose", "close", "iexlasttrade"})
+	isNotNegativeFloat64(t, "open", got.Quote.Open)
 	assertScrambledString(t, "open source", got.Quote.OpenSource, "official")
 	isPositiveFloat64(t, "latest price", got.Quote.LatestPrice)
 }
 
-func TestIntegrationHistoricalPrices(t *testing.T) {
+func testIntegrationHistoricalPrices(t *testing.T) {
 	cfg, err := readConfig("config_test.toml")
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	client := iex.NewClient(
+		cfg.Token,
+		iex.WithRateLimiter(time.Second, 10),
+		iex.WithBaseURL(cfg.BaseURL),
+	)
 	timeframe := iex.OneMonthHistorical
 	histPrices, err := client.HistoricalPrices(context.Background(), "aapl", timeframe, nil)
 	if err != nil {
@@ -121,7 +196,7 @@ func TestIntegrationHistoricalPrices(t *testing.T) {
 	isPositiveFloat64(t, "low", got.Low)
 	isPositiveFloat64(t, "open", got.Open)
 	assertString(t, "symbol", got.Symbol, "AAPL")
-	isPositiveInt(t, "volume", got.Volume)
+	isPositiveFloat64(t, "volume", got.Volume)
 	assertScrambledString(t, "id", got.ID, "HISTORICAL_PRICES")
 	assertScrambledString(t, "key", got.Key, "AAPL")
 	assertString(t, "subkey", got.Subkey, "")
@@ -129,25 +204,38 @@ func TestIntegrationHistoricalPrices(t *testing.T) {
 
 func assertInt(t *testing.T, label string, got, want int) {
 	if got != want {
-		t.Errorf("\t got = %d %s\n\t\twant = %d", got, label, want)
+		t.Errorf("\ngot = %d %s\nwant = %d", got, label, want)
 	}
 }
 
 func assertFloat64(t *testing.T, label string, got, want, tolerance float64) {
 	if diff := math.Abs(want - got); diff >= tolerance {
-		t.Errorf("\t got = %f %s\n\t\t\twant = %f", got, label, want)
+		t.Errorf("\ngot = %f %s\ntwant = %f", got, label, want)
 	}
 }
 
 func assertBool(t *testing.T, label string, got, want bool) {
 	if got != want {
-		t.Errorf("\t got = %t %s\n\t\t\twant = %t", got, label, want)
+		t.Errorf("\ngot = %t %s\nwant = %t", got, label, want)
 	}
 }
 
 func assertString(t *testing.T, label string, got, want string) {
 	if got != want {
-		t.Errorf("\t got = %s %s\n\t\t\twant = %s", got, label, want)
+		t.Errorf("\ngot = %s %s\nwant = %s", got, label, want)
+	}
+}
+
+func assertStringFromOptions(t *testing.T, label string, got string, options []string) {
+	isAnOption := false
+	for _, option := range options {
+		if got == option {
+			isAnOption = true
+			break
+		}
+	}
+	if isAnOption == false {
+		t.Errorf("\ngot = %s %s\nwant one of %s", got, label, options)
 	}
 }
 
@@ -157,25 +245,31 @@ func assertScrambledString(t *testing.T, label string, got, want string) {
 	gotSorted := sortString(got)
 	wantSorted := sortString(want)
 	if gotSorted != wantSorted {
-		t.Errorf("\t got = %s %s\n\t\t\twant = %s", got, label, want)
+		t.Errorf("\n got = %s %s\nwant = %s", got, label, want)
 	}
 }
 
 func isPositiveInt(t *testing.T, label string, got int) {
 	if got <= 0 {
-		t.Errorf("\t got = %d %s\n\t\twant int > 0", got, label)
+		t.Errorf("\n got = %d %s\nwant int > 0", got, label)
 	}
 }
 
 func isPositiveFloat64(t *testing.T, label string, got float64) {
 	if got <= 0.0 {
-		t.Errorf("\t got = %f %s\n\t\twant float64 > 0.0", got, label)
+		t.Errorf("\n got = %f %s\nwant float64 > 0.0", got, label)
+	}
+}
+
+func isNotNegativeFloat64(t *testing.T, label string, got float64) {
+	if got < 0.0 {
+		t.Errorf("\n got = %f %s\nwant float64 >= 0.0", got, label)
 	}
 }
 
 func isString(t *testing.T, label string, got string) {
 	if got == "" {
-		t.Errorf("\t got = %s %s\n\t\twant non-empty string", got, label)
+		t.Errorf("\n got = %s %s\nwant non-empty string", got, label)
 	}
 }
 
