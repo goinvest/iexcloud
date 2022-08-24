@@ -6,6 +6,7 @@ require (
 	github.com/google/go-querystring v1.1.0
 	github.com/karagog/testutil-go v0.0.0-20211208183738-8c37cec26dcb
 	github.com/r3labs/sse/v2 v2.7.5
+	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9
 )
 
 go 1.14

@@ -20,6 +20,7 @@ import (
 
 	"github.com/google/go-querystring/query"
 	sse "github.com/r3labs/sse/v2"
+	"golang.org/x/time/rate"
 )
 
 const apiURL = "https://cloud.iexapis.com/v1"
@@ -27,10 +28,11 @@ const sseURL = "https://cloud-sse.iexapis.com/v1"
 
 // Client models a client to consume the IEX Cloud API.
 type Client struct {
-	baseURL    string
-	sseBaseURL string
-	token      string
-	httpClient *http.Client
+	baseURL     string
+	sseBaseURL  string
+	token       string
+	httpClient  *http.Client
+	rateLimiter *rate.Limiter
 }
 
 // Error represents an IEX API error
@@ -54,8 +56,9 @@ func NewClient(token string, options ...ClientOption) *Client {
 		httpClient: &http.Client{Timeout: time.Second * 60},
 
 		// Set default values, which may be overridden by user options.
-		baseURL:    apiURL,
-		sseBaseURL: sseURL,
+		baseURL:     apiURL,
+		sseBaseURL:  sseURL,
+		rateLimiter: rate.NewLimiter(rate.Every(time.Second), 100),
 	}
 
 	// apply options
@@ -66,14 +69,14 @@ func NewClient(token string, options ...ClientOption) *Client {
 	return client
 }
 
-// WithHTTPClient sets the http.Client for a new IEX Client
+// WithHTTPClient sets the http.Client for a new IEX Client.
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(client *Client) {
 		client.httpClient = httpClient
 	}
 }
 
-// WithSecureHTTPClient sets a secure http.Client for a new IEX Client
+// WithSecureHTTPClient sets a secure http.Client for a new IEX Client.
 func WithSecureHTTPClient() ClientOption {
 	return func(client *Client) {
 		client.httpClient = &http.Client{
@@ -89,17 +92,24 @@ func WithSecureHTTPClient() ClientOption {
 	}
 }
 
-// WithBaseURL sets the baseURL for a new IEX Client
+// WithBaseURL sets the baseURL for a new IEX Client.
 func WithBaseURL(baseURL string) ClientOption {
 	return func(client *Client) {
 		client.baseURL = baseURL
 	}
 }
 
-// WithSSEBaseURL sets the sseBaseURL for a new IEX Client
+// WithSSEBaseURL sets the sseBaseURL for a new IEX Client.
 func WithSSEBaseURL(url string) ClientOption {
 	return func(client *Client) {
 		client.sseBaseURL = url
+	}
+}
+
+// WithRateLimiter sets the rate limiter.
+func WithRateLimiter(duration time.Duration, numRequests int) ClientOption {
+	return func(client *Client) {
+		client.rateLimiter = rate.NewLimiter(rate.Every(duration), numRequests)
 	}
 }
 
@@ -112,8 +122,10 @@ func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) er
 	return c.FetchURLToJSON(ctx, u, v)
 }
 
-// GetJSONWithQueryParams gets the JSON data from the given endpoint with the query parameters attached.
-func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, queryParams map[string]string, v interface{}) error {
+// GetJSONWithQueryParams gets the JSON data from the given endpoint with the
+// query parameters attached.
+func (c *Client) GetJSONWithQueryParams(ctx context.Context,
+	endpoint string, queryParams map[string]string, v interface{}) error {
 	queryParams["token"] = c.token
 	u, err := c.url(endpoint, queryParams)
 	if err != nil {
@@ -163,6 +175,10 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	req, err := http.NewRequest("GET", address, nil)
 	if err != nil {
 		return []byte{}, err
+	}
+	err = c.rateLimiter.Wait(ctx)
+	if err != nil {
+		return nil, err
 	}
 	resp, err := c.httpClient.Do(req.WithContext(ctx))
 	if err != nil {
