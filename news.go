@@ -15,5 +15,5 @@ type News struct {
 	Related    string    `json:"related"`
 	Image      string    `json:"image"`
 	Language   string    `json:"lang"`
-	HasPaywall bool      `json:"hasPaywall"`
+	HasPaywall bool      `json:"hasPaywall,omitempty"`
 }
