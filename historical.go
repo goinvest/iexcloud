@@ -6,7 +6,6 @@
 package iex
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -112,39 +111,26 @@ type IntradayHistoricalOptions struct {
 
 // HistoricalDataPoint Represents a single historical data point for a stock
 type HistoricalDataPoint struct {
-	Close          float64 `json:"close"`
-	High           float64 `json:"high"`
-	Low            float64 `json:"low"`
-	Open           float64 `json:"open"`
-	Symbol         string  `json:"symbol"`
-	Volume         float64 `json:"volume"`
-	ID             string  `json:"id"`
-	Key            string  `json:"key"`
-	Subkey         string  `json:"subkey"`
-	Date           Date    `json:"date"`
-	Minute         string  `json:"minute"`
-	UOpen          float64 `json:"uOpen"`
-	UClose         float64 `json:"uClose"`
-	UHigh          float64 `json:"uHigh"`
-	ULow           float64 `json:"uLow"`
-	UVolume        int     `json:"uVolume"`
-	Change         float64 `json:"change"`
-	ChangePercent  float64 `json:"changePercent"`
-	Label          string  `json:"label"`
-	ChangeOverTime float64 `json:"changeOverTime"`
-}
-
-// Time merges HistoricalDataPoint's Date and Mintue field and
-// get the exact time. Useful for "5dm" and "1mm" time frames
-func (p HistoricalDataPoint) Time() time.Time {
-	if p.Minute == "" {
-		return time.Time(p.Date)
-	}
-
-	layout := "2006-01-02 15:04"
-	dateStr := fmt.Sprintf("%s %s", p.Date.String(), p.Minute)
-	t, _ := time.Parse(layout, dateStr)
-	return t
+	Close          float64    `json:"close"`
+	High           float64    `json:"high"`
+	Low            float64    `json:"low"`
+	Open           float64    `json:"open"`
+	Symbol         string     `json:"symbol"`
+	Volume         float64    `json:"volume"`
+	ID             string     `json:"id"`
+	Key            string     `json:"key"`
+	Subkey         string     `json:"subkey"`
+	Date           Date       `json:"date"`
+	Minute         HourMinute `json:"minute"`
+	UOpen          float64    `json:"uOpen"`
+	UClose         float64    `json:"uClose"`
+	UHigh          float64    `json:"uHigh"`
+	ULow           float64    `json:"uLow"`
+	UVolume        int        `json:"uVolume"`
+	Change         float64    `json:"change"`
+	ChangePercent  float64    `json:"changePercent"`
+	Label          string     `json:"label"`
+	ChangeOverTime float64    `json:"changeOverTime"`
 }
 
 // IntradayOptions optional query params to pass to intraday endpoint
