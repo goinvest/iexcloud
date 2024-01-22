@@ -50,8 +50,8 @@ func (e Error) Error() string {
 }
 
 // NewClient creates a client with the given authorization token.
-func NewClient(token string, options ...ClientOption) *Client {
-	client := &Client{
+func NewClient(token string, opts ...ClientOption) *Client {
+	c := &Client{
 		token:      token,
 		httpClient: &http.Client{Timeout: time.Second * 60},
 
@@ -61,12 +61,12 @@ func NewClient(token string, options ...ClientOption) *Client {
 		rateLimiter: rate.NewLimiter(rate.Every(time.Second), 100),
 	}
 
-	// apply options
-	for _, applyOption := range options {
-		applyOption(client)
+	// Apply options using the functional option pattern.
+	for _, opt := range opts {
+		opt(c)
 	}
 
-	return client
+	return c
 }
 
 // WithHTTPClient sets the http.Client for a new IEX Client.
@@ -200,7 +200,7 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 	return io.ReadAll(resp.Body)
 }
 
-// Returns an URL object that points to the endpoint with optional query parameters.
+// Returns a URL object that points to the endpoint with optional query parameters.
 func (c *Client) url(endpoint string, queryParams map[string]string) (*url.URL, error) {
 	u, err := url.Parse(c.baseURL + endpoint)
 	if err != nil {
