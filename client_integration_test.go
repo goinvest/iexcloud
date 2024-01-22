@@ -58,7 +58,7 @@ func TestMain(m *testing.M) {
 	client = iex.NewClient(
 		cfg.Token,
 		iex.WithBaseURL(cfg.BaseURL),
-		iex.WithRateLimiter(150*time.Millisecond, 1),
+		iex.WithRateLimiter(200*time.Millisecond, 1),
 	)
 	m.Run()
 }
@@ -85,7 +85,33 @@ func TestIntegrationQuarterlyBalanceSheets(t *testing.T) {
 	assertString(t, "symbol", bs.Symbol, "AAPL")
 	assertInt(t, "number of quarters", len(bs.Statements), 4)
 	q1 := bs.Statements[0]
-	assertString(t, "filing type", q1.FilingType, "10-Q")
+	isPositiveInt(t, "fiscal quarter", q1.FiscalQuarter)
+	isPositiveInt(t, "fiscal year", q1.FiscalYear)
+	assertString(t, "currency", q1.Currency, "USD")
+}
+
+func TestIntegrationAnnualCashFlows(t *testing.T) {
+	cf, err := client.AnnualCashFlows(context.Background(), "aapl", 4)
+	if err != nil {
+		log.Fatalf("Error getting annual cash flows: %s", err)
+	}
+	assertString(t, "symbol", cf.Symbol, "AAPL")
+	assertInt(t, "number of years", len(cf.Statements), 4)
+	y1 := cf.Statements[0]
+	assertString(t, "filing type", y1.FilingType, "10-K")
+	assertInt(t, "fiscal quarter", y1.FiscalQuarter, 0)
+	isPositiveInt(t, "fiscal year", y1.FiscalYear)
+	assertString(t, "currency", y1.Currency, "USD")
+}
+
+func TestIntegrationQuarterlyCashFlows(t *testing.T) {
+	cf, err := client.QuarterlyCashFlows(context.Background(), "aapl", 4)
+	if err != nil {
+		log.Fatalf("Error getting balance sheets: %s", err)
+	}
+	assertString(t, "symbol", cf.Symbol, "AAPL")
+	assertInt(t, "number of quarters", len(cf.Statements), 4)
+	q1 := cf.Statements[0]
 	isPositiveInt(t, "fiscal quarter", q1.FiscalQuarter)
 	isPositiveInt(t, "fiscal year", q1.FiscalYear)
 	assertString(t, "currency", q1.Currency, "USD")

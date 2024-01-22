@@ -177,23 +177,31 @@ func TestBalanceSheets(t *testing.T) {
 		wantErr           bool
 	}{
 		{
-			name:              "nominal - annual",
-			requestSymbol:     "aapl",
-			requestPeriod:     "annual",
-			requestNumber:     1,
-			responseJSON:      nominalBalanceSheetJSON,
-			wantRequestPath:   "/stock/aapl/balance-sheet/1",
-			wantQueryParams:   map[string][]string{"token": []string{testToken}, "period": []string{"annual"}},
+			name:            "nominal - annual",
+			requestSymbol:   "aapl",
+			requestPeriod:   "annual",
+			requestNumber:   1,
+			responseJSON:    nominalBalanceSheetJSON,
+			wantRequestPath: "/stock/aapl/balance-sheet",
+			wantQueryParams: map[string][]string{
+				"token":  []string{testToken},
+				"period": []string{"annual"},
+				"last":   []string{"1"},
+			},
 			wantBalanceSheets: nominalBalanceSheets,
 		},
 		{
-			name:              "nominal - quarterly",
-			requestSymbol:     "goog",
-			requestPeriod:     "quarter",
-			requestNumber:     2,
-			responseJSON:      nominalBalanceSheetJSON,
-			wantRequestPath:   "/stock/goog/balance-sheet/2",
-			wantQueryParams:   map[string][]string{"token": []string{testToken}, "period": []string{"quarter"}},
+			name:            "nominal - quarterly",
+			requestSymbol:   "goog",
+			requestPeriod:   "quarter",
+			requestNumber:   2,
+			responseJSON:    nominalBalanceSheetJSON,
+			wantRequestPath: "/stock/goog/balance-sheet",
+			wantQueryParams: map[string][]string{
+				"token":  []string{testToken},
+				"period": []string{"quarter"},
+				"last":   []string{"2"},
+			},
 			wantBalanceSheets: nominalBalanceSheets,
 		},
 	}
@@ -202,7 +210,12 @@ func TestBalanceSheets(t *testing.T) {
 		fakeIEX.ResponseJSON = tc.responseJSON
 		fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
 
-		bs, err := client.BalanceSheets(context.TODO(), tc.requestSymbol, tc.requestPeriod, tc.requestNumber)
+		bs, err := client.BalanceSheets(
+			context.TODO(),
+			tc.requestSymbol,
+			tc.requestPeriod,
+			tc.requestNumber,
+		)
 		if err != nil {
 			if tc.wantErr {
 				return // error was expected
@@ -334,7 +347,12 @@ func TestIncomeStatements(t *testing.T) {
 		fakeIEX.ResponseJSON = tc.responseJSON
 		fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
 
-		incomeStatements, err := client.incomeStatements(context.TODO(), tc.requestSymbol, tc.requestPeriod, tc.requestNumber)
+		incomeStatements, err := client.incomeStatements(
+			context.TODO(),
+			tc.requestSymbol,
+			tc.requestPeriod,
+			tc.requestNumber,
+		)
 		if err != nil {
 			if tc.wantErr {
 				return // error was expected
@@ -566,7 +584,12 @@ func TestHistoricalPrices(t *testing.T) {
 			fakeIEX.ResponseHTTPStatus = tc.responseHTTPStatus
 
 			// Run the fetch.
-			histPrices, err := client.HistoricalPrices(context.TODO(), tc.requestSymbol, tc.requestTimeframe, nil)
+			histPrices, err := client.HistoricalPrices(
+				context.TODO(),
+				tc.requestSymbol,
+				tc.requestTimeframe,
+				nil,
+			)
 
 			// Compare the response with our test expectations.
 			if err != nil {

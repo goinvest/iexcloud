@@ -91,7 +91,10 @@ type CashFlows struct {
 // CashFlow models one cash flow statement.
 type CashFlow struct {
 	ReportDate              Date    `json:"reportDate"`
+	FilingType              string  `json:"filingType"`
 	FiscalDate              Date    `json:"fiscalDate"`
+	FiscalQuarter           int     `json:"fiscalQuarter"`
+	FiscalYear              int     `json:"fiscalYear"`
 	Currency                string  `json:"currency"`
 	NetIncome               float64 `json:"netIncome"`
 	Depreciation            float64 `json:"depreciation"`

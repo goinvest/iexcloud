@@ -295,7 +295,10 @@ func (c Client) Status(ctx context.Context) (Status, error) {
 
 // AnalystRecommendationsAndTargets provides current and historical consensus
 // analyst recommendations and price targets.
-func (c Client) AnalystRecommendationsAndTargets(ctx context.Context, symbol string) (CoreEstimate, error) {
+func (c Client) AnalystRecommendationsAndTargets(
+	ctx context.Context,
+	symbol string,
+) (CoreEstimate, error) {
 	estimate := CoreEstimate{}
 	endpoint := fmt.Sprintf("/time-series/CORE_ESTIMATES/%s", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &estimate)
@@ -304,22 +307,52 @@ func (c Client) AnalystRecommendationsAndTargets(ctx context.Context, symbol str
 
 // AnnualBalanceSheets returns the specified number of most recent annual
 // balance sheets from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
+func (c Client) AnnualBalanceSheets(
+	ctx context.Context,
+	symbol string,
+	num int,
+) (BalanceSheets, error) {
 	return c.BalanceSheets(ctx, symbol, "annual", num)
 }
 
 // QuarterlyBalanceSheets returns the specified number of most recent quarterly
-// balance sheets from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyBalanceSheets(ctx context.Context, symbol string, num int) (BalanceSheets, error) {
+// balance sheets from the IEX Cloud endpoint for the given stock symbol. A
+// quarterly balance sheet could come from a 10-K instead of a 10-Q if from the
+// fiscal year end of the company.
+func (c Client) QuarterlyBalanceSheets(
+	ctx context.Context,
+	symbol string,
+	num int,
+) (BalanceSheets, error) {
 	return c.BalanceSheets(ctx, symbol, "quarter", num)
 }
 
 // BalanceSheets returns the specified number of most recent balance sheets
 // with the given period (either "annual" or "quarter").
-func (c Client) BalanceSheets(ctx context.Context, symbol, period string, num int) (BalanceSheets, error) {
-	endpoint := fmt.Sprintf("/stock/%s/balance-sheet/%d", url.PathEscape(symbol), num)
+func (c Client) BalanceSheets(
+	ctx context.Context,
+	symbol, period string,
+	num int,
+) (BalanceSheets, error) {
 	bs := BalanceSheets{}
-	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{"period": period}, &bs)
+	if period != "annual" && period != "quarter" {
+		return bs, fmt.Errorf("invalid period: %s", period)
+	}
+	if period == "annual" && (num < 1 || num > 4) {
+		return bs, fmt.Errorf("invalid number of years: %d", num)
+	}
+	if period == "quarter" && (num < 1 || num > 12) {
+		return bs, fmt.Errorf("invalid number of quarters: %d", num)
+	}
+	endpoint := fmt.Sprintf("/stock/%s/balance-sheet", url.PathEscape(symbol))
+	err := c.GetJSONWithQueryParams(
+		ctx,
+		endpoint,
+		map[string]string{
+			"period": period,
+			"last":   fmt.Sprintf("%d", num),
+		},
+		&bs)
 	return bs, err
 }
 
@@ -341,7 +374,12 @@ func (c Client) DelayedQuote(ctx context.Context, symbol string) (DelayedQuote, 
 }
 
 // HistoricalPrices retrieves historically adjusted market-wide data
-func (c Client) HistoricalPrices(ctx context.Context, symbol string, timeframe HistoricalTimeFrame, options *HistoricalOptions) ([]HistoricalDataPoint, error) {
+func (c Client) HistoricalPrices(
+	ctx context.Context,
+	symbol string,
+	timeframe HistoricalTimeFrame,
+	options *HistoricalOptions,
+) ([]HistoricalDataPoint, error) {
 	h := make([]HistoricalDataPoint, 0)
 	if !timeframe.Valid() {
 		return h, errors.New("invalid timeframe passed to method")
@@ -358,7 +396,12 @@ func (c Client) HistoricalPrices(ctx context.Context, symbol string, timeframe H
 }
 
 // HistoricalPricesByDay retrieves historically adjusted market-wide data for a given day
-func (c Client) HistoricalPricesByDay(ctx context.Context, symbol string, day time.Time, options *HistoricalOptions) ([]HistoricalDataPoint, error) {
+func (c Client) HistoricalPricesByDay(
+	ctx context.Context,
+	symbol string,
+	day time.Time,
+	options *HistoricalOptions,
+) ([]HistoricalDataPoint, error) {
 	h := make([]HistoricalDataPoint, 0)
 	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s?chartByDay=true",
 		url.PathEscape(symbol), day.Format("20060102"))
@@ -371,7 +414,10 @@ func (c Client) HistoricalPricesByDay(ctx context.Context, symbol string, day ti
 	return h, err
 }
 
-func (c Client) historicalEndpointWithOpts(endpoint string, opts *HistoricalOptions) (string, error) {
+func (c Client) historicalEndpointWithOpts(
+	endpoint string,
+	opts *HistoricalOptions,
+) (string, error) {
 	if opts == nil {
 		return endpoint, nil
 	}
@@ -387,7 +433,11 @@ func (c Client) historicalEndpointWithOpts(endpoint string, opts *HistoricalOpti
 }
 
 // IntradayHistoricalPrices retrieves intraday historical market-wide data
-func (c Client) IntradayHistoricalPrices(ctx context.Context, symbol string, options *IntradayHistoricalOptions) ([]IntradayHistoricalDataPoint, error) {
+func (c Client) IntradayHistoricalPrices(
+	ctx context.Context,
+	symbol string,
+	options *IntradayHistoricalOptions,
+) ([]IntradayHistoricalDataPoint, error) {
 	h := make([]IntradayHistoricalDataPoint, 0)
 	endpoint := fmt.Sprintf("/stock/%s/chart/1d",
 		url.PathEscape(symbol))
@@ -401,7 +451,12 @@ func (c Client) IntradayHistoricalPrices(ctx context.Context, symbol string, opt
 }
 
 // IntradayHistoricalPricesByDay retrieves intraday historical market-wide data for a given day
-func (c Client) IntradayHistoricalPricesByDay(ctx context.Context, symbol string, day time.Time, options *IntradayHistoricalOptions) ([]IntradayHistoricalDataPoint, error) {
+func (c Client) IntradayHistoricalPricesByDay(
+	ctx context.Context,
+	symbol string,
+	day time.Time,
+	options *IntradayHistoricalOptions,
+) ([]IntradayHistoricalDataPoint, error) {
 	h := make([]IntradayHistoricalDataPoint, 0)
 	endpoint := fmt.Sprintf("/stock/%s/chart/date/%s",
 		url.PathEscape(symbol), day.Format("20060102"))
@@ -413,7 +468,11 @@ func (c Client) IntradayHistoricalPricesByDay(ctx context.Context, symbol string
 	return h, err
 }
 
-func (c Client) intradayHistoricalEndpointWithOpts(endpoint string, opts *IntradayHistoricalOptions, existingParams bool) (string, error) {
+func (c Client) intradayHistoricalEndpointWithOpts(
+	endpoint string,
+	opts *IntradayHistoricalOptions,
+	existingParams bool,
+) (string, error) {
 	if opts == nil {
 		return endpoint, nil
 	}
@@ -441,7 +500,11 @@ func (c Client) IntradayPrices(ctx context.Context, symbol string) ([]IntradayPr
 }
 
 // IntradayPricesWithOpts returns the aggregated intraday prices in one minute buckets for the given options.
-func (c Client) IntradayPricesWithOpts(ctx context.Context, symbol string, options *IntradayOptions) ([]IntradayPrice, error) {
+func (c Client) IntradayPricesWithOpts(
+	ctx context.Context,
+	symbol string,
+	options *IntradayOptions,
+) ([]IntradayPrice, error) {
 	ip := []IntradayPrice{}
 	endpoint := fmt.Sprintf("/stock/%s/intraday-prices", url.PathEscape(symbol))
 	endpoint, err := c.intradayEndpointWithOpts(endpoint, options, false)
@@ -452,7 +515,11 @@ func (c Client) IntradayPricesWithOpts(ctx context.Context, symbol string, optio
 	return ip, err
 }
 
-func (c Client) intradayEndpointWithOpts(endpoint string, opts *IntradayOptions, existingParams bool) (string, error) {
+func (c Client) intradayEndpointWithOpts(
+	endpoint string,
+	opts *IntradayOptions,
+	existingParams bool,
+) (string, error) {
 	if opts == nil {
 		return endpoint, nil
 	}
@@ -516,7 +583,12 @@ func (c Client) Quote(ctx context.Context, symbol string) (Quote, error) {
 // QuoteStream streams quote data for the given symbols, until the context is finished.
 // If UTP is true, then you must have an outstanding agreement for UTP otherwise
 // the endpoint will fail with "unauthorized".
-func (c Client) QuoteStream(ctx context.Context, symbols []string, utp bool, callback func(quotes []Quote)) error {
+func (c Client) QuoteStream(
+	ctx context.Context,
+	symbols []string,
+	utp bool,
+	callback func(quotes []Quote),
+) error {
 	var escapedSymbols []string
 	for _, s := range symbols {
 		escapedSymbols = append(escapedSymbols, url.PathEscape(s))
@@ -525,7 +597,13 @@ func (c Client) QuoteStream(ctx context.Context, symbols []string, utp bool, cal
 	if utp {
 		path = "stocksUS"
 	}
-	endpoint := fmt.Sprintf("%s/%s?symbols=%s&token=%s", c.sseBaseURL, path, strings.Join(escapedSymbols, ","), c.token)
+	endpoint := fmt.Sprintf(
+		"%s/%s?symbols=%s&token=%s",
+		c.sseBaseURL,
+		path,
+		strings.Join(escapedSymbols, ","),
+		c.token,
+	)
 
 	// This blocks until either the context is done or the stream is ended.
 	return sse.NewClient(endpoint).SubscribeWithContext(ctx, "", func(ev *sse.Event) {
@@ -545,7 +623,10 @@ func (c Client) BatchQuote(ctx context.Context, symbols []string) (map[string]Qu
 	r := map[string]struct {
 		Quote Quote
 	}{}
-	endpoint := fmt.Sprintf("/stock/market/batch?symbols=%s&types=quote", url.PathEscape(strings.Join(symbols, ",")))
+	endpoint := fmt.Sprintf(
+		"/stock/market/batch?symbols=%s&types=quote",
+		url.PathEscape(strings.Join(symbols, ",")),
+	)
 	err := c.GetJSON(ctx, endpoint, &r)
 	quotes := make(map[string]Quote, len(r))
 	for symbol, quote := range r {
@@ -555,11 +636,17 @@ func (c Client) BatchQuote(ctx context.Context, symbols []string) (map[string]Qu
 }
 
 // BatchPrevious returns the previous day price for up to 100 stock symbols.
-func (c Client) BatchPrevious(ctx context.Context, symbols []string) (map[string]PreviousDay, error) {
+func (c Client) BatchPrevious(
+	ctx context.Context,
+	symbols []string,
+) (map[string]PreviousDay, error) {
 	r := map[string]struct {
 		Previous PreviousDay
 	}{}
-	endpoint := fmt.Sprintf("/stock/market/batch?symbols=%s&types=previous", url.PathEscape(strings.Join(symbols, ",")))
+	endpoint := fmt.Sprintf(
+		"/stock/market/batch?symbols=%s&types=previous",
+		url.PathEscape(strings.Join(symbols, ",")),
+	)
 	err := c.GetJSON(ctx, endpoint, &r)
 	previousday := make(map[string]PreviousDay, len(r))
 	for symbol, quote := range r {
@@ -612,7 +699,10 @@ func (c Client) InsiderSummary(ctx context.Context, symbol string) ([]InsiderSum
 }
 
 // InsiderTransactions returns a list of insider transactions for the given stock symbol.
-func (c Client) InsiderTransactions(ctx context.Context, symbol string) ([]InsiderTransaction, error) {
+func (c Client) InsiderTransactions(
+	ctx context.Context,
+	symbol string,
+) ([]InsiderTransaction, error) {
 	r := []InsiderTransaction{}
 	endpoint := fmt.Sprintf("/stock/%s/insider-transactions", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
@@ -697,7 +787,11 @@ func (c Client) AnnualFinancials(ctx context.Context, symbol string, num int) (F
 
 // QuarterlyFinancials returns the specified number of most recent quarterly
 // financials from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyFinancials(ctx context.Context, symbol string, num int) (Financials, error) {
+func (c Client) QuarterlyFinancials(
+	ctx context.Context,
+	symbol string,
+	num int,
+) (Financials, error) {
 	endpoint := fmt.Sprintf("/stock/%s/financials/%d?period=quarter",
 		url.PathEscape(symbol), num)
 	return c.financials(ctx, endpoint)
@@ -712,13 +806,20 @@ func (c Client) financials(ctx context.Context, endpoint string) (Financials, er
 // QuarterlyFinancialsAsReported returns the specified number of most recent
 // quarterly 10-Q filings from the IEX Cloud endpoint for the given stock
 // symbol.
-func (c Client) QuarterlyFinancialsAsReported(ctx context.Context, symbol string, num int) (FinancialsAsReported, error) {
+func (c Client) QuarterlyFinancialsAsReported(
+	ctx context.Context,
+	symbol string,
+	num int,
+) (FinancialsAsReported, error) {
 	endpoint := fmt.Sprintf("/time-series/reported_financials/%s/10-Q?limit=%d",
 		url.PathEscape(symbol), num)
 	return c.financialsAsReported(ctx, endpoint)
 }
 
-func (c Client) financialsAsReported(ctx context.Context, endpoint string) (FinancialsAsReported, error) {
+func (c Client) financialsAsReported(
+	ctx context.Context,
+	endpoint string,
+) (FinancialsAsReported, error) {
 	f := FinancialsAsReported{}
 	err := c.GetJSON(ctx, endpoint, &f)
 	return f, err
@@ -726,19 +827,32 @@ func (c Client) financialsAsReported(ctx context.Context, endpoint string) (Fina
 
 // AnnualIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) AnnualIncomeStatements(ctx context.Context, symbol string, num int) (IncomeStatements, error) {
+func (c Client) AnnualIncomeStatements(
+	ctx context.Context,
+	symbol string,
+	num int,
+) (IncomeStatements, error) {
 	return c.incomeStatements(ctx, symbol, "annual", num)
 }
 
 // QuarterlyIncomeStatements returns the specified number of most recent annual
 // income statements from the IEX Cloud endpoint for the given stock symbol.
-func (c Client) QuarterlyIncomeStatements(ctx context.Context, symbol string, num int) (IncomeStatements, error) {
+func (c Client) QuarterlyIncomeStatements(
+	ctx context.Context,
+	symbol string,
+	num int,
+) (IncomeStatements, error) {
 	return c.incomeStatements(ctx, symbol, "quarter", num)
 }
 
 // incomeStatements returns the specified number of most recent
 // income statements from the IEX Cloud endpoint for the given stock symbol and period.
-func (c Client) incomeStatements(ctx context.Context, symbol string, period string, num int) (IncomeStatements, error) {
+func (c Client) incomeStatements(
+	ctx context.Context,
+	symbol string,
+	period string,
+	num int,
+) (IncomeStatements, error) {
 	endpoint := fmt.Sprintf("/stock/%s/income/%d",
 		url.PathEscape(symbol), num)
 	is := IncomeStatements{}
@@ -777,7 +891,10 @@ func (c Client) FundOwnership(ctx context.Context, symbol string) ([]FundOwner, 
 
 // InstitutionalOwnership returns the top 10 holders with the most recent
 // information.
-func (c Client) InstitutionalOwnership(ctx context.Context, symbol string) ([]InstitutionalOwner, error) {
+func (c Client) InstitutionalOwnership(
+	ctx context.Context,
+	symbol string,
+) ([]InstitutionalOwner, error) {
 	r := []InstitutionalOwner{}
 	endpoint := fmt.Sprintf("/stock/%s/institutional-ownership", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
@@ -915,7 +1032,11 @@ func (c Client) SectorPerformance(ctx context.Context) ([]SectorPerformance, err
 // UpcomingEvents returns all upcoming events for a given symbol.  If an empty string is passed in for the symbol,
 // data for the entire market, including IPOs, is returned.  If fullUpcomingEarnings is set to true, full estimates
 // objects are returned; otherwise, earnings will only return Symbol and ReportDate.
-func (c Client) UpcomingEvents(ctx context.Context, symbol string, fullUpcomingEarnings bool) (UpcomingEvents, error) {
+func (c Client) UpcomingEvents(
+	ctx context.Context,
+	symbol string,
+	fullUpcomingEarnings bool,
+) (UpcomingEvents, error) {
 	if symbol == "" {
 		symbol = "market"
 	}
@@ -935,7 +1056,11 @@ func (c Client) UpcomingEvents(ctx context.Context, symbol string, fullUpcomingE
 // UpcomingEarnings returns all upcoming earnings for a given symbol.  If an empty string is passed in for the symbol,
 // data for the entire market is returned.  If fullUpcomingEarnings is set to true, full estimates
 // objects are returned; otherwise, earnings will only return Symbol and ReportDate.
-func (c Client) UpcomingEarnings(ctx context.Context, symbol string, fullUpcomingEarnings bool) ([]UpcomingEarning, error) {
+func (c Client) UpcomingEarnings(
+	ctx context.Context,
+	symbol string,
+	fullUpcomingEarnings bool,
+) ([]UpcomingEarning, error) {
 	if symbol == "" {
 		symbol = "market"
 	}
@@ -1378,18 +1503,38 @@ func (c Client) PreviousHoliday(ctx context.Context) (TradeHolidayDate, error) {
 
 // Holidays returns the last or next dates of holidays, for the
 // given number of days, from the given start date.
-func (c Client) Holidays(ctx context.Context, dir string, last int, startDate time.Time) ([]TradeHolidayDate, error) {
+func (c Client) Holidays(
+	ctx context.Context,
+	dir string,
+	last int,
+	startDate time.Time,
+) ([]TradeHolidayDate, error) {
 	r := []TradeHolidayDate{}
-	endpoint := fmt.Sprintf("/ref-data/us/dates/holiday/%s/%d/%s", dir, last, startDate.Format("20060102"))
+	endpoint := fmt.Sprintf(
+		"/ref-data/us/dates/holiday/%s/%d/%s",
+		dir,
+		last,
+		startDate.Format("20060102"),
+	)
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
 }
 
 // TradingDays returns the last or next dates of trading days, for the
 // given number of days, from the given start date.
-func (c Client) TradingDays(ctx context.Context, dir string, last int, startDate time.Time) ([]TradeHolidayDate, error) {
+func (c Client) TradingDays(
+	ctx context.Context,
+	dir string,
+	last int,
+	startDate time.Time,
+) ([]TradeHolidayDate, error) {
 	r := []TradeHolidayDate{}
-	endpoint := fmt.Sprintf("/ref-data/us/dates/trade/%s/%d/%s", dir, last, startDate.Format("20060102"))
+	endpoint := fmt.Sprintf(
+		"/ref-data/us/dates/trade/%s/%d/%s",
+		dir,
+		last,
+		startDate.Format("20060102"),
+	)
 	err := c.GetJSON(ctx, endpoint, &r)
 	return r, err
 }
@@ -1508,7 +1653,10 @@ func (c Client) IntradayStats(ctx context.Context, symbol string) (IntradayStats
 
 // AnalystRecommendations pulls data from the last four months using premium
 // data from Refinitiv.
-func (c Client) AnalystRecommendations(ctx context.Context, symbol string) ([]Recommendation, error) {
+func (c Client) AnalystRecommendations(
+	ctx context.Context,
+	symbol string,
+) ([]Recommendation, error) {
 	r := []Recommendation{}
 	endpoint := fmt.Sprintf("/stock/%s/recommendation-trends", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &r)
