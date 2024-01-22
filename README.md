@@ -14,6 +14,12 @@ goal is for iexcloud to be compatible with the v1 version of the IEX Cloud API.
 There were some changes from the beta version to v1 of the API, so things may
 still be in flux for this library.
 
+- [iexcloud][] v0 to v2 supports the [IEX Cloud Legacy API][iex-legacy], which
+  uses <https://cloud.iexapis.com/> for its base URL.
+- [iexcloud][] v3 is being developed to support the latest IEX Cloud API, which
+  uses <https://api.iex.cloud/v1/> for its base URL. Currently, this is being
+  developed in the v3 branch.
+
 ## Installation
 
 ```bash
@@ -82,6 +88,7 @@ BaseURL = "https://sandbox.iexapis.com/v1"
 
 [iexcloudio]: https://iexcloud.io
 [iexcloud]: https://github.com/goinvest/iexcloud
+[iex-legacy]: https://iexcloud.io/docs/api/
 [godoc badge]: https://godoc.org/github.com/goinvest/iexcloud?status.svg
 [godoc link]: https://godoc.org/github.com/goinvest/iexcloud
 [implementation]: https://github.com/goinvest/iexcloud/blob/master/implementation.md
