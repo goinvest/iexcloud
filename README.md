@@ -8,17 +8,16 @@ Go library for accessing the IEX Cloud API.
 
 ## Overview
 
-[iexcloud][] provides a Go interface to the [IEX Cloud API][iexcloudio]. To
-access the [IEX Cloud API][iexcloudio] an account and token are required. The
-goal is for iexcloud to be compatible with the v1 version of the IEX Cloud API.
+[iexcloud][] provides a Go interface to the [IEX Cloud Legacy
+API][iexlegacy]. To
+access the [IEX Cloud Legacy API][iexlegacy] an account and token are required. The
+goal is for [iexcloud][] to be compatible with the v1 version of the IEX Cloud Legacy API.
 There were some changes from the beta version to v1 of the API, so things may
 still be in flux for this library.
 
-- [iexcloud][] v0 to v2 supports the [IEX Cloud Legacy API][iex-legacy], which
-  uses <https://cloud.iexapis.com/> for its base URL.
-- [iexcloud][] v3 is being developed to support the latest IEX Cloud API, which
-  uses <https://api.iex.cloud/v1/> for its base URL. Currently, this is being
-  developed in the v3 branch.
+- [IEX Cloud Legacy API][iexlegacy] uses <https://cloud.iexapis.com/> for its
+  base URL.
+- [IEX Cloud API][iexapi] uses <https://api.iex.cloud/v1/> for its base URL.
 
 ## Installation
 
@@ -33,7 +32,7 @@ Examples are available at <https://github.com/goinvest/iexcloud-examples/>.
 ## Implementation Status
 
 Please see [implementation.md][implementation] for the current implementation
-status of the IEX Cloud API.
+status of the [IEX Cloud Legacy API][iexlegacy].
 
 ## Contributing
 
@@ -86,9 +85,9 @@ BaseURL = "https://sandbox.iexapis.com/v1"
 [iexcloud][] is released under the MIT license. Please see the
 [LICENSE][] file for more information.
 
-[iexcloudio]: https://iexcloud.io
+[iexapi]: https://iexcloud.io/docs/
 [iexcloud]: https://github.com/goinvest/iexcloud
-[iex-legacy]: https://iexcloud.io/docs/api/
+[iexlegacy]: https://iexcloud.io/docs/api/
 [godoc badge]: https://godoc.org/github.com/goinvest/iexcloud?status.svg
 [godoc link]: https://godoc.org/github.com/goinvest/iexcloud
 [implementation]: https://github.com/goinvest/iexcloud/blob/master/implementation.md
