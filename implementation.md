@@ -4,7 +4,6 @@ Below is a list of the IEX Loud Legacy APIs that have and have not been
 implemented. If you want a particular API to be developed next, please open an
 issue.
 
-
 ## Account
 
 - [ ] Credit Budget
@@ -14,11 +13,9 @@ issue.
 - [ ] Signed Requests
 - [x] Usage
 
-
 ## API System Metadata
 
 - [x] Status
-
 
 ## Stock / Equities
 
@@ -81,13 +78,11 @@ issue.
 - [x] Upcoming Events
 - [x] Volume by Venue
 
-
 ## News
 
 - [x] Intraday News
 - [ ] Historical News
 - [ ] Streaming News
-
 
 ## Forex / Currencies
 
@@ -95,7 +90,6 @@ issue.
 - [ ] Latest Currency Rates
 - [ ] Currency Conversion
 - [ ] Historical Daily
-
 
 ## Futures
 
@@ -106,7 +100,6 @@ issue.
 
 - [ ] Daily Treasury Rates
 
-
 ## Commodities
 
 - [x] Oil Prices
@@ -116,7 +109,6 @@ issue.
 - [x] Diesel Price
 - [x] Gas Prices
 - [x] Propane Prices
-
 
 ## Economic Data
 
@@ -133,17 +125,14 @@ issue.
 - [ ] Unemployment Rates
 - [ ] US Recession Probabilities
 
-
 ## Rates
 
 - [x] CD Rates
 - [x] Credit Card Interest Rate
 
-
 ## Mortgage
 
 - [ ] Mortgage Rates
-
 
 ## Reference Data
 
@@ -160,7 +149,7 @@ issue.
 - [ ] International Exchanges
 - [x] ISIN Mapping
 - [ ] RIC Mapping
-- [ ] FIGI Mapping
+- [x] FIGI Mapping
 - [x] Sectors
 - [x] Tags
 - [x] U.S. Holidays and Trading Days

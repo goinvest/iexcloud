@@ -20,11 +20,13 @@ type Symbol struct {
 	Exchange  string `json:"exchange"`
 	Name      string `json:"name"`
 	Date      Date   `json:"date"`
+	IsEnabled bool   `json:"isEnabled"`
 	Type      string `json:"type"`
-	IEXID     string `json:"iexId"`
 	Region    string `json:"region"`
 	Currency  string `json:"currency"`
-	IsEnabled bool   `json:"isEnabled"`
+	IEXID     string `json:"iexId"`
+	FIGI      string `json:"figi"`
+	CIK       string `json:"cik"`
 }
 
 // SearchResult models the data for a single search result.
@@ -36,6 +38,14 @@ type SearchResult struct {
 	Exchange     string `json:"exchange"`
 	Sector       string `json:"sector"`
 	CIK          string `json:"cik"`
+}
+
+// FIGIResult models the data for a single FIGI mapping search result.
+type FIGIResult struct {
+	Symbol   string `json:"symbol"`
+	Exchange string `json:"exchange"`
+	Region   string `json:"region"`
+	IEXID    string `json:"iexId"`
 }
 
 // USExchange provides information about one U.S. exchange including the name,

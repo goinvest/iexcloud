@@ -1300,6 +1300,14 @@ func (c Client) FederalFundsRate(ctx context.Context) (float64, error) {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+// FIGIMapping returns the IEX Cloud symbols for a given FIGI symbol.
+func (c Client) FIGIMapping(ctx context.Context, figi string) (FIGIResult, error) {
+	searchResult := FIGIResult{}
+	endpoint := fmt.Sprintf("/ref-data/figi?figi=%s", figi)
+	err := c.GetJSON(ctx, endpoint, &searchResult)
+	return searchResult, err
+}
+
 // FXSymbols returns a list of currencies and a list of foreign exchange
 // currency pairs that are available supported by IEX Cloud.
 func (c Client) FXSymbols(ctx context.Context) (FXSymbols, error) {
@@ -1346,6 +1354,14 @@ func (c Client) OTCSymbols(ctx context.Context) ([]Symbol, error) {
 	return r, err
 }
 
+// Search returns an array of search results for the given symbol fragment.
+func (c Client) Search(ctx context.Context, fragment string) ([]SearchResult, error) {
+	searchResult := []SearchResult{}
+	endpoint := fmt.Sprintf("/search/%s", fragment)
+	err := c.GetJSON(ctx, endpoint, &searchResult)
+	return searchResult, err
+}
+
 // Sectors returns an array of all sectors
 func (c Client) Sectors(ctx context.Context) ([]Sector, error) {
 	r := []Sector{}
@@ -1362,7 +1378,8 @@ func (c Client) Symbols(ctx context.Context) ([]Symbol, error) {
 	return symbols, err
 }
 
-// SymbolsByExchange returns an array of symbols from the defined market that IEX Cloud supports for API calls.
+// SymbolsByExchange returns an array of symbols from the defined market that
+// IEX Cloud supports for API calls.
 func (c Client) SymbolsByExchange(ctx context.Context, exchange string) ([]Symbol, error) {
 	symbols := []Symbol{}
 	endpoint := "/ref-data/exchange/" + exchange + "/symbols"
@@ -1370,20 +1387,13 @@ func (c Client) SymbolsByExchange(ctx context.Context, exchange string) ([]Symbo
 	return symbols, err
 }
 
-// SymbolsByRegion returns an array of symbols from the defined region that IEX Cloud supports for API calls.
+// SymbolsByRegion returns an array of symbols from the defined region that IEX
+// Cloud supports for API calls.
 func (c Client) SymbolsByRegion(ctx context.Context, region string) ([]Symbol, error) {
 	symbols := []Symbol{}
 	endpoint := "/ref-data/region/" + region + "/symbols"
 	err := c.GetJSON(ctx, endpoint, &symbols)
 	return symbols, err
-}
-
-// Search returns an array of search results for the given symbol fragment.
-func (c Client) Search(ctx context.Context, fragment string) ([]SearchResult, error) {
-	searchResult := []SearchResult{}
-	endpoint := fmt.Sprintf("/search/%s", fragment)
-	err := c.GetJSON(ctx, endpoint, &searchResult)
-	return searchResult, err
 }
 
 // Tags returns an array of tags.  Tags can
