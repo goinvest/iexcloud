@@ -1577,33 +1577,15 @@ func (c Client) OneTOPS(ctx context.Context, symbol string) ([]TOPS, error) {
 	return r, err
 }
 
-// StatsIntraday retrieves the intraday stats on IEX.
-func (c Client) StatsIntraday(ctx context.Context) (IntradayStats, error) {
-	r := IntradayStats{}
-	endpoint := "/stats/intraday"
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
-}
-
-// IntradayStats retrieves the intraday stats on IEX. Deprecated. Use
-// StatsIntraday instead.
-func (c Client) IntradayStats(ctx context.Context, symbol string) (IntradayStats, error) {
-	// FIXME(mdr): symbol isn't used, so this is a bad method. Need to delete.
-	r := IntradayStats{}
-	endpoint := "/stats/intraday"
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
-}
-
 //////////////////////////////////////////////////////////////////////////////
 //
-// Premium Data Endpoints
+// Premium Data Endpoints (Deprecated)
 //
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Refinitiv Endpoints
+// Refinitiv Endpoints (Deprecated)
 //
 //////////////////////////////////////////////////////////////////////////////
 
