@@ -1136,41 +1136,6 @@ func (c Client) MarketNews(ctx context.Context, num int) ([]News, error) {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Cryptocurrency Endpoints
-//
-//////////////////////////////////////////////////////////////////////////////
-
-// Crypto provides a quote for a given cryptocurrency symbol.
-func (c Client) Crypto(ctx context.Context, symbol string) (CryptoQuote, error) {
-	return c.CryptoQuote(ctx, symbol)
-}
-
-// CryptoQuote provides a quote for a given cryptocurrency symbol.
-func (c Client) CryptoQuote(ctx context.Context, symbol string) (CryptoQuote, error) {
-	r := CryptoQuote{}
-	endpoint := fmt.Sprintf("/crypto/%s/quote", url.PathEscape(symbol))
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
-}
-
-// CryptoPrice returns the price for a given cryptocurrency symbol.
-func (c Client) CryptoPrice(ctx context.Context, symbol string) (Price, error) {
-	r := Price{}
-	endpoint := fmt.Sprintf("/crypto/%s/price", url.PathEscape(symbol))
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
-}
-
-// CryptoBooks returns a current snapshot of the book for a specified cryptocurrency
-func (c Client) CryptoBooks(ctx context.Context, symbol string) (Books, error) {
-	r := Books{}
-	endpoint := fmt.Sprintf("/crypto/%s/book", url.PathEscape(symbol))
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
 // Forex / Currencies Endpoints
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -1334,15 +1299,6 @@ func (c Client) FederalFundsRate(ctx context.Context) (float64, error) {
 // Reference Data Endpoints
 //
 //////////////////////////////////////////////////////////////////////////////
-
-// CryptoSymbols returns a list of cryptocurrencies that are supported by IEX
-// Cloud.
-func (c Client) CryptoSymbols(ctx context.Context) ([]CryptoSymbol, error) {
-	r := []CryptoSymbol{}
-	endpoint := "/ref-data/crypto/symbols"
-	err := c.GetJSON(ctx, endpoint, &r)
-	return r, err
-}
 
 // FXSymbols returns a list of currencies and a list of foreign exchange
 // currency pairs that are available supported by IEX Cloud.

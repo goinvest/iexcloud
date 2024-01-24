@@ -1,21 +1,8 @@
 # iexcloud Implementation Status
 
-Below is a list of the APIs that have and have not been implemented. If
-you want a particular API to be developed next, please open an issue.
-
-
-## Rules Engine
-
-- [ ] Rules Schema
-- [ ] Lookup Values
-- [ ] Creating a Rule
-- [ ] Pause and Unpause
-- [ ] Edit an Existing Rule
-- [ ] Delete a Rule
-- [ ] Get Rule Info
-- [ ] List All Rules
-- [ ] Get Log Poutput
-- [ ] Webhooks
+Below is a list of the IEX Loud Legacy APIs that have and have not been
+implemented. If you want a particular API to be developed next, please open an
+issue.
 
 
 ## Account
@@ -46,8 +33,8 @@ you want a particular API to be developed next, please open an issue.
 - [x] Company
 - [x] Delayed Quote
 - [ ] Distribution
+- [ ] Dividends
 - [x] Dividends (Basic)
-- [ ] Dividends Forecast (Alpha)
 - [x] Earnings Today
 - [x] Extended Hours Quote — Use Quote.
 - [ ] Financials As Reported
@@ -97,17 +84,9 @@ you want a particular API to be developed next, please open an issue.
 
 ## News
 
-- [x] News
+- [x] Intraday News
 - [ ] Historical News
 - [ ] Streaming News
-
-
-## Cryptocurrency
-
-- [x] Cryptocurrency Book
-- [ ] Cryptocurrency Events
-- [x] Cryptocurrency Price
-- [x] Cryptocurrency Quote
 
 
 ## Forex / Currencies
@@ -118,15 +97,9 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Historical Daily
 
 
-## Options
-
-- [ ] End of Day Options (Deprecated)
-- [ ] End of Day Options v2 (Beta)
-
-
 ## Futures
 
-- [ ] End of Day Futures (Beta)
+- [ ] End of Day Futures (Deprecated)
 -
 
 ### Treasuries
@@ -180,7 +153,6 @@ you want a particular API to be developed next, please open an issue.
 - [ ] Options Symbols
 - [ ] International Symbols
 - [x] Mutual Fund Symbols
-- [x] Cryptocurrency Symbols
 - [x] FX Symbols
 - [ ] Futures Symbols (Beta)
 - [x] OTC Symbols

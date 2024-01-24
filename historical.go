@@ -59,29 +59,30 @@ func (htf HistoricalTimeFrame) Valid() bool {
 	}
 }
 
-// IntradayHistoricalDataPoint Represents a single intraday data point for a stock
+// IntradayHistoricalDataPoint represents a single intraday data point for a
+// stock.
 type IntradayHistoricalDataPoint struct {
 	Date                 Date    `json:"date"`
 	Minute               string  `json:"minute"`
 	Label                string  `json:"label"`
-	High                 float64 `json:"high"`
-	Low                  float64 `json:"low"`
-	Average              float64 `json:"average"`
-	Volume               int     `json:"volume"`
-	Notional             float64 `json:"notional"`
-	NumberOfTrades       int     `json:"numberOfTrades"`
+	MarketOpen           float64 `json:"marketOpen"`
+	MarketClose          float64 `json:"marketClose"`
 	MarketHigh           float64 `json:"marketHigh"`
 	MarketLow            float64 `json:"marketLow"`
 	MarketAverage        float64 `json:"marketAverage"`
 	MarketVolume         int     `json:"marketVolume"`
 	MarketNotional       float64 `json:"marketNotional"`
 	MarketNumberOfTrades int     `json:"marketNumberOfTrades"`
+	MarketChangeOverTime float64 `json:"marketChangeOverTime"`
+	High                 float64 `json:"high"`
+	Low                  float64 `json:"low"`
 	Open                 float64 `json:"open"`
 	Close                float64 `json:"close"`
-	MarketOpen           float64 `json:"marketOpen"`
-	MarketClose          float64 `json:"marketClose"`
+	Average              float64 `json:"average"`
+	Volume               float64 `json:"volume"`
+	Notional             float64 `json:"notional"`
+	NumberOfTrades       int     `json:"numberOfTrades"`
 	ChangeOverTime       float64 `json:"changeOverTime"`
-	MarketChangeOverTime float64 `json:"marketChangeOverTime"`
 }
 
 // HistoricalOptions optional query params to pass to historical endpoint
@@ -99,8 +100,8 @@ type HistoricalOptions struct {
 	IncludeToday    bool   `url:"includeToday,omitempty"`
 }
 
-// IntradayHistoricalOptions optional query params to pass to intraday historical endpoint
-// If values are false or 0 they aren't passed.
+// IntradayHistoricalOptions optional query params to pass to intraday
+// historical endpoint If values are false or 0 they aren't passed.
 type IntradayHistoricalOptions struct {
 	ChartIEXOnly    bool `url:"chartIEXOnly,omitempty"`
 	ChartReset      bool `url:"chartReset,omitempty"`
@@ -122,6 +123,7 @@ type HistoricalDataPoint struct {
 	Key            string  `json:"key"`
 	Subkey         string  `json:"subkey"`
 	Date           Date    `json:"date"`
+	ChangeOverTime float64 `json:"changeOverTime"`
 	Minute         string  `json:"minute"`
 	UOpen          float64 `json:"uOpen"`
 	UClose         float64 `json:"uClose"`
@@ -131,7 +133,6 @@ type HistoricalDataPoint struct {
 	Change         float64 `json:"change"`
 	ChangePercent  float64 `json:"changePercent"`
 	Label          string  `json:"label"`
-	ChangeOverTime float64 `json:"changeOverTime"`
 }
 
 // Time merges HistoricalDataPoint's Date and Mintue field and
