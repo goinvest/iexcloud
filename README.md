@@ -1,6 +1,6 @@
 # iexcloud
 
-Go library for accessing the IEX Cloud API.
+Go library for accessing the IEX Cloud Legacy API.
 
 [![GoDoc][godoc badge]][godoc link]
 [![Go Report Card][report badge]][report card]
