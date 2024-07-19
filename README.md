@@ -6,14 +6,19 @@ Go library for accessing the IEX Cloud Legacy API.
 [![Go Report Card][report badge]][report card]
 [![License Badge][license badge]][LICENSE]
 
+## Archived
+
+As of August, 31, 2024, all [IEX Cloud][iexweb] products will be retired.
+Therefore, the [iexcloud][] Go library is archived and all development has
+ceased.
+
 ## Overview
 
-[iexcloud][] provides a Go interface to the [IEX Cloud Legacy
-API][iexlegacy]. To
-access the [IEX Cloud Legacy API][iexlegacy] an account and token are required. The
-goal is for [iexcloud][] to be compatible with the v1 version of the IEX Cloud Legacy API.
-There were some changes from the beta version to v1 of the API, so things may
-still be in flux for this library.
+[iexcloud][] provides a Go interface to the [IEX Cloud Legacy API][iexlegacy].
+To access the [IEX Cloud Legacy API][iexlegacy] an account and token are
+required. The goal is for [iexcloud][] to be compatible with the v1 version of
+the IEX Cloud Legacy API. There were some changes from the beta version to v1 of
+the API, so things may still be in flux for this library.
 
 - [IEX Cloud Legacy API][iexlegacy] uses <https://cloud.iexapis.com/> for its
   base URL.
@@ -88,6 +93,7 @@ BaseURL = "https://sandbox.iexapis.com/v1"
 [iexapi]: https://iexcloud.io/docs/
 [iexcloud]: https://github.com/goinvest/iexcloud
 [iexlegacy]: https://iexcloud.io/docs/api/
+[iexweb]: https://iexcloud.io
 [godoc badge]: https://godoc.org/github.com/goinvest/iexcloud?status.svg
 [godoc link]: https://godoc.org/github.com/goinvest/iexcloud
 [implementation]: https://github.com/goinvest/iexcloud/blob/master/implementation.md
